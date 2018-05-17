@@ -13,10 +13,9 @@ namespace ChewieBot.Services
     {
         private IUserData userData;
 
-        public UserService()
+        public UserService(IUserData userData)
         {
-            // Add Dependency Injection for this..
-            this.userData = new UserRepository();
+            this.userData = userData;
         }
 
         public User SetUser(User user)

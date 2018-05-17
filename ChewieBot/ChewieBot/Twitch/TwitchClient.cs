@@ -11,14 +11,14 @@ using ChewieBot.Database.Model;
 
 namespace ChewieBot.Twitch
 {
-    public class TwitchClient
+    public class TwitchClient : ITwitchClient
     {
         private TwitchLib.Client.TwitchClient client;
         private IUserService userService;
 
-        public TwitchClient()
+        public TwitchClient(IUserService userService)
         {
-            this.userService = new UserService();
+            this.userService = userService;
         }
 
         public void Start()
