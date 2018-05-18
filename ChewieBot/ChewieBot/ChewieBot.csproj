@@ -184,8 +184,12 @@
     <Compile Include="Database\Repository\Implementation\UserRepository.cs" />
     <Compile Include="Database\Repository\IUserData.cs" />
     <Compile Include="Services\IUserService.cs" />
-    <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\ITwitchService.cs" />
+    <Compile Include="Services\Implementation\TwitchService.cs" />
+    <Compile Include="Services\Implementation\UserService.cs" />
+    <Compile Include="Twitch\ITwitchApi.cs" />
     <Compile Include="Twitch\ITwitchClient.cs" />
+    <Compile Include="Twitch\TwitchAPI.cs" />
     <Compile Include="Twitch\TwitchClient.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

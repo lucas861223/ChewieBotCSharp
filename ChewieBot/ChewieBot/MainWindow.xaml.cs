@@ -1,4 +1,5 @@
 ﻿using ChewieBot.AppStart;
+using ChewieBot.Services;
 using ChewieBot.Twitch;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace ChewieBot
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ITwitchClient client = UnityConfig.Resolve<ITwitchClient>();
+        private ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
 
         public MainWindow()
         {
@@ -39,9 +40,10 @@ namespace ChewieBot
 
         private void InitializeTwitchClient()
         {
-            if (client != null)
+            if (twitchService != null)
             {
-                client.Start();
+                twitchService.Initialize();
+                twitchService.Connect();
             }
         }
     }

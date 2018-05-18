@@ -1,6 +1,7 @@
 ﻿using ChewieBot.Database.Repository;
 using ChewieBot.Database.Repository.Implementation;
 using ChewieBot.Services;
+using ChewieBot.Services.Implementation;
 using ChewieBot.Twitch;
 using System;
 using System.Collections.Generic;
@@ -37,10 +38,10 @@ namespace ChewieBot.AppStart
         public static void RegisterTypes(IUnityContainer container)
         {
             container.RegisterType<IUserData, UserRepository>(new TransientLifetimeManager());
-
             container.RegisterType<IUserService, UserService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserData)));
-
             container.RegisterType<ITwitchClient, TwitchClient>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
+            container.RegisterType<ITwitchApi, TwitchAPI>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
+            container.RegisterType<ITwitchService, TwitchService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(ITwitchClient), typeof(ITwitchApi), typeof(IUserService)));
         }
 
         public static T Resolve<T>()

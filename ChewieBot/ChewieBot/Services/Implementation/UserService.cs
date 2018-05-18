@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChewieBot.Services
+namespace ChewieBot.Services.Implementation
 {
     public class UserService : IUserService
     {

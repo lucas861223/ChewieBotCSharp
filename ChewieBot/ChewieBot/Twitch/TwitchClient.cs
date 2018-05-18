@@ -8,9 +8,13 @@ using ChewieBot.Config;
 using TwitchLib.Client.Events;
 using ChewieBot.Services;
 using ChewieBot.Database.Model;
+using TwitchLib.Client.Services;
 
 namespace ChewieBot.Twitch
 {
+    /// <summary>
+    /// Sets up and Wraps the TwitchLib TwitchClient class.
+    /// </summary>
     public class TwitchClient : ITwitchClient
     {
         private TwitchLib.Client.TwitchClient client;
@@ -21,45 +25,65 @@ namespace ChewieBot.Twitch
             this.userService = userService;
         }
 
-        public void Start()
+        public void Initialize()
         {
             var credentials = new ConnectionCredentials(AppConfig.TwitchUsername, AppConfig.TwitchOAuth);
 
-            client = new TwitchLib.Client.TwitchClient();
-            client.Initialize(credentials, AppConfig.TwitchChannel);
+            // Setup client.
+            this.client = new TwitchLib.Client.TwitchClient();
+            this.client.Initialize(credentials, AppConfig.TwitchChannel);
+            this.client.DisableAutoPong = false;            
+            this.client.AddChatCommandIdentifier('!');
 
-            client.OnMessageReceived += OnMessageReceived;
-            client.OnJoinedChannel += OnJoinedChannel;
-            client.OnUserJoined += OnUserJoined;
+            // Setup event handling.
+            this.client.OnMessageReceived += OnMessageReceived;
+            this.client.OnJoinedChannel += OnJoinedChannel;
+            this.client.OnUserJoined += ClientUserJoined;
+            this.client.OnUserLeft += ClientUserLeft;
+        }
 
-            client.Connect();
+        public void Connect()
+        {
+            if (this.client != null && !this.client.IsConnected)
+            {
+                this.client.Connect();
+            }
+        }
+
+        public void Disconnect()
+        {
+            if (this.client != null && this.client.IsConnected)
+            {
+                this.client.Disconnect();
+            }
+        }
+
+        public void SendMessage(string message)
+        {
+            this.client.SendMessage(AppConfig.TwitchChannel, message);
         }
 
         private void OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            client.SendMessage(e.ChatMessage.Channel, $"Message!! -- {e.ChatMessage.Message}");
-
-            if (userService.GetUser(e.ChatMessage.Username) == null)
-            {
-                var newUser = new User();
-                newUser.Username = e.ChatMessage.Username;
-                userService.SetUser(newUser);
-            }
         }
 
         private void OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
-            client.SendMessage(e.Channel, $"Joined channel!!");
         }
 
-        private void OnUserJoined(object sender, OnUserJoinedArgs e)
+        // Exposing TwitchClient events
+
+        private void ClientUserJoined(object sender, OnUserJoinedArgs e)
         {
-            if (userService.GetUser(e.Username) == null)
-            {
-                var newUser = new User();
-                newUser.Username = e.Username;
-                userService.SetUser(newUser);
-            }
+            this.OnUserJoined?.Invoke(this, e);
         }
+
+        private void ClientUserLeft(object sender, OnUserLeftArgs e)
+        {
+            this.OnUserLeft?.Invoke(this, e);
+        }
+
+        public event EventHandler<OnUserJoinedArgs> OnUserJoined;
+        public event EventHandler<OnUserLeftArgs> OnUserLeft;
     }
 }

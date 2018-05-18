@@ -9,8 +9,13 @@ namespace ChewieBot.Config
 {
     public static class AppConfig
     {
+        // Twitch Api
+        public static string TwitchAccessToken = ConfigurationManager.AppSettings["Twitch-AccessToken"];
+        public static string TwitchClientId = ConfigurationManager.AppSettings["Twitch-ClientId"];
+
+        // Twitch Client
+        public static string TwitchChannel = ConfigurationManager.AppSettings["Twitch-Channel"];
         public static string TwitchOAuth = ConfigurationManager.AppSettings["Twitch-OAuth"];
         public static string TwitchUsername = ConfigurationManager.AppSettings["Twitch-Username"];
-        public static string TwitchChannel = ConfigurationManager.AppSettings["Twitch-Channel"];
     }
 }
