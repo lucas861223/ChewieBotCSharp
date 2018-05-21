@@ -178,11 +178,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppStart\UnityConfig.cs" />
+    <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\CommandRepository.cs" />
+    <Compile Include="Commands\CommandResponse.cs" />
+    <Compile Include="Commands\CommandToken.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\QueryCommand.cs" />
+    <Compile Include="Commands\TextCommand.cs" />
     <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
     <Compile Include="Database\Model\User.cs" />
     <Compile Include="Database\Repository\Implementation\UserRepository.cs" />
     <Compile Include="Database\Repository\IUserData.cs" />
+    <Compile Include="Enum\CommandType.cs" />
+    <Compile Include="Services\ICommandService.cs" />
+    <Compile Include="Events\CommandExecutedEventArgs.cs" />
+    <Compile Include="Services\Implementation\CommandService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\ITwitchService.cs" />
     <Compile Include="Services\Implementation\TwitchService.cs" />
@@ -222,6 +233,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Commands\CommandData\Queries\pointsCommand.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -231,9 +243,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enum\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.108.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

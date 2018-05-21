@@ -1,0 +1,13 @@
+﻿{
+  "commandName": "points",
+  "commandType": "query",
+  "queryData": {
+    "queryField": [
+      {
+        "field": "user.points",
+        "token": "points"
+      }
+    ]
+  },
+  "response": "{user} : {points}"
+}

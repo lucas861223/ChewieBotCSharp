@@ -24,6 +24,7 @@ namespace ChewieBot
     public partial class MainWindow : Window
     {
         private ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
+        private ICommandService commandService = UnityConfig.Resolve<ICommandService>();
 
         public MainWindow()
         {
@@ -36,6 +37,7 @@ namespace ChewieBot
         private void InitializeSetup()
         {
             UnityConfig.Setup();
+
         }
 
         private void InitializeTwitchClient()

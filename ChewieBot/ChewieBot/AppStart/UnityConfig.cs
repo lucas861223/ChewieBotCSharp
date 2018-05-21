@@ -42,6 +42,7 @@ namespace ChewieBot.AppStart
             container.RegisterType<ITwitchClient, TwitchClient>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
             container.RegisterType<ITwitchApi, TwitchAPI>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
             container.RegisterType<ITwitchService, TwitchService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(ITwitchClient), typeof(ITwitchApi), typeof(IUserService)));
+            container.RegisterType<ICommandService, CommandService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(ITwitchService)));
         }
 
         public static T Resolve<T>()
