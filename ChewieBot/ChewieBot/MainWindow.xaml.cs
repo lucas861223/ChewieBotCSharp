@@ -1,4 +1,5 @@
 ﻿using ChewieBot.AppStart;
+using ChewieBot.Scripting;
 using ChewieBot.Services;
 using ChewieBot.Twitch;
 using System;
@@ -30,14 +31,21 @@ namespace ChewieBot
         {
             InitializeComponent();
 
-            InitializeSetup();
-            InitializeTwitchClient();
+            //InitializeSetup();
+            //InitializeTwitchClient();
+
+            TestScripting();
         }
 
         private void InitializeSetup()
         {
             UnityConfig.Setup();
+        }
 
+        private void TestScripting()
+        {
+            var scriptEngine = new ScriptEngine();
+            scriptEngine.ExecuteScript("test.js");
         }
 
         private void InitializeTwitchClient()
