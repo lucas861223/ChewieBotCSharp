@@ -12,6 +12,7 @@ namespace ChewieBot.Scripting
     public class ScriptEngine
     {
         private V8ScriptEngine engine;
+        private object transpileTsc;
 
         public ScriptEngine()
         {
@@ -28,10 +29,19 @@ namespace ChewieBot.Scripting
 
         public void ExecuteScript(string scriptPath)
         {
-            var script = File.ReadAllText(scriptPath);
-            this.engine.Execute(script);
-            var result = this.engine.Script.result;
-            Console.WriteLine(result);
+            TranspileTypescript("test.ts");
+        }
+
+        private string TranspileTypescript(string typescriptScriptPath)
+        {
+            var tsScript = File.ReadAllText(typescriptScriptPath);
+            dynamic tsc = this.engine.Evaluate(File.ReadAllText("scripting/typescriptTranspiler.js"));
+            dynamic tscTranspile = this.engine.Evaluate("ts.transpile");
+            var test = tscTranspile(tsScript);
+            var testJS = this.engine.Evaluate(test);
+            dynamic result = this.engine.Evaluate("new Test()");
+            result.execute();
+            return "Test";
         }
     }
 }
