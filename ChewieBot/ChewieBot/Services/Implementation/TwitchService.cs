@@ -14,14 +14,16 @@ namespace ChewieBot.Services.Implementation
         private ITwitchClient client;
         private ITwitchApi api;
         private IUserService userService;
+        private ICommandService commandService;
 
         private List<User> currentUserList;
 
-        public TwitchService(ITwitchClient client, ITwitchApi api, IUserService userService)
+        public TwitchService(ITwitchClient client, ITwitchApi api, IUserService userService, ICommandService commandService)
         {
             this.client = client;
             this.api = api;
             this.userService = userService;
+            this.commandService = commandService;
             this.currentUserList = new List<User>();
         }
 
@@ -29,6 +31,7 @@ namespace ChewieBot.Services.Implementation
         {
             this.client.OnUserJoined += OnUserJoined;
             this.client.OnUserLeft += OnUserLeft;
+            this.client.OnChatCommandReceived += OnChatCommandReceived;
         }
 
         private void OnUserJoined(object sender, OnUserJoinedArgs e)
@@ -60,6 +63,12 @@ namespace ChewieBot.Services.Implementation
             }
 
             this.client.SendMessage($"{user.Username} left!");
+        }
+
+        private void OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
+        {
+            var commandResponse = this.commandService.ExecuteCommand(e.Command.CommandText, e.Command.ChatMessage.Username, e.Command.ArgumentsAsList);
+            this.client.SendMessage(commandResponse.ToString());
         }
 
         public void Initialize()

@@ -24,15 +24,15 @@ namespace ChewieBot
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
+        private ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
         private ICommandService commandService = UnityConfig.Resolve<ICommandService>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            //InitializeSetup();
-            //InitializeTwitchClient();
+            InitializeSetup();
+            InitializeTwitchClient();
             TestScripting();
         }
 
@@ -43,19 +43,15 @@ namespace ChewieBot
 
         private void TestScripting()
         {
-            this.commandService.ExecuteCommand("points", "magentafall");
-            dynamic parameters = new { Username = "magentafall", Points = 10 };
-            this.commandService.ExecuteCommand("addpoints", "magentafall", parameters);
-            this.commandService.ExecuteCommand("points", "magentafall");
         }
 
         private void InitializeTwitchClient()
         {
-            /*if (twitchService != null)
+            if (twitchService != null)
             {
                 twitchService.Initialize();
                 twitchService.Connect();
-            }*/
+            }
         }
     }
 }

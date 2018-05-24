@@ -10,24 +10,17 @@ namespace ChewieBot.Services.Implementation
 {
     public class CommandService : ICommandService
     {
-        private ITwitchService twitchService;
-        private IUserService userService;
         private CommandRepository commandRepository;
 
         public CommandService(IUserService userService)
         {
-            //this.twitchService = twitchService;
-            this.userService = userService;
             this.commandRepository = new CommandRepository();
         }
 
-        public void ExecuteCommand(string commandName, string username, dynamic parameters = null) 
+        public CommandResponse ExecuteCommand(string commandName, string username, List<string> chatParameters = null) 
         {
-            var response = this.commandRepository.ExecuteCommand(commandName, username, parameters);
-            if (response != null)
-            {
-                Console.WriteLine(response);
-            }
+            var response = this.commandRepository.ExecuteCommand(commandName, username, chatParameters);
+            return response;
         }
     }
 }

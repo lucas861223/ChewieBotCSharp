@@ -183,6 +183,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppStart\UnityConfig.cs" />
+    <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandRepository.cs" />
     <Compile Include="Commands\CommandResponse.cs" />
     <Compile Include="Config\AppConfig.cs" />

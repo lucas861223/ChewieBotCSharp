@@ -9,6 +9,6 @@ namespace ChewieBot.Services
 {
     public interface ICommandService
     {
-        void ExecuteCommand(string commandName, string username, dynamic parameters = null);
+        CommandResponse ExecuteCommand(string commandName, string username, List<string> parameters = null);
     }
 }

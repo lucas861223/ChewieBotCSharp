@@ -11,69 +11,112 @@ using ChewieBot.Database.Model;
 using ChewieBot.AppStart;
 using ChewieBot.Services;
 using ChewieBot.Scripting.Services;
+using System.Dynamic;
 
 namespace ChewieBot.Scripting
 {
     public class ScriptEngine
     {
-        private V8ScriptEngine engine;
+        private static V8ScriptEngine engine;
         private dynamic transpileTsc;
 
         public ScriptEngine()
         {
-            this.engine = new V8ScriptEngine(V8ScriptEngineFlags.EnableDebugging | V8ScriptEngineFlags.EnableRemoteDebugging, 9222);
+            if (engine == null)
+            {
+                engine = new V8ScriptEngine(V8ScriptEngineFlags.EnableDebugging | V8ScriptEngineFlags.EnableRemoteDebugging, 9222);
+            }
 
             this.CreateTranspiler();            
             this.ExposeAPIs();
         }
 
+        /// <summary>
+        /// Adding host objects and types to the script engine, so they're available in scripts.
+        /// </summary>
         private void ExposeAPIs()
         {
             this.ExposeServices();
             this.ExposeModels();
         }
 
+        /// <summary>
+        /// Add services to the script engine so that they're available in scripts.
+        /// </summary>
         private void ExposeServices()
         {
-            this.engine.AddHostObject("UserService", UnityConfig.Resolve<ScriptUserService>());
-            this.engine.AddHostType("Console", typeof(Console));
+            engine.AddHostObject("UserService", UnityConfig.Resolve<ScriptUserService>());
+            engine.AddHostType("Console", typeof(Console));
         }
 
+        /// <summary>
+        /// Add models to the script engine so that they're available in scripts.
+        /// </summary>
         private void ExposeModels()
         {
-            this.engine.AddHostType("User", typeof(User));
-            this.engine.AddHostType("CommandResponse", typeof(CommandResponse));
+            engine.AddHostType("User", typeof(User));
+            engine.AddHostType("CommandResponse", typeof(CommandResponse));
         }
 
-        public List<string> LoadScripts()
+        /// <summary>
+        /// Load TS scripts from the Commands\\CommandScripts folder and adds them to the script engine.
+        /// </summary>
+        /// <returns>A dictionary containing commands with their command name as the key. The command name is what is used to trigger the command.</returns>
+        public Dictionary<string, Command> LoadScripts()
         {
-            var list = new List<string>();
+            var dict = new Dictionary<string, Command>();
             foreach (var file in Directory.EnumerateFiles("Commands\\CommandScripts"))
             {
                 var fileName = file.Split('\\').Last();
                 fileName = fileName.Substring(0, fileName.Length - 3);
                 var chatCommandName = fileName.Substring(0, fileName.IndexOf("Command"));
-                if (this.TranspileTypescript(chatCommandName, file))
+                var command = this.TranspileTypescript(chatCommandName, file);
+                if (command != null)
                 {
-                    list.Add(chatCommandName);
+                    dict.Add(chatCommandName, command);
                 }
             }
-            return list;
+            return dict;
         }
 
-        public CommandResponse ExecuteScript(string command, string username, dynamic parameters)
+        /// <summary>
+        /// Execute a command.
+        /// </summary>
+        /// <param name="command">The command to exeute.</param>
+        /// <param name="username">The user calling the command.</param>
+        /// <param name="chatParameters">Any parameters for the command.</param>
+        /// <returns>A CommandResponse object with the response of the command execution.</returns>
+        public CommandResponse ExecuteScript(Command command, string username, List<string> chatParameters)
         {
-            if (this.engine.Script.parameters == null)
-            {
-                this.engine.AddHostObject("parameters", parameters);
-            }
-            else
-            {
-                this.engine.Script.parameters = parameters;
-            }
-
-            var response = this.engine.Evaluate($"{command}.execute('{username}', parameters)");
+            var response = engine.Evaluate(this.CreateCommandCall(command, username, chatParameters));
             return (CommandResponse)response;
+        }
+
+        /// <summary>
+        /// Creates the string that will be evaluated by the Script Engine to execute the command.
+        /// </summary>
+        /// <param name="command">The command to execute.</param>
+        /// <param name="username">The user calling the command.</param>
+        /// <param name="chatParameters">Any parameters for the command.</param>
+        /// <returns>A string that can be evaluated by the script engine to execute the command.</returns>
+        private string CreateCommandCall(Command command, string username, List<string> chatParameters)
+        {
+            // Create a JSON object for the parameters, using the parameter names as the key, and the parameters from chat as theh value.
+            var param = new StringBuilder();
+            param.Append("{");
+            for (int i = 0; i < chatParameters.Count(); i++)
+            {
+                if (i > 0)
+                {
+                    param.Append(",");
+                }
+                param.Append($"{command.Parameters[i]}: '{chatParameters[i]}'");
+            }
+            param.Append("}");
+
+            var commandCall = $"{command.CommandName}.execute('{username}', {param.ToString()})";
+
+            return commandCall;
         }
 
         /// <summary>
@@ -82,18 +125,53 @@ namespace ChewieBot.Scripting
         /// <param name="commandName">Variable name that will be assigned in the scripting engine to the javascript onject of the loaded file.</param>
         /// <param name="commandScriptPath">The path to the Typescript file to load in to the scripting engine. The Typescript file name needs to be in the format {commandName}Command.ts</param>
         /// <returns></returns>
-        private bool TranspileTypescript(string commandName, string commandScriptPath)
+        private Command TranspileTypescript(string commandName, string commandScriptPath)
         {
             if (File.Exists(commandScriptPath) && commandScriptPath.Substring(commandScriptPath.Length - 3) == ".ts")
             {
                 var tsScript = File.ReadAllText(commandScriptPath);
-                var script = this.transpileTsc(tsScript);
-                this.engine.Evaluate(script);
                 var scriptCommandName = commandName.First().ToString().ToUpper() + commandName.Substring(1) + "Command";
-                this.engine.Evaluate($"let {commandName} = new {scriptCommandName}()");
-                return true;
+
+                // Checking to see if we've already added this command. If we have, skip it.
+                dynamic engineCommand = engine.Script[scriptCommandName];
+                if (engineCommand.GetType() == typeof(Microsoft.ClearScript.Undefined))
+                {
+                    // TODO: Should rework how parameters work so that we can get basic types (e.g. string, number, etc)
+                    // as for now everything is a string, and we try to cast it in the services, returning errors if it fails.
+                    var script = this.transpileTsc(tsScript);
+                    engine.Evaluate(script);
+                    // We need to create an object for the command so that we can use the execute function later, and so we can can get the parameters property
+                    engine.Evaluate($"let {commandName} = new {scriptCommandName}()");                    
+
+                    var command = new Command();
+                    command.CommandName = commandName;
+                    command.Parameters = this.GetCommandParameters(commandName);
+                    return command;
+                }
             }
-            return false;
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a list of parameters names for a command.
+        /// </summary>
+        /// <param name="commandName">The command to get parameters for.</param>
+        /// <returns>A list of parameter names.</returns>
+        private List<string> GetCommandParameters(string commandName)
+        {
+            var list = new List<string>();
+
+            // Check to see if we have any parameters
+            dynamic parameters = engine.Evaluate($"{commandName}.parameters");
+            if (parameters.GetType() != typeof(Microsoft.ClearScript.Undefined))
+            {
+                for (int i = 0; i < parameters.length; i++)
+                {
+                    list.Add(parameters[i]);
+                }
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -102,8 +180,8 @@ namespace ChewieBot.Scripting
         private void CreateTranspiler()
         {
             if (this.transpileTsc == null) {
-                var tscScript = this.engine.Evaluate(File.ReadAllText("scripting/typescriptTranspiler.js"));
-                this.transpileTsc = this.engine.Evaluate("ts.transpile");
+                var tscScript = engine.Evaluate(File.ReadAllText("scripting/typescriptTranspiler.js"));
+                this.transpileTsc = engine.Evaluate("ts.transpile");
             }
         }
     }

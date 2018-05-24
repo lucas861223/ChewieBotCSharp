@@ -40,6 +40,7 @@ namespace ChewieBot.Twitch
             this.client.OnJoinedChannel += OnJoinedChannel;
             this.client.OnUserJoined += ClientUserJoined;
             this.client.OnUserLeft += ClientUserLeft;
+            this.client.OnChatCommandReceived += ClientChatCommandReceived;
         }
 
         public void Connect()
@@ -83,7 +84,14 @@ namespace ChewieBot.Twitch
             this.OnUserLeft?.Invoke(this, e);
         }
 
+        private void ClientChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
+        {
+            this.OnChatCommandReceived.Invoke(this, e);
+        }
+
         public event EventHandler<OnUserJoinedArgs> OnUserJoined;
         public event EventHandler<OnUserLeftArgs> OnUserLeft;
+
+        public event EventHandler<OnChatCommandReceivedArgs> OnChatCommandReceived;
     }
 }

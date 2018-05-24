@@ -16,5 +16,6 @@ namespace ChewieBot.Twitch
 
         event EventHandler<OnUserJoinedArgs> OnUserJoined;
         event EventHandler<OnUserLeftArgs> OnUserLeft;
+        event EventHandler<OnChatCommandReceivedArgs> OnChatCommandReceived;
     }
 }

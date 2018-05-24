@@ -13,12 +13,12 @@ namespace ChewieBot.Commands
 {
     public class CommandRepository
     {
-        private List<string> commands;
+        private Dictionary<string, Command> commands;
         private ScriptEngine scriptEngine;
 
         public CommandRepository()
         {
-            this.commands = new List<string>();
+            this.commands = new Dictionary<string, Command>();
             this.scriptEngine = new ScriptEngine();
             this.LoadCommands();
         }
@@ -28,11 +28,11 @@ namespace ChewieBot.Commands
             this.commands = this.scriptEngine.LoadScripts();
         }
 
-        public CommandResponse ExecuteCommand(string commandName, string username, dynamic parameters) 
+        public CommandResponse ExecuteCommand(string commandName, string username, List<string> chatParameters) 
         {
-            if (this.commands.Contains(commandName))
+            if (this.commands.ContainsKey(commandName))
             {
-                var response = this.scriptEngine.ExecuteScript(commandName, username, parameters);
+                var response = this.scriptEngine.ExecuteScript(this.commands[commandName], username, chatParameters);
                 return response;
             }
             else

@@ -1,8 +1,6 @@
 class PointsCommand {
-    execute(username: string, data: any) {
-        Console.WriteLine(`Data: ${data}`);
+    execute(username: string, params: any) {
         var result = UserService.GetUser(username);
-        Console.WriteLine(`Result: ${result}`);
         var response = new CommandResponse(`${result.Data.Username} - ${result.Data.Points}`);
         return response;
     }

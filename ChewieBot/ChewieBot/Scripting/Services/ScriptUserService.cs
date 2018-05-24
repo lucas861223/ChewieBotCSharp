@@ -1,4 +1,5 @@
 ﻿using ChewieBot.Database.Model;
+using ChewieBot.Enum;
 using ChewieBot.Services;
 using System;
 using System.Collections.Generic;
@@ -27,12 +28,12 @@ namespace ChewieBot.Scripting.Services
             response.Data = this.userService.GetUser(username);
             if (response.Data == null)
             {
-                response.ResultStatus = Enum.ScriptServiceResult.USER_NOT_EXIST;
+                response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;
                 response.Message = $"Unable to find user with name: {username}"; 
             }
             else
             {
-                response.ResultStatus = Enum.ScriptServiceResult.SUCCESS;
+                response.ResultStatus = ScriptServiceResult.SUCCESS;
             }
 
             return response;
@@ -45,28 +46,37 @@ namespace ChewieBot.Scripting.Services
             response.Data = data > 0 ? data : null;
             if (response.Data == null)
             {
-                response.ResultStatus = Enum.ScriptServiceResult.ERROR;
+                response.ResultStatus = ScriptServiceResult.ERROR;
                 response.Message = $"Unable to get points for user with name: ${username}";
             }
             else
             {
-                response.ResultStatus = Enum.ScriptServiceResult.SUCCESS;
+                response.ResultStatus = ScriptServiceResult.SUCCESS;
             }
 
             return response;
         }
 
-        public ScriptServiceResponse AddPointsForUser(string username, int points)
+        public ScriptServiceResponse AddPointsForUser(string username, string points)
         {
             var response = new ScriptServiceResponse();
-            if (!this.userService.AddPointsForUser(username, points))
+            int pointsInt;
+            if (Int32.TryParse(points, out pointsInt))
             {
-                response.ResultStatus = Enum.ScriptServiceResult.USER_NOT_EXIST;
-                response.Message = $"Unable to add points to user with name: ${username} as the user does not exist.";
+                if (!this.userService.AddPointsForUser(username, Int32.Parse(points)))
+                {
+                    response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;
+                    response.Message = $"Unable to add points to user with name: ${username} as the user does not exist.";
+                }
+                else
+                {
+                    response.ResultStatus = ScriptServiceResult.SUCCESS;
+                }
             }
             else
             {
-                response.ResultStatus = Enum.ScriptServiceResult.SUCCESS;
+                response.ResultStatus = ScriptServiceResult.ERROR;
+                response.Message = $"Unable to parse points to an integer. Points needs to be a number.";
             }
 
             return response;
