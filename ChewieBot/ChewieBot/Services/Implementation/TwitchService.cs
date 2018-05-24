@@ -1,4 +1,5 @@
 ﻿using ChewieBot.Database.Model;
+using ChewieBot.Enum;
 using ChewieBot.Twitch;
 using System;
 using System.Collections.Generic;
@@ -68,7 +69,10 @@ namespace ChewieBot.Services.Implementation
         private void OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
         {
             var commandResponse = this.commandService.ExecuteCommand(e.Command.CommandText, e.Command.ChatMessage.Username, e.Command.ArgumentsAsList);
-            this.client.SendMessage(commandResponse.ToString());
+            if (commandResponse.ResponseType == "Message")
+            {
+                this.client.SendMessage(commandResponse.ToString());
+            }
         }
 
         public void Initialize()

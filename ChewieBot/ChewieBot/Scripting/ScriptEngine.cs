@@ -12,10 +12,14 @@ using ChewieBot.AppStart;
 using ChewieBot.Services;
 using ChewieBot.Scripting.Services;
 using System.Dynamic;
+using System.Timers;
+using Microsoft.ClearScript;
+using ChewieBot.Scripting.Events;
+using ChewieBot.Enum;
 
 namespace ChewieBot.Scripting
 {
-    public class ScriptEngine
+    public class ScriptEngine : IScriptEngine
     {
         private static V8ScriptEngine engine;
         private dynamic transpileTsc;
@@ -46,7 +50,10 @@ namespace ChewieBot.Scripting
         private void ExposeServices()
         {
             engine.AddHostObject("UserService", UnityConfig.Resolve<ScriptUserService>());
+            engine.AddHostObject("ChatEventService", UnityConfig.Resolve<ScriptChatEventService>());
             engine.AddHostType("Console", typeof(Console));
+            engine.AddHostType("Timer", typeof(Timer));
+            engine.AddHostObject("host", new HostFunctions());
         }
 
         /// <summary>
@@ -56,6 +63,10 @@ namespace ChewieBot.Scripting
         {
             engine.AddHostType("User", typeof(User));
             engine.AddHostType("CommandResponse", typeof(CommandResponse));
+            engine.AddHostType("EventType", typeof(EventType));
+            engine.AddHostType("ResponseType", typeof(ResponseType));
+            engine.AddHostType("ChatEvent", typeof(ChatEvent));
+            engine.AddHostType("EventWinner", typeof(EventWinner));
         }
 
         /// <summary>
@@ -86,7 +97,7 @@ namespace ChewieBot.Scripting
         /// <param name="username">The user calling the command.</param>
         /// <param name="chatParameters">Any parameters for the command.</param>
         /// <returns>A CommandResponse object with the response of the command execution.</returns>
-        public CommandResponse ExecuteScript(Command command, string username, List<string> chatParameters)
+        public CommandResponse ExecuteCommand(Command command, string username, List<string> chatParameters)
         {
             var response = engine.Evaluate(this.CreateCommandCall(command, username, chatParameters));
             return (CommandResponse)response;

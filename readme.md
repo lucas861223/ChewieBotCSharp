@@ -3,6 +3,7 @@
 This is a Twitch.TV chat bot, specifically designed to have functionality for music streamers.
 
 This is currently a Work In Progress and is not functional.
+There are minimal/no comments for now, as pretty much everything may change. Comments/docs will be added as things get more stable.
 
 ## Planned Features
 

@@ -8,7 +8,8 @@
     execute(username: string, params: any) {
         Console.WriteLine(`Data: ${params}`);
         var result = UserService.AddPointsForUser(params.username, params.points);
-        var response = new CommandResponse(`${username} added ${params.points} to ${params.username}!`);
+        var response = new CommandResponse();
+        response.Message = `${username} added ${params.points} to ${params.username}!`;
         return response;
     }
 }

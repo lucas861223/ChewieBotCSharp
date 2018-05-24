@@ -1,5 +1,7 @@
-﻿using ChewieBot.Database.Repository;
+﻿using ChewieBot.Commands;
+using ChewieBot.Database.Repository;
 using ChewieBot.Database.Repository.Implementation;
+using ChewieBot.Scripting;
 using ChewieBot.Scripting.Services;
 using ChewieBot.Services;
 using ChewieBot.Services.Implementation;
@@ -45,6 +47,13 @@ namespace ChewieBot.AppStart
             container.RegisterType<ITwitchService, TwitchService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(ITwitchClient), typeof(ITwitchApi), typeof(IUserService), typeof(ICommandService)));
             container.RegisterType<ICommandService, CommandService>(new TransientLifetimeManager());
             container.RegisterType<ScriptUserService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
+            container.RegisterType<ScriptChatEventService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IChatEventService)));
+            container.RegisterType<ICommandRepository, CommandRepository>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IScriptEngine, ScriptEngine>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IChatEventService, ChatEventService>(new TransientLifetimeManager());
+            container.RegisterType<IChatEventData, ChatEventRepository>(new TransientLifetimeManager());
+            container.RegisterType<IEventWinnerService, EventWinnerService>(new TransientLifetimeManager());
+            container.RegisterType<IEventWinnerData, EventWinnerRepository>(new TransientLifetimeManager());
         }
 
         public static T Resolve<T>()

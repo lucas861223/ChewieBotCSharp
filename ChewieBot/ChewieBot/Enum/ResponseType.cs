@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChewieBot.Enum
 {
-    public enum CommandType
+    public enum ResponseType
     {
-        Text,
-        Event,
-        Raffle,
-        Query,
-        Parameterized
+        Empty,
+        Message
     }
 }

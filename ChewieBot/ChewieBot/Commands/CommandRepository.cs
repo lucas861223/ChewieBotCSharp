@@ -11,15 +11,15 @@ using Microsoft.ClearScript.V8;
 
 namespace ChewieBot.Commands
 {
-    public class CommandRepository
+    public class CommandRepository : ICommandRepository
     {
         private Dictionary<string, Command> commands;
-        private ScriptEngine scriptEngine;
+        private IScriptEngine scriptEngine;
 
-        public CommandRepository()
+        public CommandRepository(IScriptEngine scriptEngine)
         {
             this.commands = new Dictionary<string, Command>();
-            this.scriptEngine = new ScriptEngine();
+            this.scriptEngine = scriptEngine;
             this.LoadCommands();
         }
 
@@ -32,7 +32,7 @@ namespace ChewieBot.Commands
         {
             if (this.commands.ContainsKey(commandName))
             {
-                var response = this.scriptEngine.ExecuteScript(this.commands[commandName], username, chatParameters);
+                var response = this.scriptEngine.ExecuteCommand(this.commands[commandName], username, chatParameters);
                 return response;
             }
             else

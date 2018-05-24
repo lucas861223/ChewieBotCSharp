@@ -1,5 +1,4 @@
 ﻿using ChewieBot.Commands;
-using ChewieBot.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +9,11 @@ namespace ChewieBot.Services.Implementation
 {
     public class CommandService : ICommandService
     {
-        private CommandRepository commandRepository;
+        private ICommandRepository commandRepository;
 
-        public CommandService(IUserService userService)
+        public CommandService(ICommandRepository commandRepository)
         {
-            this.commandRepository = new CommandRepository();
+            this.commandRepository = commandRepository;
         }
 
         public CommandResponse ExecuteCommand(string commandName, string username, List<string> chatParameters = null) 
