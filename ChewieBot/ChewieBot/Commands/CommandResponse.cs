@@ -16,29 +16,7 @@ namespace ChewieBot.Commands
         public CommandResponse(string tokenisedResponse)
         {
             this.tokenisedResponse = tokenisedResponse;
-            this.responseParameters = this.ParseTokenisedResponse(this.tokenisedResponse);
-        }
-
-        protected Dictionary<string, string> ParseTokenisedResponse(string tokenised)
-        {
-            var dict = new Dictionary<string, string>();
-            var bracesPattern = new Regex("{[^}]*}|[^{}]+");
-            var matchResult = bracesPattern.Match(tokenised);
-            // Matches based on {} around text.
-            if (matchResult.Success)
-            {
-                Match match = null;
-                do
-                {
-                    match = matchResult.NextMatch();
-                    // If the match has a {, then it's a token value, so add it to our dictionary with an empty value for now.
-                    if (match != null && match.Value.IndexOf('{') > 0)
-                    {
-                        dict.Add(match.Value.Substring(1, match.Value.Length - 1), String.Empty);
-                    }
-                } while (match != null);
-            }
-            return dict;
+            this.responseParameters = new Dictionary<string, string>();
         }
 
         protected void SetParam(string key, string value)

@@ -23,14 +23,31 @@ namespace ChewieBot.Services.Implementation
             return this.userData.SetUser(user);
         }
 
-        public User GetUser(int id)
-        {
-            return this.userData.GetUser(id);
-        }
-
         public User GetUser(string username)
         {
             return this.userData.GetUser(username);
+        }
+
+        public int GetPointsForUser(string username)
+        {
+            var user = this.GetUser(username);
+            if (user != null)
+            {
+                return user.Points;
+            }
+            return -1;
+        }
+
+        public bool AddPointsForUser(string username, int points)
+        {
+            var user = this.GetUser(username);
+            if (user != null)
+            {
+                user.Points += points;
+                this.SetUser(user);
+                return true;
+            }
+            return false;
         }
     }
 }

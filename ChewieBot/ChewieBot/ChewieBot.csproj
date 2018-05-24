@@ -130,6 +130,8 @@
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -181,20 +183,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppStart\UnityConfig.cs" />
-    <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\CommandRepository.cs" />
     <Compile Include="Commands\CommandResponse.cs" />
-    <Compile Include="Commands\CommandToken.cs" />
-    <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\QueryCommand.cs" />
-    <Compile Include="Commands\TextCommand.cs" />
     <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
     <Compile Include="Database\Model\User.cs" />
     <Compile Include="Database\Repository\Implementation\UserRepository.cs" />
     <Compile Include="Database\Repository\IUserData.cs" />
     <Compile Include="Enum\CommandType.cs" />
+    <Compile Include="Enum\ScriptServiceResult.cs" />
     <Compile Include="Scripting\ScriptEngine.cs" />
+    <Compile Include="Scripting\ScriptServiceResponse.cs" />
+    <Compile Include="Scripting\Services\ScriptUserService.cs" />
     <Compile Include="Services\ICommandService.cs" />
     <Compile Include="Events\CommandExecutedEventArgs.cs" />
     <Compile Include="Services\Implementation\CommandService.cs" />
@@ -237,7 +237,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Commands\CommandData\Queries\pointsCommand.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -251,12 +250,14 @@
     <Content Include="Scripting\typescriptTranspiler.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="test.js">
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Commands\CommandScripts\pointsCommand.ts">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="test.ts">
+    <Content Include="Commands\CommandScripts\addpointsCommand.ts">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

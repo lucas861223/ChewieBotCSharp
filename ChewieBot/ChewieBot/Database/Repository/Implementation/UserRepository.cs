@@ -13,13 +13,18 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                var record = context.Users.FirstOrDefault(x => x.Id == user.Id);
+                var record = context.Users.Find(user.Id);
                 if (record == null)
                 {
                     record = user;
                     context.Users.Add(record);
-                    context.SaveChanges();
                 }
+                else
+                {
+                    context.Entry(record).CurrentValues.SetValues(user);
+                }
+
+                context.SaveChanges();
 
                 return record;
             }

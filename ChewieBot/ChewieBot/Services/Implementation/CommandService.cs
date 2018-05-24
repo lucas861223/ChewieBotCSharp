@@ -11,34 +11,22 @@ namespace ChewieBot.Services.Implementation
     public class CommandService : ICommandService
     {
         private ITwitchService twitchService;
-
-        private Queue<ICommand> commandQueue;
+        private IUserService userService;
         private CommandRepository commandRepository;
 
-        public event EventHandler<CommandExecutedEventArgs> CommandExecutedEvent;
-
-        public CommandService(ITwitchService twitchService)
+        public CommandService(IUserService userService)
         {
-            this.twitchService = twitchService;
-            this.commandQueue = new Queue<ICommand>();
+            //this.twitchService = twitchService;
+            this.userService = userService;
             this.commandRepository = new CommandRepository();
-            this.commandRepository.LoadCommands();
         }
 
-        public void QueueCommand(ICommand command)
+        public void ExecuteCommand(string commandName, string username, dynamic parameters = null) 
         {
-            // TODO: Add buffering system to prevent executing commands until after time has passed since adding a new command.
-            this.commandQueue.Enqueue(command);
-        }
-
-        private void ExecuteCommands()
-        {
-            // TODO: merge commands that are the same if possible, (e.g. !points could return everyones query in a single reply)
-            while (this.commandQueue.Count > 0)
+            var response = this.commandRepository.ExecuteCommand(commandName, username, parameters);
+            if (response != null)
             {
-                var command = this.commandQueue.Dequeue();
-                command.Execute();
-                this.CommandExecutedEvent?.Invoke(this, new CommandExecutedEventArgs(command));
+                Console.WriteLine(response);
             }
         }
     }

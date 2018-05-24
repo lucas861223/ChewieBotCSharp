@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChewieBot.Commands
+namespace ChewieBot.Enum
 {
-    public class TextCommand : BaseCommand
+    public enum ScriptServiceResult
     {
+        SUCCESS,
+        USER_NOT_EXIST,
+        ERROR
     }
 }

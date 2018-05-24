@@ -5,68 +5,40 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChewieBot.Scripting;
+using ChewieBot.Database.Model;
+using Microsoft.ClearScript.V8;
 
 namespace ChewieBot.Commands
 {
     public class CommandRepository
     {
-        private Dictionary<string, ICommand> commands;
+        private List<string> commands;
+        private ScriptEngine scriptEngine;
 
         public CommandRepository()
         {
-            this.commands = new Dictionary<string, ICommand>();
+            this.commands = new List<string>();
+            this.scriptEngine = new ScriptEngine();
             this.LoadCommands();
         }
 
         public void LoadCommands()
         {
-            this.commands.Clear();
-
-            var rootFolderName = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
-            var commandFolders = Directory.GetDirectories($"{rootFolderName}//Commands//CommandData");
-
-            foreach (var folder in commandFolders)
-            {
-                switch (Path.GetFileName(folder).ToLower())
-                {
-                    case "queries":
-                        {
-                            var queryCommands = this.ParseCommands<QueryCommand>(Directory.GetFiles(folder));
-                            this.commands = this.commands.Concat(queryCommands).ToDictionary(x => x.Key, x => x.Value);
-                            break;
-                        }
-                    case "text":
-                        {
-                            var textCommands = this.ParseCommands<TextCommand>(Directory.GetFiles(folder));
-                            this.commands = this.commands.Concat(textCommands).ToDictionary(x => x.Key, x => x.Value);
-                            break;
-                        }
-                    default:
-                        {
-                            break;
-                        }
-                }
-                
-            }
-            
+            this.commands = this.scriptEngine.LoadScripts();
         }
 
-        private Dictionary<string, ICommand> ParseCommands<T>(string[] files)
-            where T : BaseCommand
+        public CommandResponse ExecuteCommand(string commandName, string username, dynamic parameters) 
         {
-
-            var dict = new Dictionary<string, ICommand>();
-            foreach (var file in files)
+            if (this.commands.Contains(commandName))
             {
-                using (var sr = new StreamReader(file))
-                {
-                    string json = sr.ReadToEnd();
-                    var command = JsonConvert.DeserializeObject<T>(json);
-                    dict.Add(command.Name, command);
-                }
+                var response = this.scriptEngine.ExecuteScript(commandName, username, parameters);
+                return response;
             }
-
-            return dict;
+            else
+            {
+                return null;
+            }
         }
     }
 }
