@@ -11,5 +11,6 @@ namespace ChewieBot.Scripting
     {
         Dictionary<string, Command> LoadScripts();
         CommandResponse ExecuteCommand(Command commandName, string username, List<string> chatParameters);
+        void TestPython(string path, string username, dynamic parameters = null);
     }
 }

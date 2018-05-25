@@ -16,6 +16,10 @@ using System.Timers;
 using Microsoft.ClearScript;
 using ChewieBot.Scripting.Events;
 using ChewieBot.Enum;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
+using Microsoft.Scripting.Hosting.Providers;
+using IronPython.Runtime;
 
 namespace ChewieBot.Scripting
 {
@@ -23,6 +27,8 @@ namespace ChewieBot.Scripting
     {
         private static V8ScriptEngine engine;
         private dynamic transpileTsc;
+
+        private static ScriptRuntime ipy;
 
         public ScriptEngine()
         {
@@ -33,6 +39,26 @@ namespace ChewieBot.Scripting
 
             this.CreateTranspiler();            
             this.ExposeAPIs();
+
+            ipy = Python.CreateRuntime();
+            var ipyEngine = ipy.GetEngine("python");
+            var pc = HostingHelpers.GetLanguageContext(ipyEngine) as PythonContext;
+            var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List;
+            hooks.Clear();
+        }
+
+        public void TestPython(string pythonFile, string username, dynamic parameters = null)
+        {
+            dynamic test = ipy.UseFile(pythonFile);
+            if (parameters != null)
+            {
+                var ipyParams = new IronPythonKnownType(parameters);
+                test.execute(username, ipyParams);
+            }
+            else
+            {
+                test.execute(username);
+            }
         }
 
         /// <summary>
