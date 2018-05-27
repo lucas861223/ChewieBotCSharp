@@ -10,6 +10,6 @@ namespace ChewieBot.Scripting.Events
 {
     public class EventStartedEventArgs
     {
-        public ChatEvent ChatEvent { get; set; }
+        public int EventId { get; set; }
     }
 }

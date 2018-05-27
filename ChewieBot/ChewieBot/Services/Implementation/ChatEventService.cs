@@ -31,29 +31,19 @@ namespace ChewieBot.Services.Implementation
             this.userService = userService;
         }
 
-        public void AddUserToEvent(int eventId, User user)
+        private void AddUserToEvent(int eventId, User user)
         {
-            if (this.eventList.ContainsKey(eventId) && !this.eventList[eventId].HasStarted && !this.eventList[eventId].UserList.Any(x => x.Id == user.Id))
+            if (this.eventList.ContainsKey(eventId) && !this.eventList[eventId].HasFinished && !this.eventList[eventId].UserList.Any(x => x.Id == user.Id))
             {
                 this.eventList[eventId].UserList.Add(user);
             }
         }
 
-        public ChatEvent AddEvent(EventType type, int delay, int duration)
+        public ChatEvent CreateNewEvent(EventType type, int duration)
         {
             var chatEvent = new ChatEvent() { Type = type, Duration = duration };
             chatEvent = this.chatEventData.SetChatEvent(chatEvent);
             this.eventList.Add(chatEvent.EventId, chatEvent);
-
-            if (delay < 1)
-            {
-                delay = 1;
-            }
-
-            var eventTimer = new Timer(delay);
-            eventTimer.AutoReset = false;
-            this.eventTimers.Add(chatEvent.EventId, eventTimer);
-
             return chatEvent;
         }
 
@@ -61,24 +51,19 @@ namespace ChewieBot.Services.Implementation
         {
             if (this.eventList.ContainsKey(eventId) && !this.eventList[eventId].HasStarted && !this.eventList[eventId].HasFinished)
             {
-                this.eventList[eventId].HasStarted = true;
-                var timer = this.eventTimers[eventId];
+                var chatEvent = this.eventList[eventId];
+                chatEvent.HasStarted = true;
+                var timer = new Timer(chatEvent.Duration);                
+                timer.AutoReset = false;
                 timer.Elapsed += (sender, args) =>
                 {
                     this.eventTimers.Remove(eventId);
-                    var chatEvent = this.eventList[eventId];
-                    this.OnEventStarted.Invoke(sender, new EventStartedEventArgs { ChatEvent = chatEvent });
-                    var stopTimer = new Timer(chatEvent.Duration);
-                    stopTimer.AutoReset = false;
-                    stopTimer.Elapsed += (s, a) =>
-                    {
-                        this.StopEvent(eventId);
-                    };
-                    stopTimer.Start();
+                    this.StopEvent(eventId);
                 };
-                timer.Start();
 
+                this.eventTimers.Add(eventId, timer);
                 this.eventTimers[eventId].Start();
+                this.OnEventStarted?.Invoke(this, new EventStartedEventArgs { EventId = eventId });
             }
         }
 
@@ -93,7 +78,7 @@ namespace ChewieBot.Services.Implementation
                 this.chatEventData.SetChatEvent(this.eventList[eventId]);
 
                 var winners = this.GetEventWinners(eventId);
-                this.OnEventEnded.Invoke(this, new EventEndedEventArgs { ChatEvent = this.eventList[eventId], EventWinners = winners });
+                this.OnEventEnded?.Invoke(this, new EventEndedEventArgs { ChatEvent = this.eventList[eventId], EventWinners = winners });
 
                 this.eventTimers.Remove(eventId);
             }
@@ -105,7 +90,7 @@ namespace ChewieBot.Services.Implementation
             if (this.eventList.ContainsKey(eventId) && this.eventList[eventId].HasFinished)
             {
                 var winners = CreateEventWinners(eventId);
-                for (int i = 0; i < winners.Length; i++)
+                for (int i = 0; i < winners.Count; i++)
                 {
                     var winner = new EventWinner() { Event = this.eventList[eventId], User = winners[i], Position = i + 1 };
                     this.eventWinnerData.SetEventWinner(winner);
@@ -118,28 +103,35 @@ namespace ChewieBot.Services.Implementation
 
         public void AddUser(int eventId, string username)
         {
-            if (this.eventList.ContainsKey(eventId) && this.eventList[eventId].HasStarted)
+            var user = userService.GetUser(username);
+            if (user != null)
             {
-                var user = this.userService.GetUser(username);
-                if (user != null && !this.eventList[eventId].UserList.Any(x => x == user))
-                {
-                    this.eventList[eventId].UserList.Add(user);
-                }
+                this.AddUserToEvent(eventId, user);
             }
         }
 
-        private User[] CreateEventWinners(int eventId)
+        public void AddUserToCurrentEvent(string username)
         {
-            var winners = new User[3];
+            var currentEvent = this.eventList.Values.FirstOrDefault(x => x.HasStarted);
+            if (currentEvent != null)
+            {
+                this.AddUser(currentEvent.EventId, username);
+            }
+        }
+
+        private List<User> CreateEventWinners(int eventId)
+        {
+            var winners = new List<User>();
             var winningIndexList = new List<int>();
             if (this.eventList.ContainsKey(eventId) && this.eventList[eventId].HasFinished)
             {
                 var chatEvent = this.eventList[eventId];
-                if (chatEvent.UserList.Count >= 3)
+                if (chatEvent.UserList.Count >= 1)
                 {
+                    var count = chatEvent.UserList.Count >= 3 ? 3 : chatEvent.UserList.Count;
                     var rnd = new Random();
                     
-                    for(int i = 0; i < 3; i++)
+                    for(int i = 0; i < count; i++)
                     {
                         int winnerIndex;
                         do
@@ -148,7 +140,7 @@ namespace ChewieBot.Services.Implementation
                         } while (winningIndexList.Any(x => x == winnerIndex));
 
                         winningIndexList.Add(winnerIndex);
-                        winners[i] = chatEvent.UserList[winnerIndex];
+                        winners.Add(chatEvent.UserList[winnerIndex]);
                     }
                 }
             }

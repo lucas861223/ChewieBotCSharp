@@ -10,6 +10,7 @@ namespace ChewieBot.Enum
     {
         SUCCESS,
         USER_NOT_EXIST,
-        ERROR
+        ERROR,
+        PARSE_ERROR
     }
 }

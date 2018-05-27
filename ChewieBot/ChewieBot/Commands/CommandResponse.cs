@@ -13,8 +13,9 @@ namespace ChewieBot.Commands
         public string Message { get; set; }
         public string ResponseType { get; set; }
 
-        public CommandResponse()
+        public CommandResponse(string message)
         {
+            this.Message = message;
         }
     }
 }

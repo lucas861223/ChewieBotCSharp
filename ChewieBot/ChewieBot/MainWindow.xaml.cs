@@ -27,7 +27,7 @@ namespace ChewieBot
         private ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
         private ICommandService commandService = UnityConfig.Resolve<ICommandService>();
         private IUserService userService = UnityConfig.Resolve<IUserService>();
-        private IScriptEngine scriptEngine = UnityConfig.Resolve<IScriptEngine>();
+        private IPythonEngine scriptEngine = UnityConfig.Resolve<IPythonEngine>();
 
         public MainWindow()
         {
@@ -46,8 +46,9 @@ namespace ChewieBot
 
         private void TestPython()
         {
-            this.scriptEngine.TestPython("Scripting//pointsCommand.py", "magentafall");
-            this.scriptEngine.TestPython("Scripting//addpointsCommand.py", "magentafall", new { username = "magentafall", points = 50 });
+            this.commandService.ExecuteCommand("addpoints", "magentatall", new List<string>() { "magentafall", "50" });
+            this.commandService.ExecuteCommand("raffle", "magentafall", new List<string>() { "Raffle", "5" });
+            this.commandService.ExecuteCommand("joinraffle", "magentafall");
         }
 
         private void TestScripting()

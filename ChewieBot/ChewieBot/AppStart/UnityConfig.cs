@@ -48,8 +48,8 @@ namespace ChewieBot.AppStart
             container.RegisterType<ICommandService, CommandService>(new TransientLifetimeManager());
             container.RegisterType<ScriptUserService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
             container.RegisterType<ScriptChatEventService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IChatEventService)));
-            container.RegisterType<ICommandRepository, CommandRepository>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IScriptEngine, ScriptEngine>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ICommandRepository, CommandRepository>(new ContainerControlledLifetimeManager(), new InjectionConstructor(typeof(IPythonEngine)));
+            container.RegisterType<IPythonEngine, PythonEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType<IChatEventService, ChatEventService>(new TransientLifetimeManager());
             container.RegisterType<IChatEventData, ChatEventRepository>(new TransientLifetimeManager());
             container.RegisterType<IEventWinnerService, EventWinnerService>(new TransientLifetimeManager());

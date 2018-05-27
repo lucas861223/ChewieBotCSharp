@@ -11,10 +11,11 @@ namespace ChewieBot.Services
 {
     public interface IChatEventService
     {
-        ChatEvent AddEvent(EventType type, int delay, int duration);
+        ChatEvent CreateNewEvent(EventType type, int duration);
         void StartEvent(int eventId);
         void StopEvent(int eventId);
         void AddUser(int eventId, string username);
+        void AddUserToCurrentEvent(string username);
 
         event EventHandler<EventStartedEventArgs> OnEventStarted;
         event EventHandler<EventEndedEventArgs> OnEventEnded;

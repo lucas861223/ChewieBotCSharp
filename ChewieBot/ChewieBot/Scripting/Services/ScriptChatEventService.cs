@@ -27,7 +27,7 @@ namespace ChewieBot.Scripting.Services
         public ChatEvent AddEvent(string type, int delay, int duration)
         {
             var eventType = (EventType)System.Enum.Parse(typeof(EventType), type);
-            var chatEvent = this.chatEventService.AddEvent(eventType, delay, duration);
+            var chatEvent = this.chatEventService.CreateNewEvent(eventType, duration);
             return chatEvent;
 
         }

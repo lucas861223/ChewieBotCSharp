@@ -1,5 +1,6 @@
 ﻿using ChewieBot.AppStart;
 using ChewieBot.Enum;
+using ChewieBot.Scripting;
 using ChewieBot.Services;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChewieBot.Scripting
+namespace ChewieBot.ScriptingAPI
 {
     public static class UserService
     {
@@ -49,17 +50,25 @@ namespace ChewieBot.Scripting
             return response;
         }
 
-        public static ScriptServiceResponse AddPointsForUser(string username, int points)
+        public static ScriptServiceResponse AddPointsForUser(string username, string points)
         {
             var response = new ScriptServiceResponse();
-            if (!userService.AddPointsForUser(username, points))
+            if (int.TryParse(points, out int pointsInt))
             {
-                response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;
-                response.Message = $"Unable to add points to user with name: ${username} as the user does not exist.";
+                if (!userService.AddPointsForUser(username, pointsInt))
+                {
+                    response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;
+                    response.Message = $"Unable to add points to user with name: ${username} as the user does not exist.";
+                }
+                else
+                {
+                    response.ResultStatus = ScriptServiceResult.SUCCESS;
+                }
             }
             else
             {
-                response.ResultStatus = ScriptServiceResult.SUCCESS;
+                response.ResultStatus = ScriptServiceResult.ERROR;
+                response.Message = "Could not parse points to an integer.";
             }
 
             return response;

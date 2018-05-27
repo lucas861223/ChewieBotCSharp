@@ -36,9 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClearScript, Version=5.5.1.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClearScript.V8.5.5.1\lib\net45\ClearScript.dll</HintPath>
-    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.8.6\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
@@ -228,8 +225,8 @@
     <Compile Include="Scripting\Events\EventEndedEventArgs.cs" />
     <Compile Include="Scripting\Events\EventStartedEventArgs.cs" />
     <Compile Include="Scripting\IronPythonKnownType.cs" />
-    <Compile Include="Scripting\IScriptEngine.cs" />
-    <Compile Include="Scripting\ScriptEngine.cs" />
+    <Compile Include="Scripting\IPythonEngine.cs" />
+    <Compile Include="Scripting\PythonEngine.cs" />
     <Compile Include="Scripting\ScriptServiceResponse.cs" />
     <Compile Include="Scripting\Services\ScriptChatEventService.cs" />
     <Compile Include="Scripting\Services\ScriptUserService.cs" />
@@ -288,28 +285,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripting\addpointsCommand.py">
+    <Content Include="Commands\CommandScripts\addpointsCommand.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripting\pointsCommand.py">
+    <Content Include="Commands\CommandScripts\joinraffleCommand.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Commands\CommandScripts\pointsCommand.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Commands\CommandScripts\raffleCommand.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripting\typescriptTranspiler.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Commands\CommandScripts\pointsCommand.ts">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Commands\CommandScripts\addpointsCommand.ts">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Commands\CommandScripts\raffleCommand.ts">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -326,9 +314,6 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>
-if not exist "$(TargetDir)" md "$(TargetDir)"
-xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.5.1\tools\native\x86\*.*" "$(TargetDir)"
-if not exist "$(TargetDir)" md "$(TargetDir)"
-xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.5.1\tools\native\amd64\*.*" "$(TargetDir)"</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -7,16 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using ChewieBot.Scripting;
 using ChewieBot.Database.Model;
-using Microsoft.ClearScript.V8;
 
 namespace ChewieBot.Commands
 {
     public class CommandRepository : ICommandRepository
     {
         private Dictionary<string, Command> commands;
-        private IScriptEngine scriptEngine;
+        private IPythonEngine scriptEngine;
 
-        public CommandRepository(IScriptEngine scriptEngine)
+        public CommandRepository(IPythonEngine scriptEngine)
         {
             this.commands = new Dictionary<string, Command>();
             this.scriptEngine = scriptEngine;
@@ -32,8 +31,14 @@ namespace ChewieBot.Commands
         {
             if (this.commands.ContainsKey(commandName))
             {
-                var response = this.scriptEngine.ExecuteCommand(this.commands[commandName], username, chatParameters);
-                return response;
+                if (chatParameters != null && chatParameters.Count > 0)
+                {
+                    return this.scriptEngine.ExecuteCommand(this.commands[commandName], username, chatParameters);
+                }
+                else
+                {
+                    return this.scriptEngine.ExecuteCommand(this.commands[commandName], username);
+                }
             }
             else
             {
