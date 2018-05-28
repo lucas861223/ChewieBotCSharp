@@ -9,9 +9,9 @@ namespace ChewieBot.Services
 {
     public interface ITwitchService
     {
-        void Initialize();
         void Connect();
         void Disconnect();
         IEnumerable<User> GetCurrentUsers();
+        void SendMessage(string message);
     }
 }

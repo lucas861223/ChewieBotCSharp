@@ -2,7 +2,6 @@
 using ChewieBot.Database.Repository;
 using ChewieBot.Database.Repository.Implementation;
 using ChewieBot.Scripting;
-using ChewieBot.Scripting.Services;
 using ChewieBot.Services;
 using ChewieBot.Services.Implementation;
 using ChewieBot.Twitch;
@@ -42,12 +41,9 @@ namespace ChewieBot.AppStart
         {
             container.RegisterType<IUserData, UserRepository>(new TransientLifetimeManager());
             container.RegisterType<IUserService, UserService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserData)));
-            container.RegisterType<ITwitchClient, TwitchClient>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
             container.RegisterType<ITwitchApi, TwitchAPI>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
-            container.RegisterType<ITwitchService, TwitchService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(ITwitchClient), typeof(ITwitchApi), typeof(IUserService), typeof(ICommandService)));
+            container.RegisterType<ITwitchService, TwitchService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(ITwitchApi), typeof(IUserService), typeof(ICommandService)));
             container.RegisterType<ICommandService, CommandService>(new TransientLifetimeManager());
-            container.RegisterType<ScriptUserService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
-            container.RegisterType<ScriptChatEventService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IChatEventService)));
             container.RegisterType<ICommandRepository, CommandRepository>(new ContainerControlledLifetimeManager(), new InjectionConstructor(typeof(IPythonEngine)));
             container.RegisterType<IPythonEngine, PythonEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType<IChatEventService, ChatEventService>(new TransientLifetimeManager());

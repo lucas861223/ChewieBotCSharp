@@ -10,8 +10,10 @@ namespace ChewieBot.Services
     public interface IUserService
     {
         User SetUser(User user);
+        List<User> SetUsers(List<User> userList);
         User GetUser(string username);
+        List<User> GetUsers(List<string> usernames);
         int GetPointsForUser(string username);
-        bool AddPointsForUser(string username, int points);
+        void AddPointsForUser(string username, int points);
     }
 }

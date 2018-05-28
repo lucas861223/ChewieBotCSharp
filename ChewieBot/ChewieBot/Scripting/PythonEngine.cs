@@ -1,19 +1,9 @@
-﻿using ChewieBot.Services.Implementation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ChewieBot.Commands;
-using ChewieBot.Database.Model;
-using ChewieBot.AppStart;
-using ChewieBot.Services;
-using ChewieBot.Scripting.Services;
 using System.Dynamic;
-using System.Timers;
-using ChewieBot.Scripting.Events;
-using ChewieBot.Enum;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting.Hosting.Providers;
@@ -30,18 +20,28 @@ namespace ChewieBot.Scripting
             this.SetupPythonEngine();
         }
 
+        /// <summary>
+        /// Create the python engine.
+        /// </summary>
         private void SetupPythonEngine()
         {
             engine = Python.CreateEngine();
+            
+            // Remove path_hooks to prevent python scripts throwing exceptions for zip imports.
             var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
             var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List;
             hooks.Clear();
 
+            // Add the python stdlib to the paths so the stdlib is available in scripts.
             var paths = engine.GetSearchPaths();
-            paths.Add("..\\..\\..\\packages\\IronPython.StdLib.2.7.8.1\\contentFiles\\any\\any\\Lib");  // Adding stdlib
+            paths.Add("..\\..\\..\\packages\\IronPython.StdLib.2.7.8.1\\contentFiles\\any\\any\\Lib");
             engine.SetSearchPaths(paths);
         }
 
+        /// <summary>
+        /// Create a Python scope with the scripting API added as a reference and imported.
+        /// </summary>
+        /// <returns>ScriptScope with the scripting api added as a reference and imported.</returns>
         private ScriptScope CreateScope()
         {
             var scope = engine.CreateScope();            
@@ -75,6 +75,11 @@ namespace ChewieBot.Scripting
             return dict;
         }
 
+        /// <summary>
+        /// Gets the parameters from a command script source.
+        /// </summary>
+        /// <param name="source">The ScriptSource to get the parameters for.</param>
+        /// <returns>A list of parameter names for the script.</returns>
         private List<string> GetCommandParameters(ScriptSource source)
         {
             var scope = this.CreateScope();
@@ -89,7 +94,7 @@ namespace ChewieBot.Scripting
         }
 
         /// <summary>
-        /// Execute a command.
+        /// Execute a command with parameters.
         /// </summary>
         /// <param name="command">The command to exeute.</param>
         /// <param name="username">The user calling the command.</param>
@@ -106,6 +111,12 @@ namespace ChewieBot.Scripting
             return new CommandResponse(responseMessage);
         }
 
+        /// <summary>
+        /// Eecute a command with no parameters.
+        /// </summary>
+        /// <param name="command">The command to execute.</param>
+        /// <param name="username">The user calling the command.</param>
+        /// <returns>A commandResponse object with the response of the command execution.</returns>
         public CommandResponse ExecuteCommand(Command command, string username)
         {
             var scope = this.CreateScope();
@@ -115,6 +126,12 @@ namespace ChewieBot.Scripting
             return new CommandResponse(responseMessage);
         }
 
+        /// <summary>
+        /// Create a dynamic object that contains the command parameters, that is passed to the script execute function so that we can access the script can access parameters as member variables of the param object.
+        /// </summary>
+        /// <param name="command">The command to create the parameter object for.</param>
+        /// <param name="chatParams">The parameters passed to the command from chat.</param>
+        /// <returns>A dynamic object that has member variables with the command parameter names, with their values assigned to the values from chat.</returns>
         private dynamic CreateParamObject(Command command, List<string> chatParams)
         {
             var obj = new ExpandoObject() as IDictionary<string, object>;

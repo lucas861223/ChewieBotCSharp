@@ -1,7 +1,7 @@
 ﻿using ChewieBot.Database.Model;
 using ChewieBot.Database.Repository;
 using ChewieBot.Enum;
-using ChewieBot.Scripting.Events;
+using ChewieBot.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +31,12 @@ namespace ChewieBot.Services.Implementation
             this.userService = userService;
         }
 
+
+        /// <summary>
+        /// Add a user to an event.
+        /// </summary>
+        /// <param name="eventId">The event id to add the user to.</param>
+        /// <param name="user">The user to add to the event.</param>
         private void AddUserToEvent(int eventId, User user)
         {
             if (this.eventList.ContainsKey(eventId) && !this.eventList[eventId].HasFinished && !this.eventList[eventId].UserList.Any(x => x.Id == user.Id))
@@ -39,6 +45,12 @@ namespace ChewieBot.Services.Implementation
             }
         }
 
+        /// <summary>
+        /// Create a new event.
+        /// </summary>
+        /// <param name="type">The type of event that is to be created.</param>
+        /// <param name="duration">The duration of the event in milliseconds.</param>
+        /// <returns>The ChatEvent that was created.</returns>
         public ChatEvent CreateNewEvent(EventType type, int duration)
         {
             var chatEvent = new ChatEvent() { Type = type, Duration = duration };
@@ -47,6 +59,11 @@ namespace ChewieBot.Services.Implementation
             return chatEvent;
         }
 
+        /// <summary>
+        /// Start an event. This starts a timer that will trigger the StopEvent() function after the configured duration has elapsed.
+        /// Invokes the EventStartedEvent.
+        /// </summary>
+        /// <param name="eventId">The id of the event to start.</param>
         public void StartEvent(int eventId)
         {
             if (this.eventList.ContainsKey(eventId) && !this.eventList[eventId].HasStarted && !this.eventList[eventId].HasFinished)
@@ -67,6 +84,10 @@ namespace ChewieBot.Services.Implementation
             }
         }
 
+        /// <summary>
+        /// Stop an event. Invokes the EventEndedEvent.
+        /// </summary>
+        /// <param name="eventId">The id of the event to stop.</param>
         public void StopEvent(int eventId)
         {
             if (this.eventList.ContainsKey(eventId) && this.eventList[eventId].HasStarted)
@@ -84,6 +105,11 @@ namespace ChewieBot.Services.Implementation
             }
         }
 
+        /// <summary>
+        /// Get the list of winners for an event.
+        /// </summary>
+        /// <param name="eventId">The id of the event to get winners for.</param>
+        /// <returns>The list of winners for the event.</returns>
         public List<EventWinner> GetEventWinners(int eventId)
         {
             var winnerList = new List<EventWinner>();
@@ -101,6 +127,11 @@ namespace ChewieBot.Services.Implementation
             return winnerList;
         }
 
+        /// <summary>
+        /// Add a user to an event by username.
+        /// </summary>
+        /// <param name="eventId">The id of the event to add the user to.</param>
+        /// <param name="username">The username of the user to add.</param>
         public void AddUser(int eventId, string username)
         {
             var user = userService.GetUser(username);
@@ -110,17 +141,31 @@ namespace ChewieBot.Services.Implementation
             }
         }
 
-        public void AddUserToCurrentEvent(string username)
+        /// <summary>
+        /// Add a user to the started event of a specified event type.
+        /// </summary>
+        /// <param name="type">The type of event to add the user to.</param>
+        /// <param name="username">The username to add to the event.</param>
+        public void AddUserToCurrentEvent(EventType type, string username)
         {
-            var currentEvent = this.eventList.Values.FirstOrDefault(x => x.HasStarted);
+            var currentEvent = this.eventList.Values.FirstOrDefault(x => x.Type == type && x.HasStarted);
             if (currentEvent != null)
             {
                 this.AddUser(currentEvent.EventId, username);
             }
         }
 
+        /// <summary>
+        /// Creates event winners for an event.
+        /// </summary>
+        /// <param name="eventId">The id of the event to create winners for.</param>
+        /// <returns>The list of winning users for an event.</returns>
         private List<User> CreateEventWinners(int eventId)
         {
+            //TODO: Update this to not be a naive implementation. Currently just used for testing.
+            // Should close an event without winners if there's not enough entrants.
+            // Number of winners should have an option to scale with the number of entrants.
+            // Number of winners should be able to be specified.
             var winners = new List<User>();
             var winningIndexList = new List<int>();
             if (this.eventList.ContainsKey(eventId) && this.eventList[eventId].HasFinished)

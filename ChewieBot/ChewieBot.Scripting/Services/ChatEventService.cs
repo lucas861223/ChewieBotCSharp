@@ -2,7 +2,7 @@
 using ChewieBot.Database.Model;
 using ChewieBot.Enum;
 using ChewieBot.Scripting;
-using ChewieBot.Scripting.Events;
+using ChewieBot.Events;
 using ChewieBot.Services;
 using System;
 using System.Collections.Generic;
@@ -49,17 +49,25 @@ namespace ChewieBot.ScriptingAPI
             else
             {
                 response.ResultStatus = ScriptServiceResult.PARSE_ERROR;
-                response.Message = $"Unable to parse variable eventId -- {eventId} -- to an integer.";
+                response.Message = $"Unable to parse the parameter eventId -- {eventId} -- to an integer.";
             }
 
             return response;
         }
 
-        public static ScriptServiceResponse AddUserToCurrentEvent(string username)
+        public static ScriptServiceResponse AddUserToCurrentEvent(string eventType, string username)
         {
             var response = new ScriptServiceResponse();
-            chatEventService.AddUserToCurrentEvent(username);
-            response.ResultStatus = ScriptServiceResult.SUCCESS;
+            if (System.Enum.TryParse(eventType, out EventType type))
+            {
+                chatEventService.AddUserToCurrentEvent(type, username);
+                response.ResultStatus = ScriptServiceResult.SUCCESS;
+            }
+            else
+            {
+                response.ResultStatus = ScriptServiceResult.PARSE_ERROR;
+                response.Message = $"Unable to parse the parameter eventType -- {eventType} -- to a valid EventType enum value.";
+            }
             return response;
         }
 
@@ -74,7 +82,7 @@ namespace ChewieBot.ScriptingAPI
             else
             {
                 response.ResultStatus = ScriptServiceResult.PARSE_ERROR;
-                response.Message = $"Unable to parse variable eventType -- {eventType} -- to an EventType, or eventDuration -- {eventDuration} -- to an integer.";
+                response.Message = $"Unable to parse the parameter eventType -- {eventType} -- to a valid EventType enum value, or eventDuration -- {eventDuration} -- to an integer.";
             }
 
             return response;
@@ -91,7 +99,7 @@ namespace ChewieBot.ScriptingAPI
             else
             {
                 response.ResultStatus = ScriptServiceResult.PARSE_ERROR;
-                response.Message = $"Could not parse variable eventId -- {eventId} -- to an integer.";
+                response.Message = $"Unable to parse the parameter eventId -- {eventId} -- to an integer.";
             }
 
             return response;

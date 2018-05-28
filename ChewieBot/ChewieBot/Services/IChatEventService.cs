@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ChewieBot.Database.Model;
 using ChewieBot.Enum;
-using ChewieBot.Scripting.Events;
+using ChewieBot.Events;
 
 namespace ChewieBot.Services
 {
@@ -15,7 +15,7 @@ namespace ChewieBot.Services
         void StartEvent(int eventId);
         void StopEvent(int eventId);
         void AddUser(int eventId, string username);
-        void AddUserToCurrentEvent(string username);
+        void AddUserToCurrentEvent(EventType type, string username);
 
         event EventHandler<EventStartedEventArgs> OnEventStarted;
         event EventHandler<EventEndedEventArgs> OnEventEnded;

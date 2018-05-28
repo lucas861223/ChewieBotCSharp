@@ -19,5 +19,6 @@ namespace ChewieBot.Database.Model
         public List<User> UserList { get; set; } = new List<User>();
         public bool HasStarted { get; set; } = false;
         public bool HasFinished { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
     }
 }

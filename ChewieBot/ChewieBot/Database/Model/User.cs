@@ -13,5 +13,8 @@ namespace ChewieBot.Database.Model
         public int Id { get; set; }
         public string Username { get; set; }
         public int Points { get; set; }
+        public UserLevel UserLevel { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
     }
 }

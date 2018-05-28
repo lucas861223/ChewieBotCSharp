@@ -45,5 +45,65 @@ namespace ChewieBot.Database.Repository.Implementation
                 return context.Users.FirstOrDefault(x => x.Username == username);
             }
         }
+
+        public List<User> GetUsers(List<string> usernames)
+        {
+            using (var context = new DatabaseContext())
+            {
+                return context.Users.Where(x => usernames.Contains(x.Username)).ToList();
+            }
+        }
+
+        public void DeleteUser(string username)
+        {
+            using (var context = new DatabaseContext())
+            {
+                var record = context.Users.FirstOrDefault(x => x.Username == username && !x.IsDeleted);
+                if (record != null)
+                {
+                    record.IsDeleted = true;
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void DeleteUser(User user)
+        {
+            using (var context = new DatabaseContext())
+            {
+                var record = context.Users.Find(user.Id);
+                if (record != null)
+                {
+                    record.IsDeleted = true;
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public List<User> SetUsers(List<User> userList)
+        {
+            using (var context = new DatabaseContext())
+            {
+                var recordList = new List<User>();
+                foreach (var user in userList)
+                {
+                    var record = context.Users.Find(user.Id);
+                    if (record == null)
+                    {
+                        record = user;
+                        context.Users.Add(record);
+                        recordList.Add(record);
+                    }
+                    else
+                    {
+                        context.Entry(record).CurrentValues.SetValues(user);
+                        recordList.Add(record);
+                    }
+                }
+
+                context.SaveChanges();
+                return recordList;
+            }
+        }
     }
 }

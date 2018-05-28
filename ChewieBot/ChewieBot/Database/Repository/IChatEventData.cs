@@ -13,5 +13,7 @@ namespace ChewieBot.Database.Repository
         ChatEvent SetChatEvent(ChatEvent chatEvent);
         ChatEvent GetChatEvent(int eventId);
         IEnumerable<ChatEvent> GetAllChatEventsForType(EventType type);
+        void DeleteChatEvent(ChatEvent chatEvent);
+        void DeleteChatEvent(int eventId);
     }
 }

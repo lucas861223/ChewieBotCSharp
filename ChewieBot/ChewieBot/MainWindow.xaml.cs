@@ -71,7 +71,6 @@ namespace ChewieBot
         {
             if (twitchService != null)
             {
-                twitchService.Initialize();
                 twitchService.Connect();
             }
         }

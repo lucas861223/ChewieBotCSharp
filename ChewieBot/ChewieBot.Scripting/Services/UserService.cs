@@ -39,7 +39,7 @@ namespace ChewieBot.ScriptingAPI
             response.Data = data > 0 ? data : null;
             if (response.Data == null)
             {
-                response.ResultStatus = ScriptServiceResult.ERROR;
+                response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;
                 response.Message = $"Unable to get points for user with name: ${username}";
             }
             else
@@ -55,19 +55,12 @@ namespace ChewieBot.ScriptingAPI
             var response = new ScriptServiceResponse();
             if (int.TryParse(points, out int pointsInt))
             {
-                if (!userService.AddPointsForUser(username, pointsInt))
-                {
-                    response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;
-                    response.Message = $"Unable to add points to user with name: ${username} as the user does not exist.";
-                }
-                else
-                {
-                    response.ResultStatus = ScriptServiceResult.SUCCESS;
-                }
+                userService.AddPointsForUser(username, pointsInt);
+                response.ResultStatus = ScriptServiceResult.SUCCESS;
             }
             else
             {
-                response.ResultStatus = ScriptServiceResult.ERROR;
+                response.ResultStatus = ScriptServiceResult.PARSE_ERROR;
                 response.Message = "Could not parse points to an integer.";
             }
 

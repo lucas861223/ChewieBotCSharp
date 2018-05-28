@@ -14,6 +14,7 @@ namespace ChewieBot.Database
         public DbSet<User> Users { get; set; }
         public DbSet<ChatEvent> ChatEvents { get; set; }
         public DbSet<EventWinner> EventWinners { get; set; }
+        public DbSet<UserLevel> UserLevels { get; set; }
 
         public DatabaseContext()
             : base("DatabaseConnection")

@@ -14,5 +14,6 @@ namespace ChewieBot.Database.Model
         public ChatEvent Event { get; set; }
         public User User { get; set; }
         public int Position { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

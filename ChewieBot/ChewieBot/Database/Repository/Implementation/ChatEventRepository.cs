@@ -45,5 +45,31 @@ namespace ChewieBot.Database.Repository.Implementation
                 return record;
             }
         }
+
+        public void DeleteChatEvent(ChatEvent chatEvent)
+        {
+            using (var context = new DatabaseContext())
+            {
+                var record = context.ChatEvents.Find(chatEvent.EventId);
+                if (record != null)
+                {
+                    record.IsDeleted = true;
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void DeleteChatEvent(int eventId)
+        {
+            using (var context = new DatabaseContext())
+            {
+                var record = context.ChatEvents.Find(eventId);
+                if (record != null)
+                {
+                    record.IsDeleted = true;
+                    context.SaveChanges();
+                }
+            }
+        }
     }
 }
