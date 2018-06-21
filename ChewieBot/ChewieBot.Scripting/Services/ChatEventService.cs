@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChewieBot.ScriptingAPI
+namespace ChewieBot.ScriptingAPI.Services
 {
     /*TODO Need to work out a decent way for how to handle function call status/error handling/etc, as the core services using void and not throwing exceptions or returning errors is not really all that useful.
      * Options are throw exceptions, then add try/catch everywhere, and update the return response based on those, or have the core services also return a response object.

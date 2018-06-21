@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChewieBot"
+        xmlns:CefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         mc:Ignorable="d"
-        Title="ChewieBot" Height="350" Width="525">
+        Title="ChewieBot" Width="1366" Height="768">
     <Grid>
-        
+        <ListView Grid.Column="1" Grid.Row="1" Name="SongList">
+                
+        </ListView>
+            <!--<CefSharp:ChromiumWebBrowser Name="YoutubeEmbed" Grid.Row="0"></CefSharp:ChromiumWebBrowser>-->
     </Grid>
 </Window>

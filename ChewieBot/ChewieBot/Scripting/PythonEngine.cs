@@ -48,7 +48,7 @@ namespace ChewieBot.Scripting
             scope.ImportModule("clr");
             engine.Execute("import clr", scope);
             engine.Execute("clr.AddReferenceToFileAndPath(\"ChewieBot.ScriptingAPI.dll\")", scope);
-            engine.Execute("from ChewieBot.ScriptingAPI import *", scope);            
+            engine.Execute("from ChewieBot.ScriptingAPI.Services import *", scope);            
             return scope;
         }
 
@@ -63,13 +63,16 @@ namespace ChewieBot.Scripting
             {
                 var fileName = file.Split('\\').Last();
                 fileName = fileName.Substring(0, fileName.Length - 3);
-                var chatCommandName = fileName.Substring(0, fileName.IndexOf("Command"));
-                var source = engine.CreateScriptSourceFromFile(file);                
-
-                if (source != null)
+                if (fileName.Contains("Command"))
                 {
-                    var command = new Command { CommandName = chatCommandName, Source = source, Parameters = GetCommandParameters(source) };
-                    dict.Add(chatCommandName, command);
+                    var chatCommandName = fileName.Substring(0, fileName.IndexOf("Command"));
+                    var source = engine.CreateScriptSourceFromFile(file);
+
+                    if (source != null)
+                    {
+                        var command = new Command { CommandName = chatCommandName, Source = source, Parameters = GetCommandParameters(source) };
+                        dict.Add(chatCommandName, command);
+                    }
                 }
             }
             return dict;

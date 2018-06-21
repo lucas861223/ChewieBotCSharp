@@ -2,11 +2,13 @@
 using ChewieBot.Scripting;
 using ChewieBot.Services;
 using ChewieBot.Twitch;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -28,20 +30,49 @@ namespace ChewieBot
         private ICommandService commandService = UnityConfig.Resolve<ICommandService>();
         private IUserService userService = UnityConfig.Resolve<IUserService>();
         private IPythonEngine scriptEngine = UnityConfig.Resolve<IPythonEngine>();
+        private ISongQueueService songService = UnityConfig.Resolve<ISongQueueService>();
+        private IYoutubeService youtubeService = UnityConfig.Resolve<IYoutubeService>();
 
         public MainWindow()
         {
             InitializeComponent();
 
             InitializeSetup();
-            //InitializeTwitchClient();
+            InitializeTwitchClient();
             //TestScripting();
-            TestPython();
+            //TestPython();
+            TestEmbeds();
         }
 
         private void InitializeSetup()
         {
             UnityConfig.Setup();
+            SongList.ItemsSource = this.songService.SongList;
+        }
+        
+        private void TestEmbeds()
+        {
+            //this.songService.AddNewSong("https://www.youtube.com/watch?v=POiTHZO2yso", userService.GetUser("magentafall"), Enum.SongRequestType.Donation);
+            //this.songService.AddNewSong("https://www.youtube.com/watch?v=7Iweue-OcMo", userService.GetUser("magentafall"), Enum.SongRequestType.Donation);
+            /*SongList.ItemsSource = this.songService.GetSongList();
+
+            var nextSong = this.songService.GetNextSong();
+            //YoutubeEmbed.Address = nextSong.Url;
+
+            var timer = new Timer();
+            timer.Interval = 8000;
+            timer.Elapsed += (o, e) =>
+            {
+                nextSong = this.songService.GetNextSong();
+                //YoutubeEmbed.Load(nextSong.Url);
+                timer.Stop();
+            };
+            timer.Start();*/
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void TestPython()

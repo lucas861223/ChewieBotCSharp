@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChewieBot.ScriptingAPI
+namespace ChewieBot.ScriptingAPI.Services
 {
     public static class UserService
     {
