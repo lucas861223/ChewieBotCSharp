@@ -244,6 +244,7 @@
     <Compile Include="Enum\SongSourceType.cs" />
     <Compile Include="Events\EventEndedEventArgs.cs" />
     <Compile Include="Events\EventStartedEventArgs.cs" />
+    <Compile Include="Events\SongAddedEventArgs.cs" />
     <Compile Include="Models\Song.cs" />
     <Compile Include="Models\SongDetails.cs" />
     <Compile Include="Scripting\PythonType.cs" />

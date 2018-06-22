@@ -42,7 +42,7 @@ namespace ChewieBot.AppStart
             container.RegisterType<IUserData, UserRepository>(new TransientLifetimeManager());
             container.RegisterType<IUserService, UserService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserData)));
             container.RegisterType<ITwitchApi, TwitchAPI>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
-            container.RegisterType<ITwitchService, TwitchService>(new SingletonLifetimeManager(), new InjectionConstructor(typeof(IUserService), typeof(ICommandService)));
+            container.RegisterType<ITwitchService, TwitchService>(new ContainerControlledLifetimeManager(), new InjectionConstructor(typeof(IUserService), typeof(ICommandService)));
             container.RegisterType<ICommandService, CommandService>(new TransientLifetimeManager());
             container.RegisterType<ICommandRepository, CommandRepository>(new ContainerControlledLifetimeManager(), new InjectionConstructor(typeof(IPythonEngine)));
             container.RegisterType<IPythonEngine, PythonEngine>(new ContainerControlledLifetimeManager());
@@ -50,7 +50,7 @@ namespace ChewieBot.AppStart
             container.RegisterType<IChatEventData, ChatEventRepository>(new TransientLifetimeManager());
             container.RegisterType<IEventWinnerService, EventWinnerService>(new TransientLifetimeManager());
             container.RegisterType<IEventWinnerData, EventWinnerRepository>(new TransientLifetimeManager());
-            container.RegisterType<ISongQueueService, SongQueueService>(new TransientLifetimeManager());
+            container.RegisterType<ISongQueueService, SongQueueService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IYoutubeService, YoutubeService>(new TransientLifetimeManager());
         }
 

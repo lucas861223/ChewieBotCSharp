@@ -1,5 +1,6 @@
 ﻿using ChewieBot.Database.Model;
 using ChewieBot.Enum;
+using ChewieBot.Events;
 using ChewieBot.Models;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,6 @@ namespace ChewieBot.Services
         void RemoveSong(int id);
         void RemoveSongsForUser(string username);
         List<Song> SongList { get; set; }
+        event EventHandler<SongAddedEventArgs> SongAddedEvent;
     }
 }

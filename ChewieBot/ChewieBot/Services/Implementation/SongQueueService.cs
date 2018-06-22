@@ -1,5 +1,6 @@
 ﻿using ChewieBot.Database.Model;
 using ChewieBot.Enum;
+using ChewieBot.Events;
 using ChewieBot.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace ChewieBot.Services.Implementation
         private int nextSongId = 0;
         private int currentSongId = -1;
         private IYoutubeService youtubeService;
+
+        public event EventHandler<SongAddedEventArgs> SongAddedEvent;
 
         public SongQueueService(IYoutubeService youtubeService)
         {
@@ -69,6 +72,7 @@ namespace ChewieBot.Services.Implementation
             song = this.GetSongDetails(song);
             this.SongList.Add(song);
             nextSongId++;
+            this.SongAddedEvent?.Invoke(this, new SongAddedEventArgs { Song = song, SongList = this.SongList });
             return song;
         }
 
