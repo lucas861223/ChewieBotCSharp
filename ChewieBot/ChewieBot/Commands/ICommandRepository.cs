@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChewieBot.ScriptingEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace ChewieBot.Commands
     {
         void LoadCommands();
         void ExecuteCommand(string commandName, string username, List<string> chatParameters);
+        List<Command> GetAllCommands();
     }
 }

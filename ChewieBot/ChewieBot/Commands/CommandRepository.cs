@@ -22,6 +22,11 @@ namespace ChewieBot.Commands
             this.LoadCommands();
         }
 
+        public List<Command> GetAllCommands()
+        {
+            return this.commands.Values.ToList();
+        }
+
         public void LoadCommands()
         {
             this.commands = this.scriptEngine.LoadScripts();

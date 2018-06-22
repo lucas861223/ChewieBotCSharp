@@ -238,6 +238,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppStart\UnityConfig.cs" />
+    <Compile Include="CommandList.xaml.cs">
+      <DependentUpon>CommandList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Commands\CommandRepository.cs" />
     <Compile Include="Commands\CommandResponse.cs" />
     <Compile Include="Commands\ICommandRepository.cs" />
@@ -269,6 +272,7 @@
     <Compile Include="Events\QuoteDeletedEventArgs.cs" />
     <Compile Include="Events\SongAddedEventArgs.cs" />
     <Compile Include="Events\SongChangedEventArgs.cs" />
+    <Compile Include="Models\CommandListItem.cs" />
     <Compile Include="Models\ScriptServiceResponse.cs" />
     <Compile Include="Quotes.xaml.cs">
       <DependentUpon>Quotes.xaml</DependentUpon>
@@ -278,6 +282,7 @@
     <Compile Include="SongQueue.xaml.cs">
       <DependentUpon>SongQueue.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CommandListViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\MenuLink.cs" />
     <Compile Include="Models\Song.cs" />
@@ -301,6 +306,10 @@
     <Compile Include="Twitch\TwitchAPI.cs" />
     <Compile Include="ViewModels\QuotesViewModel.cs" />
     <Compile Include="ViewModels\SongQueueViewModel.cs" />
+    <Page Include="CommandList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

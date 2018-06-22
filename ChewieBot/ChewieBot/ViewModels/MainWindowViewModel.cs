@@ -1,4 +1,5 @@
 ﻿using ChewieBot.AppStart;
+using ChewieBot.Commands;
 using ChewieBot.Models;
 using ChewieBot.Services;
 using System;
@@ -35,7 +36,8 @@ namespace ChewieBot.ViewModels
             MenuItems = new MenuLink[]
                 {
                     new MenuLink("Song Queue", new SongQueue(UnityConfig.Resolve<ISongQueueService>())),
-                    new MenuLink("Quotes", new Quotes(UnityConfig.Resolve<IQuoteService>()))
+                    new MenuLink("Quotes", new Quotes(UnityConfig.Resolve<IQuoteService>())),
+                    new MenuLink("Command List", new CommandList(UnityConfig.Resolve<ICommandRepository>()))
                 };
         }
 
