@@ -1,7 +1,9 @@
 ﻿using ChewieBot.Models;
 using ChewieBot.Services;
+using ChewieBot.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,47 +24,39 @@ namespace ChewieBot
     /// </summary>
     public partial class SongQueue : UserControl
     {
-        private ISongQueueService songService;
-        private Song currentSong;
-        private Func<ISongQueueService> resolve;
+        private SongQueueViewModel viewModel;
 
         public SongQueue(ISongQueueService songService)
         {
-            this.songService = songService;
-            InitializeComponent();
-            this.Init();
-        }
-
-        private void Init()
-        {
-            SongList.Dispatcher.Invoke(() =>
-            {
-                SongList.ItemsSource = songService.SongList;
-            });
-
             songService.SongAddedEvent += (o, e) =>
             {
-                SongList.Dispatcher.Invoke(() =>
+                this.Dispatcher.Invoke(() =>
                 {
-                    SongList.Items.Refresh();
+                    this.viewModel.SongList = e.SongList;
+                    this.DataContext = null;
+                    this.DataContext = viewModel;
                 });
             };
 
-            SongList.SelectionChanged += (SelectionChangedEventHandler)((o, e) =>
+            this.viewModel = new SongQueueViewModel(songService);
+            this.DataContext = viewModel;
+            InitializeComponent();            
+        }
+
+        public void SongChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 1)
             {
-                if (e.AddedItems.Count == 1)
+                var song = e.AddedItems[0] as Song;
+                if (viewModel.CurrentSong != song)
                 {
-                    var song = e.AddedItems[0] as Song;
-                    if (currentSong != song)
+                    viewModel.CurrentSong = song;
+                    YoutubeEmbed.Dispatcher.Invoke(() =>
                     {
-                        currentSong = song;
-                        YoutubeEmbed.Dispatcher.Invoke(() =>
-                        {
-                            YoutubeEmbed.Load(song.Url);
-                        });
-                    }
+                        YoutubeEmbed.Load(song.Url);
+                    });
                 }
-            });
+            }
         }
     }
 }

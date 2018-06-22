@@ -18,6 +18,7 @@ namespace ChewieBot.Services.Implementation
         private IYoutubeService youtubeService;
 
         public event EventHandler<SongAddedEventArgs> SongAddedEvent;
+        public event EventHandler<SongChangedEventArgs> SongChangedEvent;
 
         public SongQueueService(IYoutubeService youtubeService)
         {
@@ -81,6 +82,7 @@ namespace ChewieBot.Services.Implementation
             if (SongList.Count >= currentSongId && SongList.Count > 0)
             {
                 var nextSong = SongList[++currentSongId];
+                SongChangedEvent?.Invoke(this, new SongChangedEventArgs { Song = nextSong });
                 return nextSong;
             }
 
@@ -90,8 +92,13 @@ namespace ChewieBot.Services.Implementation
         public Song GetNextSong(SongRequestType requestType)
         {
             var nextSong = SongList.FirstOrDefault(x => x.RequestType == requestType);
-            currentSongId = nextSong.Id;
-            return nextSong;
+            if (nextSong != null)
+            {
+                currentSongId = nextSong.Id;
+                SongChangedEvent?.Invoke(this, new SongChangedEventArgs { Song = nextSong });
+                return nextSong;
+            }
+            return null;
         }
 
         public void RemoveSong(Song song)

@@ -56,7 +56,7 @@
                                   HorizontalScrollBarVisibility="{Binding ElementName=MenuListBox, Path=SelectedItem.HorizontalScrollBarVisibilityRequirement}"
                                   VerticalScrollBarVisibility="{Binding ElementName=MenuListBox, Path=SelectedItem.VerticalScrollBarVisibilityRequirement}" 
                                   Padding="{Binding ElementName=MenuListBox, Path=SelectedItem.MarginRequirement}">
-                            <ContentControl Content="{Binding ElementName=MenuListBox, Path=SelectedItem.Content}" />
+                            <ContentControl Content="{Binding ElementName=MenuListBox, Path=SelectedItem.Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </ScrollViewer>
                     </Grid>
                 </DockPanel>

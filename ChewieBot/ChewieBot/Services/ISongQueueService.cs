@@ -20,5 +20,6 @@ namespace ChewieBot.Services
         void RemoveSongsForUser(string username);
         List<Song> SongList { get; set; }
         event EventHandler<SongAddedEventArgs> SongAddedEvent;
+        event EventHandler<SongChangedEventArgs> SongChangedEvent;
     }
 }

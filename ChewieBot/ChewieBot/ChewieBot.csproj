@@ -264,6 +264,7 @@
     <Compile Include="Events\EventEndedEventArgs.cs" />
     <Compile Include="Events\EventStartedEventArgs.cs" />
     <Compile Include="Events\SongAddedEventArgs.cs" />
+    <Compile Include="Events\SongChangedEventArgs.cs" />
     <Compile Include="SongQueue.xaml.cs">
       <DependentUpon>SongQueue.xaml</DependentUpon>
     </Compile>
