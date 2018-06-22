@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChewieBot.Scripting;
 using ChewieBot.Database.Model;
+using ChewieBot.ScriptingEngine;
 
 namespace ChewieBot.Commands
 {
@@ -27,22 +27,18 @@ namespace ChewieBot.Commands
             this.commands = this.scriptEngine.LoadScripts();
         }
 
-        public CommandResponse ExecuteCommand(string commandName, string username, List<string> chatParameters) 
+        public void ExecuteCommand(string commandName, string username, List<string> chatParameters) 
         {
             if (this.commands.ContainsKey(commandName))
             {
                 if (chatParameters != null && chatParameters.Count > 0)
                 {
-                    return this.scriptEngine.ExecuteCommand(this.commands[commandName], username, chatParameters);
+                    this.scriptEngine.ExecuteCommand(this.commands[commandName], username, chatParameters);
                 }
                 else
                 {
-                    return this.scriptEngine.ExecuteCommand(this.commands[commandName], username);
+                    this.scriptEngine.ExecuteCommand(this.commands[commandName], username);
                 }
-            }
-            else
-            {
-                return null;
             }
         }
     }

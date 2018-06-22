@@ -1,5 +1,5 @@
 ﻿using ChewieBot.Database.Model;
-using ChewieBot.Enum;
+using ChewieBot.Enums;
 using ChewieBot.Events;
 using ChewieBot.Models;
 using System;

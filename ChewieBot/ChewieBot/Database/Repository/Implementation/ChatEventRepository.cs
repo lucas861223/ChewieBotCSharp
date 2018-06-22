@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChewieBot.Database.Model;
-using ChewieBot.Enum;
+using ChewieBot.Enums;
 
 namespace ChewieBot.Database.Repository.Implementation
 {

@@ -1,6 +1,7 @@
 ﻿using ChewieBot.AppStart;
-using ChewieBot.Enum;
-using ChewieBot.Scripting;
+using ChewieBot.Enums;
+using ChewieBot.Models;
+using ChewieBot.ScriptingEngine;
 using ChewieBot.Services;
 using System;
 using System.Collections.Generic;

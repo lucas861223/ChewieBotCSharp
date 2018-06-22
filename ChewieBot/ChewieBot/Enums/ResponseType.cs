@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChewieBot.Enum
+namespace ChewieBot.Enums
 {
     public enum ResponseType
     {

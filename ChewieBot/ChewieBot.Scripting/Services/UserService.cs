@@ -1,6 +1,7 @@
 ﻿using ChewieBot.AppStart;
-using ChewieBot.Enum;
-using ChewieBot.Scripting;
+using ChewieBot.Enums;
+using ChewieBot.Models;
+using ChewieBot.ScriptingEngine;
 using ChewieBot.Services;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,12 @@ namespace ChewieBot.ScriptingAPI.Services
             response.Data = userService.GetUser(username);
             if (response.Data == null)
             {
-                response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;
+                response.ResultStatus = Enums.ScriptServiceResult.USER_NOT_EXIST;
                 response.Message = $"Unable to find user with name: {username}";
             }
             else
             {
-                response.ResultStatus = ScriptServiceResult.SUCCESS;
+                response.ResultStatus = Enums.ScriptServiceResult.SUCCESS;
             }
 
             return response;

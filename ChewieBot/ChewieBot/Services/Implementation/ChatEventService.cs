@@ -1,6 +1,6 @@
 ﻿using ChewieBot.Database.Model;
 using ChewieBot.Database.Repository;
-using ChewieBot.Enum;
+using ChewieBot.Enums;
 using ChewieBot.Events;
 using System;
 using System.Collections.Generic;

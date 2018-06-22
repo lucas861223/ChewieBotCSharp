@@ -1,6 +1,6 @@
 ﻿using ChewieBot.AppStart;
 using ChewieBot.Models;
-using ChewieBot.Scripting;
+using ChewieBot.ScriptingEngine;
 using ChewieBot.Services;
 using ChewieBot.Twitch;
 using ChewieBot.ViewModels;
@@ -98,8 +98,7 @@ namespace ChewieBot
             this.userService.SetUser(new Database.Model.User { Username = "erredece", Points = 50 });
             this.userService.SetUser(new Database.Model.User { Username = "cozmium", Points = 50 });
 
-            var response = this.commandService.ExecuteCommand("raffle", "magentafall", new List<string>() { "start", "0", "5000" });
-            Console.WriteLine(response.ToString());
+            this.commandService.ExecuteCommand("raffle", "magentafall", new List<string>() { "start", "0", "5000" });
 
             this.commandService.ExecuteCommand("raffle", "magentafall", new List<string>() { "join" });
             this.commandService.ExecuteCommand("raffle", "chewiemelodies", new List<string>() { "join" });

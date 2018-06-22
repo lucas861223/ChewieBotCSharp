@@ -1,5 +1,5 @@
 ﻿using ChewieBot.Database.Model;
-using ChewieBot.Enum;
+using ChewieBot.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

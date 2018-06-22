@@ -1,6 +1,6 @@
 ﻿using ChewieBot.Config;
 using ChewieBot.Database.Model;
-using ChewieBot.Enum;
+using ChewieBot.Enums;
 using ChewieBot.Twitch;
 using System;
 using System.Collections.Generic;
@@ -140,11 +140,7 @@ namespace ChewieBot.Services.Implementation
         /// <param name="e">Event Args containing details about the command and message sent.</param>
         private void OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
         {
-            var commandResponse = this.commandService.ExecuteCommand(e.Command.CommandText, e.Command.ChatMessage.Username, e.Command.ArgumentsAsList);
-            if (commandResponse.ResponseType == "Message")
-            {
-                this.SendMessage(commandResponse.ToString());
-            }
+            this.commandService.ExecuteCommand(e.Command.CommandText, e.Command.ChatMessage.Username, e.Command.ArgumentsAsList);
         }
 
         /// <summary>
@@ -154,11 +150,7 @@ namespace ChewieBot.Services.Implementation
         /// <param name="e">Event Args containing details about the whispered command and message sent.</param>
         private void OnWhisperCommandReceived(object sender, OnWhisperCommandReceivedArgs e)
         {
-            var commandResponse = this.commandService.ExecuteCommand(e.Command.CommandText, e.Command.WhisperMessage.Username, e.Command.ArgumentsAsList);
-            if (commandResponse.ResponseType == "Message")
-            {
-                this.client.SendWhisper(e.Command.WhisperMessage.Username, commandResponse.Message);
-            }
+            this.commandService.ExecuteCommand(e.Command.CommandText, e.Command.WhisperMessage.Username, e.Command.ArgumentsAsList);
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using ChewieBot.Commands;
 using ChewieBot.Database.Repository;
 using ChewieBot.Database.Repository.Implementation;
-using ChewieBot.Scripting;
+using ChewieBot.ScriptingEngine;
 using ChewieBot.Services;
 using ChewieBot.Services.Implementation;
 using ChewieBot.Twitch;
@@ -52,6 +52,8 @@ namespace ChewieBot.AppStart
             container.RegisterType<IEventWinnerData, EventWinnerRepository>(new TransientLifetimeManager());
             container.RegisterType<ISongQueueService, SongQueueService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IYoutubeService, YoutubeService>(new TransientLifetimeManager());
+            container.RegisterType<IQuoteData, QuoteRepository>(new TransientLifetimeManager());
+            container.RegisterType<IQuoteService, QuoteService>(new TransientLifetimeManager());
         }
 
         public static T Resolve<T>()

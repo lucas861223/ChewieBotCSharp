@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ChewieBot.Commands;
 using System.Dynamic;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting.Hosting.Providers;
 using IronPython.Runtime;
 
-namespace ChewieBot.Scripting
+namespace ChewieBot.ScriptingEngine
 {
     public class PythonEngine : IPythonEngine
     {
@@ -48,7 +47,7 @@ namespace ChewieBot.Scripting
             scope.ImportModule("clr");
             engine.Execute("import clr", scope);
             engine.Execute("clr.AddReferenceToFileAndPath(\"ChewieBot.ScriptingAPI.dll\")", scope);
-            engine.Execute("from ChewieBot.ScriptingAPI.Services import *", scope);            
+            engine.Execute("from ChewieBot.ScriptingAPI.Services import *", scope);
             return scope;
         }
 
@@ -103,15 +102,13 @@ namespace ChewieBot.Scripting
         /// <param name="username">The user calling the command.</param>
         /// <param name="chatParameters">Any parameters for the command.</param>
         /// <returns>A CommandResponse object with the response of the command execution.</returns>
-        public CommandResponse ExecuteCommand(Command command, string username, List<string> chatParameters)
+        public void ExecuteCommand(Command command, string username, List<string> chatParameters)
         {
             var scope = this.CreateScope();
             var paramsObject = this.CreateParamObject(command, chatParameters);
             command.Source.Execute(scope);
             var execute = scope.GetVariable<Func<string, dynamic, string>>("execute");
-            var responseMessage = execute(username, paramsObject);
-
-            return new CommandResponse(responseMessage);
+            execute(username, paramsObject);
         }
 
         /// <summary>
@@ -120,13 +117,12 @@ namespace ChewieBot.Scripting
         /// <param name="command">The command to execute.</param>
         /// <param name="username">The user calling the command.</param>
         /// <returns>A commandResponse object with the response of the command execution.</returns>
-        public CommandResponse ExecuteCommand(Command command, string username)
+        public void ExecuteCommand(Command command, string username)
         {
             var scope = this.CreateScope();
             command.Source.Execute(scope);
             var execute = scope.GetVariable<Func<string, string>>("execute");
-            var responseMessage = execute(username);
-            return new CommandResponse(responseMessage);
+            execute(username);
         }
 
         /// <summary>

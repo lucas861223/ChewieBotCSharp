@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChewieBot.Scripting
+namespace ChewieBot.ScriptingEngine
 {
     public class PythonType : DynamicObject
     {

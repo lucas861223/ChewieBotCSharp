@@ -1,7 +1,6 @@
 ﻿using ChewieBot.AppStart;
 using ChewieBot.Database.Model;
-using ChewieBot.Enum;
-using ChewieBot.Scripting;
+using ChewieBot.Enums;
 using ChewieBot.Events;
 using ChewieBot.Services;
 using System;
@@ -9,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChewieBot.ScriptingEngine;
+using ChewieBot.Models;
 
 namespace ChewieBot.ScriptingAPI.Services
 {
@@ -74,7 +75,7 @@ namespace ChewieBot.ScriptingAPI.Services
         public static ScriptServiceResponse CreateNewEvent(string eventType, string eventDuration)
         {
             var response = new ScriptServiceResponse();
-            if (System.Enum.TryParse(eventType, out Enum.EventType type) && int.TryParse(eventDuration, out int duration))
+            if (System.Enum.TryParse(eventType, out EventType type) && int.TryParse(eventDuration, out int duration))
             {
                 response.ResultStatus = ScriptServiceResult.SUCCESS;
                 response.Data = chatEventService.CreateNewEvent(type, duration * 1000); // duration is in seconds, so multiply by 1000 to get ms for timers.

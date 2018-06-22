@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChewieBot.Scripting;
 using Microsoft.Scripting.Hosting;
 
-namespace ChewieBot.Commands
+namespace ChewieBot.ScriptingEngine
 {
     public class Command
     {

@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChewieBot.Enum
+namespace ChewieBot.Enums
 {
-    public enum EventType
+    public enum SongRequestType
     {
+        Donation,
+        BitDonation,
+        NewSubscriber,
         Raffle,
-        Heist,
-        Tournament
+        Points
     }
 }

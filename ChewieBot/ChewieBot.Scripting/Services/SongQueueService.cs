@@ -1,5 +1,6 @@
 ﻿using ChewieBot.AppStart;
-using ChewieBot.Scripting;
+using ChewieBot.Enums;
+using ChewieBot.Models;
 using ChewieBot.Services;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace ChewieBot.ScriptingAPI.Services
         public static ScriptServiceResponse AddSong(string username, string url)
         {
             var user = userService.GetUser(username);
-            var song = songService.AddNewSong(url, user, Enum.SongRequestType.Raffle);
+            var song = songService.AddNewSong(url, user, SongRequestType.Raffle);
             var response = new ScriptServiceResponse();
-            response.ResultStatus = Enum.ScriptServiceResult.SUCCESS;
+            response.ResultStatus = ScriptServiceResult.SUCCESS;
             response.Message = $"Song {song.Title} added to queue.";
             return response;
         }
