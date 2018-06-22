@@ -265,9 +265,14 @@
     <Compile Include="Enums\SongSourceType.cs" />
     <Compile Include="Events\EventEndedEventArgs.cs" />
     <Compile Include="Events\EventStartedEventArgs.cs" />
+    <Compile Include="Events\QuoteAddedEventArgs.cs" />
+    <Compile Include="Events\QuoteDeletedEventArgs.cs" />
     <Compile Include="Events\SongAddedEventArgs.cs" />
     <Compile Include="Events\SongChangedEventArgs.cs" />
     <Compile Include="Models\ScriptServiceResponse.cs" />
+    <Compile Include="Quotes.xaml.cs">
+      <DependentUpon>Quotes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\Implementation\QuoteService.cs" />
     <Compile Include="Services\IQuoteService.cs" />
     <Compile Include="SongQueue.xaml.cs">
@@ -294,6 +299,7 @@
     <Compile Include="Services\IYoutubeService.cs" />
     <Compile Include="Twitch\ITwitchApi.cs" />
     <Compile Include="Twitch\TwitchAPI.cs" />
+    <Compile Include="ViewModels\QuotesViewModel.cs" />
     <Compile Include="ViewModels\SongQueueViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -307,6 +313,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Quotes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SongQueue.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -51,9 +51,9 @@ namespace ChewieBot.AppStart
             container.RegisterType<IEventWinnerService, EventWinnerService>(new TransientLifetimeManager());
             container.RegisterType<IEventWinnerData, EventWinnerRepository>(new TransientLifetimeManager());
             container.RegisterType<ISongQueueService, SongQueueService>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IYoutubeService, YoutubeService>(new TransientLifetimeManager());
+            container.RegisterType<IYoutubeService, YoutubeService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IQuoteData, QuoteRepository>(new TransientLifetimeManager());
-            container.RegisterType<IQuoteService, QuoteService>(new TransientLifetimeManager());
+            container.RegisterType<IQuoteService, QuoteService>(new ContainerControlledLifetimeManager(), new InjectionConstructor(typeof(IQuoteData), typeof(IUserService)));
         }
 
         public static T Resolve<T>()

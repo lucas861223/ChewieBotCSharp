@@ -1,4 +1,5 @@
 ﻿using ChewieBot.Database.Model;
+using ChewieBot.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,9 @@ namespace ChewieBot.Services
         Quote GetQuote(int id);
         Quote AddQuote(string username, string quoteText);
         void DeleteQuote(int id);
+        IEnumerable<Quote> GetAllQuotes();
+
+        event EventHandler<QuoteAddedEventArgs> QuoteAddedEvent;
+        event EventHandler<QuoteDeletedEventArgs> QuoteDeletedEvent;
     }
 }

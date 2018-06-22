@@ -24,7 +24,7 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                var quote = context.Quotes.FirstOrDefault(x => x.Id == id);
+                var quote = context.Quotes.Include("User").FirstOrDefault(x => x.Id == id);
                 if (quote != null)
                 {
                     context.Quotes.Remove(quote);
@@ -45,7 +45,7 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                return context.Quotes.Where(x => x.User.Username == username);
+                return context.Quotes.Include("User").Where(x => x.User.Username == username);
             }
         }
 
@@ -53,7 +53,7 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                return context.Quotes;
+                return context.Quotes.Include("User").ToList();
             }
         }
     }

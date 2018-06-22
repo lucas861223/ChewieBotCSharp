@@ -34,7 +34,8 @@ namespace ChewieBot.ViewModels
             this.Title = "Song Queue";
             MenuItems = new MenuLink[]
                 {
-                    new MenuLink("Song Queue", new SongQueue(UnityConfig.Resolve<ISongQueueService>()))
+                    new MenuLink("Song Queue", new SongQueue(UnityConfig.Resolve<ISongQueueService>())),
+                    new MenuLink("Quotes", new Quotes(UnityConfig.Resolve<IQuoteService>()))
                 };
         }
 
