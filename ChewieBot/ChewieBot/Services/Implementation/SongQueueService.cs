@@ -31,7 +31,7 @@ namespace ChewieBot.Services.Implementation
             {
                 case SongSourceType.Youtube:
                     {
-                        return url.Replace("watch?v=", "embed/");
+                        return url.Replace("watch?v=", "tv#/watch?v=");
                     }
                 default:
                     {

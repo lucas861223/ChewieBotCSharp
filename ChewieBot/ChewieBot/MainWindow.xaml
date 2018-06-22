@@ -7,10 +7,10 @@
         xmlns:CefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         mc:Ignorable="d"
         Title="ChewieBot" Width="1366" Height="768">
-    <Grid>
-        <ListView Grid.Column="1" Grid.Row="1" Name="SongList">
+    <DockPanel>
+        <ListView Name="SongList" DockPanel.Dock="Top" Height="300" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 
         </ListView>
-            <!--<CefSharp:ChromiumWebBrowser Name="YoutubeEmbed" Grid.Row="0"></CefSharp:ChromiumWebBrowser>-->
-    </Grid>
+        <CefSharp:ChromiumWebBrowser Name="YoutubeEmbed" DockPanel.Dock="Bottom" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></CefSharp:ChromiumWebBrowser>
+    </DockPanel>
 </Window>

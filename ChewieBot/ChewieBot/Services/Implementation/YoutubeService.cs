@@ -19,12 +19,13 @@ namespace ChewieBot.Services.Implementation
             {
                 client.BaseAddress = new Uri("https://www.googleapis.com/youtube/v3/videos");
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                var key = song.Url.Split('/').Last();
-                var urlParams = $"?part=contentDetails,snippet&id={key}&key={ConfigurationManager.AppSettings["Youtube-API-Key"]}";
+                var key = song.Url.Split('/').Last().Split('?')[1].Substring(2);
+                var urlParams = $"?part=contentDetails,snippet,status&id={key}&key={ConfigurationManager.AppSettings["Youtube-API-Key"]}";
                 var response = client.GetAsync(urlParams).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     dynamic json = JsonConvert.DeserializeObject<dynamic>(response.Content.ReadAsStringAsync().Result);
+                    song.Embeddable = (bool)json.items[0].status.embeddable;
                     song.Title = json.items[0].snippet.title;
                     song.Duration = XmlConvert.ToTimeSpan((string)json.items[0].contentDetails.duration);
                 }

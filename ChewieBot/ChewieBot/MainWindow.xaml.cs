@@ -1,4 +1,5 @@
 ﻿using ChewieBot.AppStart;
+using ChewieBot.Models;
 using ChewieBot.Scripting;
 using ChewieBot.Services;
 using ChewieBot.Twitch;
@@ -33,6 +34,8 @@ namespace ChewieBot
         private ISongQueueService songService = UnityConfig.Resolve<ISongQueueService>();
         private IYoutubeService youtubeService = UnityConfig.Resolve<IYoutubeService>();
 
+        private Song currentSong;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -59,8 +62,21 @@ namespace ChewieBot
                     SongList.Items.Refresh();
                 });
             };
+
+            SongList.SelectionChanged += (SelectionChangedEventHandler)((o, e) =>
+            {
+                if (e.AddedItems.Count == 1)
+                {
+                    var song = e.AddedItems[0] as Song;
+                    if (currentSong != song)
+                    {
+                        currentSong = song;
+                        YoutubeEmbed.Load(song.Url);
+                    }
+                }
+            });
         }
-        
+
         private void TestEmbeds()
         {
             //this.songService.AddNewSong("https://www.youtube.com/watch?v=POiTHZO2yso", userService.GetUser("magentafall"), Enum.SongRequestType.Donation);
@@ -115,6 +131,21 @@ namespace ChewieBot
             {
                 twitchService.Connect();
             }
+        }
+
+        public static T FindAncestor<T>(DependencyObject obj)
+            where T : DependencyObject
+        {
+            while (obj != null)
+            {
+                T o = obj as T;
+                if (o != null)
+                {
+                    return o;
+                }
+                obj = VisualTreeHelper.GetParent(obj);
+            }
+            return default(T);
         }
 
         /// <summary>

@@ -17,6 +17,7 @@ namespace ChewieBot.Models
         public SongSourceType SourceType { get; set; }
         public string Title { get; set; }
         public TimeSpan Duration { get; set; }
+        public bool Embeddable { get; set; }
 
         public override string ToString()
         {
