@@ -3,6 +3,8 @@ using ChewieBot.Models;
 using ChewieBot.Scripting;
 using ChewieBot.Services;
 using ChewieBot.Twitch;
+using ChewieBot.ViewModels;
+using MahApps.Metro.Controls;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -25,7 +28,7 @@ namespace ChewieBot
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
         private ICommandService commandService = UnityConfig.Resolve<ICommandService>();
@@ -33,6 +36,8 @@ namespace ChewieBot
         private IPythonEngine scriptEngine = UnityConfig.Resolve<IPythonEngine>();
         private ISongQueueService songService = UnityConfig.Resolve<ISongQueueService>();
         private IYoutubeService youtubeService = UnityConfig.Resolve<IYoutubeService>();
+
+        private MainWindowViewModel viewModel;
 
         private Song currentSong;
 
@@ -50,31 +55,8 @@ namespace ChewieBot
         private void InitializeSetup()
         {
             UnityConfig.Setup();
-            SongList.Dispatcher.Invoke(() =>
-            {
-                SongList.ItemsSource = songService.SongList;
-            });
-
-            songService.SongAddedEvent += (o, e) =>
-            {
-                SongList.Dispatcher.Invoke(() =>
-                {
-                    SongList.Items.Refresh();
-                });
-            };
-
-            SongList.SelectionChanged += (SelectionChangedEventHandler)((o, e) =>
-            {
-                if (e.AddedItems.Count == 1)
-                {
-                    var song = e.AddedItems[0] as Song;
-                    if (currentSong != song)
-                    {
-                        currentSong = song;
-                        YoutubeEmbed.Load(song.Url);
-                    }
-                }
-            });
+            viewModel = new MainWindowViewModel();
+            DataContext = viewModel;
         }
 
         private void TestEmbeds()
@@ -123,6 +105,27 @@ namespace ChewieBot
             this.commandService.ExecuteCommand("raffle", "chewiemelodies", new List<string>() { "join" });
             this.commandService.ExecuteCommand("raffle", "cozmium", new List<string>() { "join" });
             this.commandService.ExecuteCommand("raffle", "erredece", new List<string>() { "join" });
+        }
+
+        private void UIElement_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            //until we had a StaysOpen glag to Drawer, this will help with scroll bars
+            var dependencyObject = Mouse.Captured as DependencyObject;
+            while (dependencyObject != null)
+            {
+                if (dependencyObject is ScrollBar) return;
+                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
+            }
+
+            MenuToggleButton.IsChecked = false;
+        }
+
+        private void MenuItemClicked(object sender, MouseButtonEventArgs e)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                viewModel.Title = ((e.Source as ListBox).SelectedItem as MenuLink).Name;
+            });
         }
 
         private void InitializeTwitchClient()

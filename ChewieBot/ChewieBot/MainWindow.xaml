@@ -1,16 +1,67 @@
-﻿<Window x:Class="ChewieBot.MainWindow"
+﻿<Controls:MetroWindow x:Class="ChewieBot.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChewieBot"
         xmlns:CefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         Title="ChewieBot" Width="1366" Height="768">
-    <DockPanel>
-        <ListView Name="SongList" DockPanel.Dock="Top" Height="300" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                
-        </ListView>
-        <CefSharp:ChromiumWebBrowser Name="YoutubeEmbed" DockPanel.Dock="Bottom" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></CefSharp:ChromiumWebBrowser>
-    </DockPanel>
-</Window>
+    <Grid>
+        <materialDesign:DialogHost Identifier="RootDialog" SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
+            <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+                <materialDesign:DrawerHost.LeftDrawerContent>
+                    <DockPanel MinWidth="212">
+                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                                    DockPanel.Dock="Top"
+                                    HorizontalAlignment="Right" Margin="16"
+                                    IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                        <ListBox x:Name="MenuListBox" Margin="0 16 0 16" SelectedIndex="0"                         
+                             ItemsSource="{Binding MenuItems}"
+                                PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp"
+                                 MouseLeftButtonUp="MenuItemClicked">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="Models.MenuLink">
+                                    <TextBlock Text="{Binding Name}" Margin="32 0 32 0" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </materialDesign:DrawerHost.LeftDrawerContent>
+
+                <DockPanel>
+                    <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                            Mode="PrimaryMid" DockPanel.Dock="Top">
+                        <DockPanel>
+                            <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
+                                        x:Name="MenuToggleButton"/>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="{Binding Path=Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                        </DockPanel>
+                    </materialDesign:ColorZone>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ScrollViewer Grid.Row="1" 
+                                  HorizontalScrollBarVisibility="{Binding ElementName=MenuListBox, Path=SelectedItem.HorizontalScrollBarVisibilityRequirement}"
+                                  VerticalScrollBarVisibility="{Binding ElementName=MenuListBox, Path=SelectedItem.VerticalScrollBarVisibilityRequirement}" 
+                                  Padding="{Binding ElementName=MenuListBox, Path=SelectedItem.MarginRequirement}">
+                            <ContentControl Content="{Binding ElementName=MenuListBox, Path=SelectedItem.Content}" />
+                        </ScrollViewer>
+                    </Grid>
+                </DockPanel>
+            </materialDesign:DrawerHost>
+        </materialDesign:DialogHost>
+    </Grid>
+    
+</Controls:MetroWindow>
