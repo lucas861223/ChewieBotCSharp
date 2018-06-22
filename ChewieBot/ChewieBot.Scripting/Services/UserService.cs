@@ -22,12 +22,12 @@ namespace ChewieBot.ScriptingAPI.Services
             response.Data = userService.GetUser(username);
             if (response.Data == null)
             {
-                response.ResultStatus = Enums.ScriptServiceResult.USER_NOT_EXIST;
+                response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;
                 response.Message = $"Unable to find user with name: {username}";
             }
             else
             {
-                response.ResultStatus = Enums.ScriptServiceResult.SUCCESS;
+                response.ResultStatus = ScriptServiceResult.SUCCESS;
             }
 
             return response;
