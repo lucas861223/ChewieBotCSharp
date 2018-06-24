@@ -87,5 +87,10 @@ namespace ChewieBot.Services.Implementation
                 this.SetUser(user);
             }
         }
+
+        public void RemovePointsForUser(string username, int points)
+        {
+            this.AddPointsForUser(username, -points);
+        }
     }
 }

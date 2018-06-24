@@ -7,6 +7,7 @@ using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting.Hosting.Providers;
 using IronPython.Runtime;
+using ChewieBot.ScriptingEngine.Constants;
 
 namespace ChewieBot.ScriptingEngine
 {
@@ -55,10 +56,10 @@ namespace ChewieBot.ScriptingEngine
         /// Load TS scripts from the Commands\\CommandScripts folder and adds them to the script engine.
         /// </summary>
         /// <returns>A dictionary containing commands with their command name as the key. The command name is what is used to trigger the command.</returns>
-        public Dictionary<string, Command> LoadScripts()
+        public Dictionary<string, Command> LoadScripts(string commandsPath)
         {
             var dict = new Dictionary<string, Command>();
-            foreach (var file in Directory.EnumerateFiles("Commands\\CommandScripts"))
+            foreach (var file in Directory.EnumerateFiles(commandsPath))
             {
                 var fileName = file.Split('\\').Last();
                 fileName = fileName.Substring(0, fileName.Length - 3);
@@ -69,7 +70,7 @@ namespace ChewieBot.ScriptingEngine
 
                     if (source != null)
                     {
-                        var command = new Command { CommandName = chatCommandName, Source = source, Parameters = GetCommandParameters(source) };
+                        var command = new Command { CommandName = chatCommandName, Source = source, Parameters = GetCommandParameters(source), PointCost = GetCommandCost(source) };
                         dict.Add(chatCommandName, command);
                     }
                 }
@@ -86,13 +87,31 @@ namespace ChewieBot.ScriptingEngine
         {
             var scope = this.CreateScope();
             source.Execute(scope);
-            if (scope.ContainsVariable("parameters"))
+            if (scope.ContainsVariable(ScriptVariables.Parameters))
             {
-                var parameters = ((IList<object>)scope.GetVariable("parameters")).Cast<string>().ToList();
+                var parameters = ((IList<object>)scope.GetVariable(ScriptVariables.Parameters)).Cast<string>().ToList();
                 return parameters;
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Get the point cost from a command script source.
+        /// </summary>
+        /// <param name="source">The ScriptSource to get the parameters for.</param>
+        /// <returns>The point cost for the command the script creates.</returns>
+        private int GetCommandCost(ScriptSource source)
+        {
+            var scope = this.CreateScope();
+            source.Execute(scope);
+            if (scope.ContainsVariable(ScriptVariables.PointCost))
+            {
+                var cost = scope.GetVariable(ScriptVariables.PointCost);
+                return cost;
+            }
+
+            return 0;
         }
 
         /// <summary>
@@ -107,7 +126,7 @@ namespace ChewieBot.ScriptingEngine
             var scope = this.CreateScope();
             var paramsObject = this.CreateParamObject(command, chatParameters);
             command.Source.Execute(scope);
-            var execute = scope.GetVariable<Func<string, dynamic, string>>("execute");
+            var execute = scope.GetVariable<Func<string, dynamic, string>>(ScriptFunctions.Execute);
             execute(username, paramsObject);
         }
 
@@ -121,7 +140,7 @@ namespace ChewieBot.ScriptingEngine
         {
             var scope = this.CreateScope();
             command.Source.Execute(scope);
-            var execute = scope.GetVariable<Func<string, string>>("execute");
+            var execute = scope.GetVariable<Func<string, string>>(ScriptFunctions.Execute);
             execute(username);
         }
 

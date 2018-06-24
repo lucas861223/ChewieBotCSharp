@@ -8,7 +8,7 @@ namespace ChewieBot.ScriptingEngine
 {
     public interface IPythonEngine
     {
-        Dictionary<string, Command> LoadScripts();
+        Dictionary<string, Command> LoadScripts(string commandPaths);
         void ExecuteCommand(Command commandName, string username, List<string> chatParameters);
         void ExecuteCommand(Command commandName, string username);
     }

@@ -15,5 +15,6 @@ namespace ChewieBot.Services
         List<User> GetUsers(List<string> usernames);
         int GetPointsForUser(string username);
         void AddPointsForUser(string username, int points);
+        void RemovePointsForUser(string username, int points);
     }
 }

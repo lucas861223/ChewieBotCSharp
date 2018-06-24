@@ -9,7 +9,9 @@ namespace ChewieBot.Models
     public class CommandListItem
     {
         public string CommandName { get; set; }
+        public int Cost { get; set; }
         public List<string> Parameters { get; set; }
+        
         public string ParametersAsString
         {
             get

@@ -102,10 +102,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
+    <Compile Include="Constants\ScriptFunctions.cs" />
     <Compile Include="IPythonEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PythonEngine.cs" />
     <Compile Include="PythonType.cs" />
+    <Compile Include="Constants\ScriptVariables.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -18,7 +18,7 @@ namespace ChewieBot.ViewModels
         public CommandListViewModel(ICommandRepository commandRepo)
         {
             this.commandRepo = commandRepo;
-            this.CommandList = this.commandRepo.GetAllCommands().Select(x => new CommandListItem { CommandName = x.CommandName, Parameters = x.Parameters }).ToList();
+            this.CommandList = this.commandRepo.GetAllCommands().Select(x => new CommandListItem { CommandName = x.CommandName, Parameters = x.Parameters, Cost = x.PointCost }).ToList();
         }
     }
 }

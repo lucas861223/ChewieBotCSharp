@@ -1,6 +1,7 @@
 ﻿using ChewieBot.Config;
 using ChewieBot.Database.Model;
 using ChewieBot.Enums;
+using ChewieBot.Exceptions;
 using ChewieBot.Twitch;
 using System;
 using System.Collections.Generic;
@@ -140,7 +141,18 @@ namespace ChewieBot.Services.Implementation
         /// <param name="e">Event Args containing details about the command and message sent.</param>
         private void OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
         {
-            this.commandService.ExecuteCommand(e.Command.CommandText, e.Command.ChatMessage.Username, e.Command.ArgumentsAsList);
+            try
+            {
+                this.commandService.ExecuteCommand(e.Command.CommandText, e.Command.ChatMessage.Username, e.Command.ArgumentsAsList);
+            }
+            catch (CommandPointsException cpex)
+            {
+                this.SendMessage(cpex.Message);
+            }
+            catch (CommandNotExistException cnex)
+            {
+                this.SendMessage($"{cnex.CommandName} does not exist.");
+            }
         }
 
         /// <summary>

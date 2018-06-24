@@ -37,7 +37,7 @@ namespace ChewieBot.ScriptingAPI.Services
         {
             var response = new ScriptServiceResponse();
             int? data = userService.GetPointsForUser(username);
-            response.Data = data > 0 ? data : null;
+            response.Data = data >= 0 ? data : null;
             if (response.Data == null)
             {
                 response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;

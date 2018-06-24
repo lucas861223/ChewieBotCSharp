@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ChewieBot.Database.Model;
 using ChewieBot.ScriptingEngine;
+using System.Configuration;
+using ChewieBot.Exceptions;
 
 namespace ChewieBot.Commands
 {
@@ -29,22 +31,45 @@ namespace ChewieBot.Commands
 
         public void LoadCommands()
         {
-            this.commands = this.scriptEngine.LoadScripts();
+            var commandsPath = ConfigurationManager.AppSettings["CommandsPath"];
+            this.commands = this.scriptEngine.LoadScripts(commandsPath);
         }
 
         public void ExecuteCommand(string commandName, string username, List<string> chatParameters) 
         {
-            if (this.commands.ContainsKey(commandName))
+            if (!this.commands.ContainsKey(commandName))
             {
-                if (chatParameters != null && chatParameters.Count > 0)
-                {
-                    this.scriptEngine.ExecuteCommand(this.commands[commandName], username, chatParameters);
-                }
-                else
-                {
-                    this.scriptEngine.ExecuteCommand(this.commands[commandName], username);
-                }
+                throw new CommandNotExistException($"{commandName} is not a valid command.");
             }
+
+            if (chatParameters != null && chatParameters.Count > 0)
+            {
+                this.scriptEngine.ExecuteCommand(this.commands[commandName], username, chatParameters);
+            }
+            else
+            {
+                this.scriptEngine.ExecuteCommand(this.commands[commandName], username);
+            }
+        }
+
+        public Command GetCommand(string commandName)
+        {
+            if (!this.commands.ContainsKey(commandName))
+            {
+                throw new CommandNotExistException($"{commandName} is not a valid command.");
+            }
+
+            return this.commands[commandName];
+        }
+
+        public int GetCommandCost(string commandName)
+        {
+            if (!this.commands.ContainsKey(commandName))
+            {
+                throw new CommandNotExistException($"{commandName} is not a valid command.");                
+            }
+
+            return this.commands[commandName].PointCost;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ChewieBot.Commands;
+using ChewieBot.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace ChewieBot.Services.Implementation
     public class CommandService : ICommandService
     {
         private ICommandRepository commandRepository;
+        private IUserService userService;
 
-        public CommandService(ICommandRepository commandRepository)
+        public CommandService(ICommandRepository commandRepository, IUserService userService)
         {
             this.commandRepository = commandRepository;
+            this.userService = userService;
         }
 
         /// <summary>
@@ -26,7 +29,19 @@ namespace ChewieBot.Services.Implementation
         /// <returns>A CommandResponse for the executed command, containing the status and a message if the command returns a message.</returns>
         public void ExecuteCommand(string commandName, string username, List<string> chatParameters = null) 
         {
-            this.commandRepository.ExecuteCommand(commandName, username, chatParameters);
+            var userPoints = this.userService.GetPointsForUser(username);
+            var commandCost = this.commandRepository.GetCommandCost(commandName);
+            if (userPoints >= commandCost)
+            {
+                this.commandRepository.ExecuteCommand(commandName, username, chatParameters);
+                this.userService.RemovePointsForUser(username, commandCost);
+            }
+            else
+            {
+                var user = this.userService.GetUser(username);
+                var command = this.commandRepository.GetCommand(commandName);
+                throw new CommandPointsException($"{username} doesn't have enough points for {commandName}", user, command);
+            }
         }
     }
 }
