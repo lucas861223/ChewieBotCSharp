@@ -30,7 +30,7 @@ namespace ChewieBot.Services.Implementation
         public void ExecuteCommand(string commandName, string username, List<string> chatParameters = null) 
         {
             var userPoints = this.userService.GetPointsForUser(username);
-            var commandCost = this.commandRepository.GetCommandCost(commandName);
+            var commandCost = this.commandRepository.GetCommand(commandName).PointCost;
             if (userPoints >= commandCost)
             {
                 this.commandRepository.ExecuteCommand(commandName, username, chatParameters);
@@ -40,7 +40,7 @@ namespace ChewieBot.Services.Implementation
             {
                 var user = this.userService.GetUser(username);
                 var command = this.commandRepository.GetCommand(commandName);
-                throw new CommandPointsException($"{username} doesn't have enough points for {commandName}", user, command);
+                throw new CommandException($"{username} doesn't have enough points for {commandName}", commandName, true);
             }
         }
     }

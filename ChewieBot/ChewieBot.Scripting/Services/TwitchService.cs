@@ -17,13 +17,21 @@ namespace ChewieBot.ScriptingAPI.Services
 
         static TwitchService()
         {
-            twitchService.InitializeClient();
+            if (!twitchService.IsInitialized)
+            {
+                twitchService.InitializeClient();
+            }
         }
 
         public static ScriptServiceResponse SendMessage(string message)
         {
             var response = new ScriptServiceResponse();
             response.ResultStatus = ScriptServiceResult.SUCCESS;
+
+            if (!twitchService.IsConnected)
+            {
+                twitchService.Connect();
+            }
 
             twitchService.SendMessage(message);
             return response;

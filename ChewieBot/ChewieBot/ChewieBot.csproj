@@ -273,8 +273,8 @@
     <Compile Include="Events\QuoteDeletedEventArgs.cs" />
     <Compile Include="Events\SongAddedEventArgs.cs" />
     <Compile Include="Events\SongChangedEventArgs.cs" />
+    <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\CommandNotExistException.cs" />
-    <Compile Include="Exceptions\CommandPointsException.cs" />
     <Compile Include="Models\CommandListItem.cs" />
     <Compile Include="Models\ScriptServiceResponse.cs" />
     <Compile Include="Quotes.xaml.cs">

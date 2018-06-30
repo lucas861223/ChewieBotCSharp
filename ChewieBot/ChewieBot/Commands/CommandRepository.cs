@@ -42,6 +42,11 @@ namespace ChewieBot.Commands
                 throw new CommandNotExistException($"{commandName} is not a valid command.");
             }
 
+            if (this.commands[commandName].Parameters.Count != chatParameters.Count)
+            {
+                
+            }
+
             if (chatParameters != null && chatParameters.Count > 0)
             {
                 this.scriptEngine.ExecuteCommand(this.commands[commandName], username, chatParameters);
@@ -56,20 +61,10 @@ namespace ChewieBot.Commands
         {
             if (!this.commands.ContainsKey(commandName))
             {
-                throw new CommandNotExistException($"{commandName} is not a valid command.");
+                return null;
             }
 
             return this.commands[commandName];
-        }
-
-        public int GetCommandCost(string commandName)
-        {
-            if (!this.commands.ContainsKey(commandName))
-            {
-                throw new CommandNotExistException($"{commandName} is not a valid command.");                
-            }
-
-            return this.commands[commandName].PointCost;
         }
     }
 }

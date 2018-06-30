@@ -23,6 +23,7 @@ namespace ChewieBot.Services.Implementation
         private List<User> currentUserList;
 
         public bool IsConnected { get { return this.client.IsConnected; } }
+        public bool IsInitialized { get; private set; }
 
         /// <summary>
         /// Service for interacting with the Twitch Client.
@@ -51,6 +52,8 @@ namespace ChewieBot.Services.Implementation
             this.client.AddWhisperCommandIdentifier('!');
 
             this.SetupEventHandlers();
+
+            this.IsInitialized = true;
         }
 
         /// <summary>
@@ -145,13 +148,20 @@ namespace ChewieBot.Services.Implementation
             {
                 this.commandService.ExecuteCommand(e.Command.CommandText, e.Command.ChatMessage.Username, e.Command.ArgumentsAsList);
             }
-            catch (CommandPointsException cpex)
-            {
-                this.SendMessage(cpex.Message);
-            }
             catch (CommandNotExistException cnex)
             {
                 this.SendMessage($"{cnex.CommandName} does not exist.");
+            }
+            catch (CommandException cex)
+            {
+                if (cex.ShouldSendToClient)
+                {
+                    this.SendMessage(cex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                // python script failed for some reason.
             }
         }
 

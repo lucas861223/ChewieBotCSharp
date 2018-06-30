@@ -20,8 +20,17 @@ namespace ChewieBot.ScriptingAPI.Services
             var user = userService.GetUser(username);
             var song = songService.AddNewSong(url, user, SongRequestType.Raffle);
             var response = new ScriptServiceResponse();
-            response.ResultStatus = ScriptServiceResult.SUCCESS;
-            response.Message = $"Song {song.Title} added to queue.";
+            if (song != null)
+            {
+                response.ResultStatus = ScriptServiceResult.SUCCESS;
+                response.Message = $"Song {song.Title} added to queue.";
+            }
+            else
+            {
+                response.ResultStatus = ScriptServiceResult.ERROR;
+                response.Message = $"{url} is not a valid song url. Try again.";
+            }
+
             return response;
         }
     }

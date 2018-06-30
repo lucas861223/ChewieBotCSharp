@@ -8,6 +8,8 @@ namespace ChewieBot.Enums
 {
     public enum SongSourceType
     {
-        Youtube
+        Invalid,
+        Youtube,
+        Soundcloud
     }
 }

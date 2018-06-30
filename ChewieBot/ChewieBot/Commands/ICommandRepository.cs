@@ -13,6 +13,5 @@ namespace ChewieBot.Commands
         void ExecuteCommand(string commandName, string username, List<string> chatParameters);
         List<Command> GetAllCommands();
         Command GetCommand(string commandName);
-        int GetCommandCost(string commandName);
     }
 }

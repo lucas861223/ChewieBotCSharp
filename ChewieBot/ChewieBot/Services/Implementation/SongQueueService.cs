@@ -26,21 +26,6 @@ namespace ChewieBot.Services.Implementation
             this.youtubeService = youtubeService;
         }
 
-        private string FormatUrl(string url, SongSourceType sourceType)
-        {
-            switch (sourceType)
-            {
-                case SongSourceType.Youtube:
-                    {
-                        return url.Replace("watch?v=", "tv#/watch?v=");
-                    }
-                default:
-                    {
-                        return url;
-                    }
-            }
-        }
-
         private Song GetSongDetails(Song song)
         {
             switch (song.SourceType)
@@ -58,7 +43,7 @@ namespace ChewieBot.Services.Implementation
 
         private SongSourceType GetSourceType(string url)
         {
-            if (url.Contains("youtube"))
+            if (url.Contains("youtu"))
             {
                 return SongSourceType.Youtube;
             }
@@ -69,7 +54,12 @@ namespace ChewieBot.Services.Implementation
         public Song AddNewSong(string url, User user, SongRequestType requestType)
         {
             var sourceType = this.GetSourceType(url);
-            var song = new Song { Id = nextSongId, Url = this.FormatUrl(url, sourceType), RequestedBy = user, RequestType = requestType, SourceType = sourceType };
+            if (sourceType == SongSourceType.Invalid)
+            {
+                return null;
+            }
+
+            var song = new Song { Id = nextSongId, Url = url, RequestedBy = user, RequestType = requestType, SourceType = sourceType };
             song = this.GetSongDetails(song);
             this.SongList.Add(song);
             nextSongId++;
