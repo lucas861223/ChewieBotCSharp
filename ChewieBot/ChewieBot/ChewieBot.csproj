@@ -277,6 +277,9 @@
     <Compile Include="Exceptions\CommandNotExistException.cs" />
     <Compile Include="Models\CommandListItem.cs" />
     <Compile Include="Models\ScriptServiceResponse.cs" />
+    <Compile Include="PopoutPlayer.xaml.cs">
+      <DependentUpon>PopoutPlayer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Quotes.xaml.cs">
       <DependentUpon>Quotes.xaml</DependentUpon>
     </Compile>
@@ -325,6 +328,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PopoutPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Quotes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

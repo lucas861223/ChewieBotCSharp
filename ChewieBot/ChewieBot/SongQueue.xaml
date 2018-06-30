@@ -10,9 +10,35 @@
       d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
         <ListBox  
-                 DockPanel.Dock="Top" Height="300" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderThickness="1"
+                 DockPanel.Dock="Top" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderThickness="1"
                  ItemsSource="{Binding Path=SongList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  SelectionChanged="SongChanged">
+            <ListBox.Template>
+                <ControlTemplate>
+                    <DockPanel>
+                        <materialDesign:ColorZone Padding="8" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                            Mode="PrimaryLight" DockPanel.Dock="Top">
+                            <DockPanel>
+                                <Grid Margin="0, 2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="7*" />
+                                        <ColumnDefinition Width="1.4*" />
+                                        <ColumnDefinition Width="2.8*" />
+                                        <ColumnDefinition Width="0.8*" />
+                                        <ColumnDefinition Width="2*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="Song Name" Grid.Column="0" />
+                                    <Label Content="Length" Grid.Column="1" />
+                                    <Label Content="Requested By" Grid.Column="2" />
+                                    <Label Content="Type" Grid.Column="3" />
+                                    <Button Click="OpenPopoutPlayer" Content="Popout Music Player" Grid.Column="4" />
+                                </Grid>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ItemsPresenter></ItemsPresenter>
+                    </DockPanel>
+                </ControlTemplate>
+            </ListBox.Template>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0, 2">
@@ -29,7 +55,8 @@
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
-        <CefSharp:ChromiumWebBrowser Name="YoutubeEmbed" DockPanel.Dock="Bottom" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></CefSharp:ChromiumWebBrowser>
+        </ListBox>        
+        <CefSharp:ChromiumWebBrowser Name="YoutubeEmbed" DockPanel.Dock="Bottom" Width="640" Height="360" HorizontalAlignment="Right" VerticalAlignment="Bottom"></CefSharp:ChromiumWebBrowser>
+        
     </DockPanel>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using ChewieBot.Models;
 using ChewieBot.Services;
 using ChewieBot.ViewModels;
+using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,6 +26,7 @@ namespace ChewieBot
     public partial class SongQueue : UserControl
     {
         private SongQueueViewModel viewModel;
+        private PopoutPlayer popoutPlayer;
 
         public SongQueue(ISongQueueService songService)
         {
@@ -52,10 +54,33 @@ namespace ChewieBot
                 {
                     viewModel.CurrentSong = song;
                     YoutubeEmbed.Dispatcher.Invoke(() =>
-                    {
-                        YoutubeEmbed.Load(song.Url);
+                    {                        
+                        if (popoutPlayer != null)
+                        {
+                            popoutPlayer.ChangeSong(song);
+                        }
+                        else
+                        {
+                            YoutubeEmbed.Load(song.Url);
+                        }
                     });
                 }
+            }
+        }
+
+        public void OpenPopoutPlayer(object sender, EventArgs e)
+        {
+            if (popoutPlayer == null)
+            {
+                popoutPlayer = new PopoutPlayer(this.viewModel);
+                popoutPlayer.Show();
+                YoutubeEmbed.Visibility = Visibility.Collapsed;
+
+                popoutPlayer.Closed += (o, args) =>
+                {
+                    popoutPlayer = null;
+                    YoutubeEmbed.Visibility = Visibility.Visible;
+                };
             }
         }
     }

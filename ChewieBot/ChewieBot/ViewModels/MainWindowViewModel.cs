@@ -46,7 +46,6 @@ namespace ChewieBot.ViewModels
 
         public bool Connected { get; set; }
 
-
         private Action<PropertyChangedEventArgs> RaisePropertyChanged()
         {
             return args => PropertyChanged?.Invoke(this, args);

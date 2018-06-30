@@ -28,5 +28,10 @@ namespace ChewieBot.Constants
             public const string Quotes = "Quotes";
             public const string CommandList = "Command List";
         }
+
+        public class PopoutMusicPlayer
+        {
+            public const string Text = "Popout Music Player";
+        }
     }
 }
