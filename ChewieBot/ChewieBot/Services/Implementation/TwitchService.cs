@@ -22,6 +22,8 @@ namespace ChewieBot.Services.Implementation
 
         private List<User> currentUserList;
 
+        public bool IsConnected { get { return this.client.IsConnected; } }
+
         /// <summary>
         /// Service for interacting with the Twitch Client.
         /// </summary>
@@ -179,7 +181,10 @@ namespace ChewieBot.Services.Implementation
         /// </summary>
         public void Connect()
         {
-            this.client.Connect();
+            if (!this.client.IsConnected)
+            {
+                this.client.Connect();
+            }
         }
 
         /// <summary>
@@ -187,7 +192,10 @@ namespace ChewieBot.Services.Implementation
         /// </summary>
         public void Disconnect()
         {
-            this.client.Disconnect();
+            if (this.client.IsConnected)
+            {
+                this.client.Disconnect();
+            }
         }
 
         /// <summary>

@@ -13,5 +13,6 @@ namespace ChewieBot.Services
         void Disconnect();
         IEnumerable<User> GetCurrentUsers();
         void SendMessage(string message);
+        bool IsConnected { get; }
     }
 }

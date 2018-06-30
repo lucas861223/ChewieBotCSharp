@@ -1,5 +1,6 @@
 ﻿using ChewieBot.AppStart;
 using ChewieBot.Commands;
+using ChewieBot.Constants;
 using ChewieBot.Models;
 using ChewieBot.Services;
 using System;
@@ -18,9 +19,33 @@ namespace ChewieBot.ViewModels
 
         public string Title
         {
-            get { return title; }
+            get { return this.title; }
             set { this.MutateVerbose(ref title, value, RaisePropertyChanged()); }
         }
+
+        private string connectButton;
+        public string ConnectButton
+        {
+            get { return this.connectButton; }
+            set { this.MutateVerbose(ref connectButton, value, RaisePropertyChanged()); }
+        }
+
+        private string connectStatus;
+        public string ConnectStatus
+        {
+            get { return this.connectStatus; }
+            set { this.MutateVerbose(ref connectStatus, value, RaisePropertyChanged()); }
+        }
+
+        private string connectColour;
+        public string ConnectColour
+        {
+            get { return this.connectColour; }
+            set { this.MutateVerbose(ref connectColour, value, RaisePropertyChanged()); }
+        }
+
+        public bool Connected { get; set; }
+
 
         private Action<PropertyChangedEventArgs> RaisePropertyChanged()
         {
@@ -32,12 +57,17 @@ namespace ChewieBot.ViewModels
 
         public MainWindowViewModel()
         {
-            this.Title = "Song Queue";
+            // First page is the song queue, so set title accordingly.
+            this.Title = AppConstants.Views.SongQueue;
+            this.Connected = false;
+            this.ConnectButton = AppConstants.ConnectButton.Connect;
+            this.ConnectStatus = AppConstants.ConnectStatus.NotConnected;
+            this.ConnectColour = AppConstants.ConnectStatus.NotConnectedColourHex;
             MenuItems = new MenuLink[]
                 {
-                    new MenuLink("Song Queue", new SongQueue(UnityConfig.Resolve<ISongQueueService>())),
-                    new MenuLink("Quotes", new Quotes(UnityConfig.Resolve<IQuoteService>())),
-                    new MenuLink("Command List", new CommandList(UnityConfig.Resolve<ICommandRepository>()))
+                    new MenuLink(AppConstants.Views.SongQueue, new SongQueue(UnityConfig.Resolve<ISongQueueService>())),
+                    new MenuLink(AppConstants.Views.Quotes, new Quotes(UnityConfig.Resolve<IQuoteService>())),
+                    new MenuLink(AppConstants.Views.CommandList, new CommandList(UnityConfig.Resolve<ICommandRepository>()))
                 };
         }
 
