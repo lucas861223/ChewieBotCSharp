@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TwitchLib.Client.Events;
 
 namespace ChewieBot.Services
 {
@@ -16,5 +17,8 @@ namespace ChewieBot.Services
         bool IsConnected { get; }
         bool IsInitialized { get; }
         void InitializeClient();
+
+        event EventHandler<OnConnectedArgs> OnConnectedEvent;
+        event EventHandler<OnDisconnectedArgs> OnDisconnectedEvent;
     }
 }

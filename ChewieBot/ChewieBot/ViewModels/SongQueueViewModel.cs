@@ -40,5 +40,10 @@ namespace ChewieBot.ViewModels
         {
             return args => PropertyChanged?.Invoke(this, args);
         }
+
+        public void RemoveSong(Song song)
+        {
+            this.songService.RemoveSong(song.Id);
+        }
     }
 }

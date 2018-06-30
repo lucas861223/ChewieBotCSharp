@@ -23,6 +23,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TwitchLib.Client.Events;
 
 namespace ChewieBot
 {
@@ -45,6 +46,8 @@ namespace ChewieBot
         {
             UnityConfig.Setup();
             this.twitchService.InitializeClient();
+            this.twitchService.OnConnectedEvent += OnConnected;
+            this.twitchService.OnDisconnectedEvent += OnDisconnected;
             viewModel = new MainWindowViewModel();
             DataContext = viewModel;
         }
@@ -76,19 +79,28 @@ namespace ChewieBot
             {
                 if (this.twitchService.IsConnected)
                 {
-                    this.twitchService.Disconnect();
-                    this.viewModel.ConnectButton = AppConstants.ConnectButton.Connect;
-                    this.viewModel.ConnectStatus = AppConstants.ConnectStatus.NotConnected;
-                    this.viewModel.ConnectColour = AppConstants.ConnectStatus.NotConnectedColourHex;
+                    this.twitchService.Disconnect();                    
                 }
                 else
                 {
                     this.twitchService.Connect();
-                    this.viewModel.ConnectButton = AppConstants.ConnectButton.Disconnect;
-                    this.viewModel.ConnectStatus = AppConstants.ConnectStatus.Connected;
-                    this.viewModel.ConnectColour = AppConstants.ConnectStatus.ConnectedColourHex;
+                    this.viewModel.ConnectStatus = AppConstants.ConnectStatus.Connecting;
                 }
             });
+        }
+
+        private void OnConnected(object sender, OnConnectedArgs e)
+        {
+            this.viewModel.ConnectButton = AppConstants.ConnectButton.Disconnect;
+            this.viewModel.ConnectStatus = AppConstants.ConnectStatus.Connected;
+            this.viewModel.ConnectColour = AppConstants.ConnectStatus.ConnectedColourHex;
+        }
+
+        private void OnDisconnected(object sender, OnDisconnectedArgs e)
+        {
+            this.viewModel.ConnectButton = AppConstants.ConnectButton.Connect;
+            this.viewModel.ConnectStatus = AppConstants.ConnectStatus.NotConnected;
+            this.viewModel.ConnectColour = AppConstants.ConnectStatus.NotConnectedColourHex;
         }
 
         private void InitializeTwitchClient()

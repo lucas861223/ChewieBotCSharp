@@ -273,6 +273,7 @@
     <Compile Include="Events\QuoteDeletedEventArgs.cs" />
     <Compile Include="Events\SongAddedEventArgs.cs" />
     <Compile Include="Events\SongChangedEventArgs.cs" />
+    <Compile Include="Events\SongRemovedEventArgs.cs" />
     <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\CommandNotExistException.cs" />
     <Compile Include="Models\CommandListItem.cs" />

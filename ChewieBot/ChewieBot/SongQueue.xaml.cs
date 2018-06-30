@@ -27,10 +27,22 @@ namespace ChewieBot
     {
         private SongQueueViewModel viewModel;
         private PopoutPlayer popoutPlayer;
+        private ISongQueueService songService;
 
         public SongQueue(ISongQueueService songService)
         {
+            this.songService = songService;
             songService.SongAddedEvent += (o, e) =>
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.viewModel.SongList = e.SongList;
+                    this.DataContext = null;
+                    this.DataContext = viewModel;
+                });
+            };
+
+            songService.SongRemovedEvent += (o, e) =>
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -82,6 +94,18 @@ namespace ChewieBot
                     YoutubeEmbed.Visibility = Visibility.Visible;
                 };
             }
+        }
+
+        private void MarkAsPlayed(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RemoveFromQueue(object sender, RoutedEventArgs e)
+        {
+            var song = (e.Source as MenuItem).DataContext as Song;
+            this.viewModel.RemoveSong(song);
+            Console.WriteLine(e);
         }
     }
 }

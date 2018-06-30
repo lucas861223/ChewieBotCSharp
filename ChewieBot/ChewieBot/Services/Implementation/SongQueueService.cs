@@ -19,6 +19,7 @@ namespace ChewieBot.Services.Implementation
 
         public event EventHandler<SongAddedEventArgs> SongAddedEvent;
         public event EventHandler<SongChangedEventArgs> SongChangedEvent;
+        public event EventHandler<SongRemovedEventArgs> SongRemovedEvent;
 
         public SongQueueService(IYoutubeService youtubeService)
         {
@@ -94,6 +95,7 @@ namespace ChewieBot.Services.Implementation
         public void RemoveSong(Song song)
         {
             this.SongList.Remove(song);
+            this.SongRemovedEvent?.Invoke(this, new SongRemovedEventArgs { Song = song, SongList = this.SongList });
         }
 
         public void RemoveSong(int id)
@@ -102,6 +104,7 @@ namespace ChewieBot.Services.Implementation
             if (song != null)
             {
                 this.SongList.Remove(song);
+                this.SongRemovedEvent?.Invoke(this, new SongRemovedEventArgs { Song = song, SongList = this.SongList });
             }
         }
 

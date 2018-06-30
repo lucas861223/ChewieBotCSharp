@@ -25,6 +25,9 @@ namespace ChewieBot.Services.Implementation
         public bool IsConnected { get { return this.client.IsConnected; } }
         public bool IsInitialized { get; private set; }
 
+        public event EventHandler<OnConnectedArgs> OnConnectedEvent;
+        public event EventHandler<OnDisconnectedArgs> OnDisconnectedEvent;
+
         /// <summary>
         /// Service for interacting with the Twitch Client.
         /// </summary>
@@ -68,6 +71,18 @@ namespace ChewieBot.Services.Implementation
             this.client.OnChatCommandReceived += OnChatCommandReceived;
             this.client.OnWhisperCommandReceived += OnWhisperCommandReceived;
             this.client.OnExistingUsersDetected += OnExistingUsersDetected;
+            this.client.OnConnected += OnConnected;
+            this.client.OnDisconnected += OnDisconnected;
+        }
+
+        private void OnConnected(object sender, OnConnectedArgs e)
+        {
+            this.OnConnectedEvent?.Invoke(sender, e);
+        }
+
+        private void OnDisconnected(object sender, OnDisconnectedArgs e)
+        {
+            this.OnDisconnectedEvent?.Invoke(sender, e);
         }
 
         /// <summary>

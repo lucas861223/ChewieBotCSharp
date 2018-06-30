@@ -20,6 +20,7 @@ namespace ChewieBot.Constants
             public const string NotConnected = "status: not connected";
             public const string ConnectedColourHex = "#0cd64f";
             public const string NotConnectedColourHex = "#d31515";
+            public const string Connecting = "status: connecting...";
         }
 
         public class Views
