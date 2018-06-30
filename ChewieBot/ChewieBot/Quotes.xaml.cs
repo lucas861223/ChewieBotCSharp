@@ -27,6 +27,7 @@ namespace ChewieBot
         public Quotes(IQuoteService quoteService)
         {
             InitializeComponent();
+            quoteService.Initialize();
 
             quoteService.QuoteAddedEvent += (o, e) =>
             {

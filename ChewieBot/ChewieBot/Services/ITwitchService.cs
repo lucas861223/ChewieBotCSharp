@@ -14,5 +14,6 @@ namespace ChewieBot.Services
         IEnumerable<User> GetCurrentUsers();
         void SendMessage(string message);
         bool IsConnected { get; }
+        void InitializeClient();
     }
 }

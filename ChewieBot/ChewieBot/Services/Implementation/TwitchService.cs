@@ -34,14 +34,12 @@ namespace ChewieBot.Services.Implementation
             this.userService = userService;
             this.commandService = commandService;
             this.currentUserList = new List<User>();
-
-            this.InitializeClient();
         }
 
         /// <summary>
         /// Set the configuration options for the twitch client and initialize it.
         /// </summary>
-        private void InitializeClient()
+        public void InitializeClient()
         {
             var credentials = new ConnectionCredentials(AppConfig.TwitchUsername, AppConfig.TwitchOAuth);
 

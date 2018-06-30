@@ -14,6 +14,7 @@ namespace ChewieBot.Services
         Quote AddQuote(string username, string quoteText);
         void DeleteQuote(int id);
         IEnumerable<Quote> GetAllQuotes();
+        void Initialize();
 
         event EventHandler<QuoteAddedEventArgs> QuoteAddedEvent;
         event EventHandler<QuoteDeletedEventArgs> QuoteDeletedEvent;

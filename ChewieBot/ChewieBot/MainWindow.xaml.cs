@@ -44,6 +44,7 @@ namespace ChewieBot
         private void InitializeSetup()
         {
             UnityConfig.Setup();
+            this.twitchService.InitializeClient();
             viewModel = new MainWindowViewModel();
             DataContext = viewModel;
         }

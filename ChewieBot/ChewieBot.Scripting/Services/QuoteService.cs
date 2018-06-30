@@ -16,6 +16,11 @@ namespace ChewieBot.ScriptingAPI.Services
     {
         private static IQuoteService quoteService = UnityConfig.Resolve<IQuoteService>();
 
+        static QuoteService()
+        {
+            quoteService.Initialize();
+        }
+
         public static ScriptServiceResponse AddQuote(string username, string quotedUser, string quoteText)
         {
             var response = new ScriptServiceResponse();

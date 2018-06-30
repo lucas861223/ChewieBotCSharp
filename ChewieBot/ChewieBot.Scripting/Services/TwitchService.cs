@@ -15,6 +15,11 @@ namespace ChewieBot.ScriptingAPI.Services
     {
         private static ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
 
+        static TwitchService()
+        {
+            twitchService.InitializeClient();
+        }
+
         public static ScriptServiceResponse SendMessage(string message)
         {
             var response = new ScriptServiceResponse();

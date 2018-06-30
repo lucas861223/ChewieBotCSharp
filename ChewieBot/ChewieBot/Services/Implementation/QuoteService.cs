@@ -23,6 +23,10 @@ namespace ChewieBot.Services.Implementation
         {
             this.quoteData = quoteData;
             this.userService = userService;
+        }
+
+        public void Initialize()
+        {
             this.quoteList = this.quoteData.GetAllQuotes().ToList();
         }
 
