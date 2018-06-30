@@ -245,6 +245,7 @@
     <Compile Include="Commands\CommandResponse.cs" />
     <Compile Include="Commands\ICommandRepository.cs" />
     <Compile Include="Config\AppConfig.cs" />
+    <Compile Include="Constants\AppConstants.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
     <Compile Include="Database\Model\ChatEvent.cs" />
     <Compile Include="Database\Model\EventWinner.cs" />
