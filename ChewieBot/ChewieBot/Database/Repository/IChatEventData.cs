@@ -10,10 +10,10 @@ namespace ChewieBot.Database.Repository
 {
     public interface IChatEventData
     {
-        ChatEvent SetChatEvent(ChatEvent chatEvent);
-        ChatEvent GetChatEvent(int eventId);
-        IEnumerable<ChatEvent> GetAllChatEventsForType(EventType type);
-        void DeleteChatEvent(ChatEvent chatEvent);
-        void DeleteChatEvent(int eventId);
+        ChatEvent Set(ChatEvent chatEvent);
+        ChatEvent Get(int eventId);
+        IEnumerable<ChatEvent> GetAllForType(EventType type);
+        void Delete(ChatEvent chatEvent);
+        void Delete(int eventId);
     }
 }

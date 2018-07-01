@@ -10,23 +10,29 @@ namespace ChewieBot.Database.Repository.Implementation
 {
     public class ChatEventRepository : IChatEventData
     {
-        public IEnumerable<ChatEvent> GetAllChatEventsForType(EventType type)
+        public IEnumerable<ChatEvent> GetAllForType(EventType type)
         {
             using (var context = new DatabaseContext())
             {
-                return context.ChatEvents.Where(x => x.Type == type);
+                return context.ChatEvents.Where(x => x.Type == type && !x.IsDeleted);
             }
         }
 
-        public ChatEvent GetChatEvent(int eventId)
+        public ChatEvent Get(int eventId)
         {
             using (var context = new DatabaseContext())
             {
-                return context.ChatEvents.Find(eventId);
+                var record = context.ChatEvents.Find(eventId);
+                if (!record.IsDeleted)
+                {
+                    return record;
+                }
+
+                return null;
             }
         }
 
-        public ChatEvent SetChatEvent(ChatEvent chatEvent)
+        public ChatEvent Set(ChatEvent chatEvent)
         {
             using (var context = new DatabaseContext())
             {
@@ -46,7 +52,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public void DeleteChatEvent(ChatEvent chatEvent)
+        public void Delete(ChatEvent chatEvent)
         {
             using (var context = new DatabaseContext())
             {
@@ -59,7 +65,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public void DeleteChatEvent(int eventId)
+        public void Delete(int eventId)
         {
             using (var context = new DatabaseContext())
             {

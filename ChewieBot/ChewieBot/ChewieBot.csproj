@@ -237,6 +237,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppStart\DatabaseSetup.cs" />
     <Compile Include="AppStart\UnityConfig.cs" />
     <Compile Include="CommandList.xaml.cs">
       <DependentUpon>CommandList.xaml</DependentUpon>
@@ -246,14 +247,18 @@
     <Compile Include="Commands\ICommandRepository.cs" />
     <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Constants\AppConstants.cs" />
+    <Compile Include="Constants\SettingsConstants.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
+    <Compile Include="Database\Model\BotSetting.cs" />
     <Compile Include="Database\Model\ChatEvent.cs" />
     <Compile Include="Database\Model\EventWinner.cs" />
     <Compile Include="Database\Model\Quote.cs" />
     <Compile Include="Database\Model\User.cs" />
     <Compile Include="Database\Model\UserLevel.cs" />
+    <Compile Include="Database\Repository\IBotSettingData.cs" />
     <Compile Include="Database\Repository\IChatEventData.cs" />
     <Compile Include="Database\Repository\IEventWinnerData.cs" />
+    <Compile Include="Database\Repository\Implementation\BotSettingRepository.cs" />
     <Compile Include="Database\Repository\Implementation\ChatEventRepository.cs" />
     <Compile Include="Database\Repository\Implementation\EventWinnerRepository.cs" />
     <Compile Include="Database\Repository\Implementation\QuoteRepository.cs" />
@@ -284,10 +289,20 @@
     <Compile Include="Quotes.xaml.cs">
       <DependentUpon>Quotes.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\IBotSettingService.cs" />
+    <Compile Include="Services\Implementation\BotSettingService.cs" />
+    <Compile Include="Services\Implementation\UserLevelService.cs" />
+    <Compile Include="Services\IUserLevelService.cs" />
     <Compile Include="Services\Implementation\QuoteService.cs" />
     <Compile Include="Services\IQuoteService.cs" />
+    <Compile Include="Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SongQueue.xaml.cs">
       <DependentUpon>SongQueue.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserLevels.xaml.cs">
+      <DependentUpon>UserLevels.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\CommandListViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -312,7 +327,9 @@
     <Compile Include="Twitch\ITwitchApi.cs" />
     <Compile Include="Twitch\TwitchAPI.cs" />
     <Compile Include="ViewModels\QuotesViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SongQueueViewModel.cs" />
+    <Compile Include="ViewModels\UserLevelsViewModel.cs" />
     <Page Include="CommandList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -337,7 +354,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SongQueue.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserLevels.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

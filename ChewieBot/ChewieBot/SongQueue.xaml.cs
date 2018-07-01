@@ -98,14 +98,14 @@ namespace ChewieBot
 
         private void MarkAsPlayed(object sender, RoutedEventArgs e)
         {
-
+            var song = (e.Source as MenuItem).DataContext as Song;
+            song.HasPlayed = true;
         }
 
         private void RemoveFromQueue(object sender, RoutedEventArgs e)
         {
             var song = (e.Source as MenuItem).DataContext as Song;
             this.viewModel.RemoveSong(song);
-            Console.WriteLine(e);
         }
     }
 }

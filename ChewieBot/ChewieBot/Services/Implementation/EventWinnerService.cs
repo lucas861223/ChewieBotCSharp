@@ -28,7 +28,7 @@ namespace ChewieBot.Services.Implementation
         /// <returns>The list of EventWinners for the event</returns>
         public IEnumerable<EventWinner> GetEventWinners(int eventId)
         {
-            var chatEvent = this.chatEventData.GetChatEvent(eventId);
+            var chatEvent = this.chatEventData.Get(eventId);
             return this.GetEventWinners(chatEvent);
         }
 
@@ -41,7 +41,7 @@ namespace ChewieBot.Services.Implementation
         {
             if (chatEvent != null)
             {
-                return this.eventWinnerData.GetEventWinners(chatEvent);
+                return this.eventWinnerData.Get(chatEvent);
             }
             return null;
         }
@@ -55,7 +55,7 @@ namespace ChewieBot.Services.Implementation
         {
             if (user != null)
             {
-                return this.eventWinnerData.GetEventWinsForUser(user);
+                return this.eventWinnerData.GetAllForUser(user);
             }
             return null;
         }
@@ -67,7 +67,7 @@ namespace ChewieBot.Services.Implementation
         /// <returns>The list of all EventWinners for the user.</returns>
         public IEnumerable<EventWinner> GetEventWinsForUser(string username)
         {
-            var user = this.userData.GetUser(username);
+            var user = this.userData.Get(username);
             return this.GetEventWinsForUser(user);
         }
 
@@ -78,7 +78,7 @@ namespace ChewieBot.Services.Implementation
         /// <returns>The event winner that was added or updated.</returns>
         public EventWinner SetEventWinner(EventWinner eventWinner)
         {
-            return this.eventWinnerData.SetEventWinner(eventWinner);
+            return this.eventWinnerData.Set(eventWinner);
         }
     }
 }

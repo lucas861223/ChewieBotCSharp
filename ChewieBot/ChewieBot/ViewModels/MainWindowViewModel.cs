@@ -66,7 +66,8 @@ namespace ChewieBot.ViewModels
                 {
                     new MenuLink(AppConstants.Views.SongQueue, new SongQueue(UnityConfig.Resolve<ISongQueueService>())),
                     new MenuLink(AppConstants.Views.Quotes, new Quotes(UnityConfig.Resolve<IQuoteService>())),
-                    new MenuLink(AppConstants.Views.CommandList, new CommandList(UnityConfig.Resolve<ICommandRepository>()))
+                    new MenuLink(AppConstants.Views.CommandList, new CommandList(UnityConfig.Resolve<ICommandRepository>())),
+                    new MenuLink(AppConstants.Views.UserLevels, new UserLevels(UnityConfig.Resolve<IUserLevelService>()))
                 };
         }
 

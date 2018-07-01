@@ -7,13 +7,26 @@ using ChewieBot.Database.Model;
 
 namespace ChewieBot.Database.Repository.Implementation
 {
-    public class UserLevelRepository : IUserLevelData
+    public class BotSettingRepository : IBotSettingData
     {
+        public void Delete(BotSetting setting)
+        {
+            using (var context = new DatabaseContext())
+            {
+                var record = context.BotSettings.Find(setting.Id);
+                if (record != null)
+                {
+                    record.IsDeleted = true;
+                    context.SaveChanges();
+                }
+            }
+        }
+
         public void Delete(string name)
         {
             using (var context = new DatabaseContext())
             {
-                var record = this.Get(name);
+                var record = context.BotSettings.FirstOrDefault(x => x.Name == name);
                 if (record != null)
                 {
                     record.IsDeleted = true;
@@ -22,48 +35,27 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public void Delete(UserLevel userLevel)
+        public BotSetting Get(string name)
         {
             using (var context = new DatabaseContext())
             {
-                var record = context.UserLevels.Find(userLevel.Id);
-                if (record != null)
-                {
-                    record.IsDeleted = true;
-                    context.SaveChanges();
-                }
+                return context.BotSettings.FirstOrDefault(x => x.Name == name && !x.IsDeleted);
             }
         }
 
-        public UserLevel Get(string name)
+        public BotSetting Set(BotSetting setting)
         {
             using (var context = new DatabaseContext())
             {
-                return context.UserLevels.FirstOrDefault(x => x.Name == name && !x.IsDeleted);
-            }
-        }
-
-        public List<UserLevel> GetAll()
-        {
-            using (var context = new DatabaseContext())
-            {
-                return context.UserLevels.Where(x => !x.IsDeleted).ToList();
-            }
-        }
-
-        public UserLevel Set(UserLevel userLevel)
-        {
-            using (var context = new DatabaseContext())
-            {
-                var record = context.UserLevels.Find(userLevel.Id);
+                var record = context.BotSettings.Find(setting.Id);
                 if (record == null)
                 {
-                    record = userLevel;
-                    context.UserLevels.Add(record);
+                    record = setting;
+                    context.BotSettings.Add(record);
                 }
                 else
                 {
-                    context.Entry(record).CurrentValues.SetValues(userLevel);
+                    context.Entry(record).CurrentValues.SetValues(setting);
                 }
 
                 context.SaveChanges();

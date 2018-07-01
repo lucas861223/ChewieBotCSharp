@@ -54,6 +54,10 @@ namespace ChewieBot.AppStart
             container.RegisterType<IYoutubeService, YoutubeService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IQuoteData, QuoteRepository>(new TransientLifetimeManager());
             container.RegisterType<IQuoteService, QuoteService>(new ContainerControlledLifetimeManager(), new InjectionConstructor(typeof(IQuoteData), typeof(IUserService)));
+            container.RegisterType<IBotSettingData, BotSettingRepository>(new TransientLifetimeManager());
+            container.RegisterType<IBotSettingService, BotSettingService>(new TransientLifetimeManager());
+            container.RegisterType<IUserLevelData, UserLevelRepository>(new TransientLifetimeManager());
+            container.RegisterType<IUserLevelService, UserLevelService>(new TransientLifetimeManager());
         }
 
         public static T Resolve<T>()

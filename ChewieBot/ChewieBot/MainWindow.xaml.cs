@@ -45,6 +45,7 @@ namespace ChewieBot
         private void InitializeSetup()
         {
             UnityConfig.Setup();
+            DatabaseSetup.Setup();
             this.twitchService.InitializeClient();
             this.twitchService.OnConnectedEvent += OnConnected;
             this.twitchService.OnDisconnectedEvent += OnDisconnected;

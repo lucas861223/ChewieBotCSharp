@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace ChewieBot.Database.Model
 {
-    public class User
+    public class BotSetting
     {
         [Key]
         public int Id { get; set; }
-        public string Username { get; set; }
-        public int Points { get; set; }
-        public UserLevel UserLevel { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public string Name { get; set; }
+        public string Value { get; set; }
+        public string Description { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

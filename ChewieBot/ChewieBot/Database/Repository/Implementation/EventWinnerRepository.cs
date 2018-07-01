@@ -9,23 +9,23 @@ namespace ChewieBot.Database.Repository.Implementation
 {
     public class EventWinnerRepository : IEventWinnerData
     {
-        public IEnumerable<EventWinner> GetEventWinners(ChatEvent chatEvent)
+        public IEnumerable<EventWinner> Get(ChatEvent chatEvent)
         {
             using (var context = new DatabaseContext())
             {
-                return context.EventWinners.Where(x => x.Event == chatEvent);
+                return context.EventWinners.Where(x => x.Event == chatEvent && !x.IsDeleted);
             }
         }
 
-        public IEnumerable<EventWinner> GetEventWinsForUser(User user)
+        public IEnumerable<EventWinner> GetAllForUser(User user)
         {
             using (var context = new DatabaseContext())
             {
-                return context.EventWinners.Where(x => x.User == user);
+                return context.EventWinners.Where(x => x.User == user && !x.IsDeleted);
             }
         }
 
-        public EventWinner SetEventWinner(EventWinner eventWinner)
+        public EventWinner Set(EventWinner eventWinner)
         {
             using (var context = new DatabaseContext())
             {

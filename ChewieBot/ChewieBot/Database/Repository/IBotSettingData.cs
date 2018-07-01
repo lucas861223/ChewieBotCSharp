@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace ChewieBot.Database.Repository
 {
-    public interface IEventWinnerData
+    public interface IBotSettingData
     {
-        EventWinner Set(EventWinner eventWinner);
-        IEnumerable<EventWinner> Get(ChatEvent chatEvent);
-        IEnumerable<EventWinner> GetAllForUser(User user);
+        BotSetting Set(BotSetting setting);
+        BotSetting Get(string name);
+        void Delete(BotSetting setting);
+        void Delete(string name);
     }
 }

@@ -9,7 +9,7 @@ namespace ChewieBot.Database.Repository.Implementation
 {
     public class UserRepository : IUserData
     {
-        public User SetUser(User user)
+        public User Set(User user)
         {
             using (var context = new DatabaseContext())
             {
@@ -30,7 +30,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public User GetUser(int id)
+        public User Get(int id)
         {
             using (var context = new DatabaseContext())
             {
@@ -38,7 +38,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public User GetUser(string username)
+        public User Get(string username)
         {
             using (var context = new DatabaseContext())
             {
@@ -46,7 +46,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public List<User> GetUsers(List<string> usernames)
+        public List<User> Get(List<string> usernames)
         {
             using (var context = new DatabaseContext())
             {
@@ -54,7 +54,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public void DeleteUser(string username)
+        public void Delete(string username)
         {
             using (var context = new DatabaseContext())
             {
@@ -67,7 +67,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public void DeleteUser(User user)
+        public void Delete(User user)
         {
             using (var context = new DatabaseContext())
             {
@@ -80,7 +80,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public List<User> SetUsers(List<User> userList)
+        public List<User> Set(List<User> userList)
         {
             using (var context = new DatabaseContext())
             {

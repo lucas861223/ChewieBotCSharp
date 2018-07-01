@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChewieBot.Database.Repository
+namespace ChewieBot.Services
 {
-    public interface IUserLevelData
+    public interface IUserLevelService
     {
-        UserLevel Set(UserLevel userLevel);
         UserLevel Get(string name);
         List<UserLevel> GetAll();
-        void Delete(string name);
+        UserLevel Set(UserLevel userLevel);
         void Delete(UserLevel userLevel);
+        void Delete(string name);
     }
 }

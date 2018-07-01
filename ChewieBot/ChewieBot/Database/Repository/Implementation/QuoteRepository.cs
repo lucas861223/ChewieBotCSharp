@@ -9,7 +9,7 @@ namespace ChewieBot.Database.Repository.Implementation
 {
     public class QuoteRepository : IQuoteData
     {
-        public Quote AddQuote(User user, string quoteText)
+        public Quote Set(User user, string quoteText)
         {
             using (var context = new DatabaseContext())
             {
@@ -20,7 +20,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public void DeleteQuote(int id)
+        public void Delete(int id)
         {
             using (var context = new DatabaseContext())
             {
@@ -33,7 +33,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public Quote GetQuote(int id)
+        public Quote Get(int id)
         {
             using (var context = new DatabaseContext())
             {
@@ -41,7 +41,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public IEnumerable<Quote> GetQuotesForUser(string username)
+        public IEnumerable<Quote> GetAllForUser(string username)
         {
             using (var context = new DatabaseContext())
             {
@@ -49,7 +49,7 @@ namespace ChewieBot.Database.Repository.Implementation
             }
         }
 
-        public IEnumerable<Quote> GetAllQuotes()
+        public IEnumerable<Quote> GetAll()
         {
             using (var context = new DatabaseContext())
             {

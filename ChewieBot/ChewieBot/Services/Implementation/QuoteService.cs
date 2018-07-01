@@ -27,7 +27,7 @@ namespace ChewieBot.Services.Implementation
 
         public void Initialize()
         {
-            this.quoteList = this.quoteData.GetAllQuotes().ToList();
+            this.quoteList = this.quoteData.GetAll().ToList();
         }
 
         public IEnumerable<Quote> GetAllQuotes()
@@ -40,7 +40,7 @@ namespace ChewieBot.Services.Implementation
             var user = this.userService.GetUser(username);
             if (user != null)
             {
-                var quote = quoteData.AddQuote(user, quoteText);
+                var quote = quoteData.Set(user, quoteText);
                 if (quote != null)
                 {
                     this.quoteList.Add(quote);
@@ -58,13 +58,13 @@ namespace ChewieBot.Services.Implementation
             {
                 this.quoteList.Remove(quoteToDelete);
                 this.QuoteDeletedEvent?.Invoke(this, new QuoteDeletedEventArgs { Id = id });
-                quoteData.DeleteQuote(id);
+                quoteData.Delete(id);
             }            
         }
 
         public Quote GetQuote(int id)
         {
-            return quoteData.GetQuote(id);
+            return quoteData.Get(id);
         }
     }
 }

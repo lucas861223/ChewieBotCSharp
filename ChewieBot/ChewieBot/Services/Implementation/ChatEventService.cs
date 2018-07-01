@@ -54,7 +54,7 @@ namespace ChewieBot.Services.Implementation
         public ChatEvent CreateNewEvent(EventType type, int duration)
         {
             var chatEvent = new ChatEvent() { Type = type, Duration = duration };
-            chatEvent = this.chatEventData.SetChatEvent(chatEvent);
+            chatEvent = this.chatEventData.Set(chatEvent);
             this.eventList.Add(chatEvent.EventId, chatEvent);
             return chatEvent;
         }
@@ -96,7 +96,7 @@ namespace ChewieBot.Services.Implementation
                 this.eventList[eventId].HasFinished = true;
                 this.eventList[eventId].TimeFinished = DateTime.UtcNow;
 
-                this.chatEventData.SetChatEvent(this.eventList[eventId]);
+                this.chatEventData.Set(this.eventList[eventId]);
 
                 var winners = this.GetEventWinners(eventId);
                 this.OnEventEnded?.Invoke(this, new EventEndedEventArgs { ChatEvent = this.eventList[eventId], EventWinners = winners });
@@ -119,7 +119,7 @@ namespace ChewieBot.Services.Implementation
                 for (int i = 0; i < winners.Count; i++)
                 {
                     var winner = new EventWinner() { Event = this.eventList[eventId], User = winners[i], Position = i + 1 };
-                    this.eventWinnerData.SetEventWinner(winner);
+                    this.eventWinnerData.Set(winner);
                     winnerList.Add(winner);
                 }
             }

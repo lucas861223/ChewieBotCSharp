@@ -18,6 +18,7 @@ namespace ChewieBot.Models
         public string Title { get; set; }
         public TimeSpan Duration { get; set; }
         public bool Embeddable { get; set; }
+        public bool HasPlayed { get; set; } = false;
 
         public override string ToString()
         {

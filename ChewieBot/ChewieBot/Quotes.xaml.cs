@@ -27,8 +27,8 @@ namespace ChewieBot
         public Quotes(IQuoteService quoteService)
         {
             InitializeComponent();
-            quoteService.Initialize();
 
+            quoteService.Initialize();
             quoteService.QuoteAddedEvent += (o, e) =>
             {
                 this.Dispatcher.Invoke(() =>

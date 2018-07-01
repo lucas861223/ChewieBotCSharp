@@ -9,10 +9,10 @@ namespace ChewieBot.Database.Repository
 {
     public interface IQuoteData
     {
-        Quote GetQuote(int id);
-        IEnumerable<Quote> GetQuotesForUser(string username);
-        IEnumerable<Quote> GetAllQuotes();
-        void DeleteQuote(int id);
-        Quote AddQuote(User user, string quote);
+        Quote Get(int id);
+        IEnumerable<Quote> GetAllForUser(string username);
+        IEnumerable<Quote> GetAll();
+        void Delete(int id);
+        Quote Set(User user, string quote);
     }
 }

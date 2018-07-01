@@ -25,7 +25,7 @@ namespace ChewieBot.Services.Implementation
         /// <returns>The user that was added or updated.</returns>
         public User SetUser(User user)
         {
-            return this.userData.SetUser(user);
+            return this.userData.Set(user);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace ChewieBot.Services.Implementation
         /// <returns>The list of users added and/or updated.</returns>
         public List<User> SetUsers(List<User> userList)
         {
-            return this.userData.SetUsers(userList);
+            return this.userData.Set(userList);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ChewieBot.Services.Implementation
         /// <returns>The user, if it exists, or null if no user exists.</returns>
         public User GetUser(string username)
         {
-            return this.userData.GetUser(username);
+            return this.userData.Get(username);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ChewieBot.Services.Implementation
         /// <returns>A list containing users that are in the database that match the provided usernames. Any users that don't exist will not be included in the results.</returns>
         public List<User> GetUsers(List<string> usernames)
         {
-            return this.userData.GetUsers(usernames);
+            return this.userData.Get(usernames);
         }
 
         /// <summary>
