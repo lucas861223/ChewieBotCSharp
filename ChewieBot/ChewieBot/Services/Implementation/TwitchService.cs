@@ -1,4 +1,5 @@
 ﻿using ChewieBot.Config;
+using ChewieBot.Constants.SettingsConstants;
 using ChewieBot.Database.Model;
 using ChewieBot.Enums;
 using ChewieBot.Exceptions;
@@ -18,9 +19,8 @@ namespace ChewieBot.Services.Implementation
     {
         private TwitchClient client;
         private IUserService userService;
+        private IUserLevelService userLevelService;
         private ICommandService commandService;
-
-        private List<User> currentUserList;
 
         public bool IsConnected { get { return this.client.IsConnected; } }
         public bool IsInitialized { get; private set; }
@@ -37,7 +37,6 @@ namespace ChewieBot.Services.Implementation
         {
             this.userService = userService;
             this.commandService = commandService;
-            this.currentUserList = new List<User>();
         }
 
         /// <summary>
@@ -45,18 +44,21 @@ namespace ChewieBot.Services.Implementation
         /// </summary>
         public void InitializeClient()
         {
-            var credentials = new ConnectionCredentials(AppConfig.TwitchUsername, AppConfig.TwitchOAuth);
+            if (!this.IsInitialized)
+            {
+                var credentials = new ConnectionCredentials(AppConfig.TwitchUsername, AppConfig.TwitchOAuth);
 
-            // Setup client.
-            this.client = new TwitchClient();
-            this.client.Initialize(credentials, AppConfig.TwitchChannel);
-            this.client.DisableAutoPong = false;
-            this.client.AddChatCommandIdentifier('!');
-            this.client.AddWhisperCommandIdentifier('!');
+                // Setup client.
+                this.client = new TwitchClient();
+                this.client.Initialize(credentials, AppConfig.TwitchChannel);
+                this.client.DisableAutoPong = false;
+                this.client.AddChatCommandIdentifier('!');
+                this.client.AddWhisperCommandIdentifier('!');
 
-            this.SetupEventHandlers();
+                this.SetupEventHandlers();
 
-            this.IsInitialized = true;
+                this.IsInitialized = true;
+            }
         }
 
         /// <summary>
@@ -101,7 +103,6 @@ namespace ChewieBot.Services.Implementation
                 newUserList.Add(user);
             }
             this.userService.SetUsers(newUserList);
-            this.currentUserList = userList;
         }
 
         /// <summary>
@@ -111,6 +112,7 @@ namespace ChewieBot.Services.Implementation
         /// <param name="e">Event Args containing the name of the bot and channel that was joined.</param>
         private void OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
+            // Bot joined.
         }
 
         /// <summary>
@@ -120,19 +122,20 @@ namespace ChewieBot.Services.Implementation
         /// <param name="e">Event Args containing the name of the user and channel that was joined.</param>
         private void OnUserJoined(object sender, OnUserJoinedArgs e)
         {
-            var user = this.userService.GetUser(e.Username);
-            if (user == null)
+            // If the viewer talked in chat before the JOIN command was received, they'll already be added as a user
+            // so we need to skip this.
+            if (!this.userService.IsUserWatching(e.Username))
             {
-                user = new User() { Username = e.Username };
-                this.userService.SetUser(user);
-            }
+                var user = this.userService.GetUser(e.Username);
+                if (user == null)
+                {
+                    user = this.userService.AddNewUser(e.Username, UserLevelSettings.ViewerUserLevelName);
+                }
+                this.userService.UserJoined(user);
 
-            if (!this.currentUserList.Any(x => x.Id == user.Id))
-            {
-                this.currentUserList.Add(user);
-            }
+                this.SendMessage($"{user.Username} joined!");
 
-            this.SendMessage($"{user.Username} joined!");
+            }
         }
 
         /// <summary>
@@ -145,10 +148,8 @@ namespace ChewieBot.Services.Implementation
             var user = this.userService.GetUser(e.Username);
             if (user != null)
             {
-                if (this.currentUserList.Any(x => x.Id == user.Id))
-                {
-                    this.currentUserList.Remove(user);
-                }
+                this.userService.UserLeft(user);
+                this.SendMessage($"{user.Username} left!");
             }
         }
 
@@ -197,6 +198,16 @@ namespace ChewieBot.Services.Implementation
         /// <param name="e">Event Args containing details about the message.</param>
         private void OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
+            // To handle if a viewer talks before the JOIN message has been received.
+            if (!this.userService.IsUserWatching(e.ChatMessage.Username))
+            {
+                var user = this.userService.GetUser(e.ChatMessage.Username);
+                if (user == null)
+                {
+                    user = this.userService.AddNewUser(e.ChatMessage.Username, UserLevelSettings.ViewerUserLevelName);
+                }
+                this.userService.UserJoined(user);
+            }
         }
 
         /// <summary>
@@ -219,15 +230,6 @@ namespace ChewieBot.Services.Implementation
             {
                 this.client.Disconnect();
             }
-        }
-
-        /// <summary>
-        /// Get the list of currently connected users.
-        /// </summary>
-        /// <returns>A list if currently connected users.</returns>
-        public IEnumerable<User> GetCurrentUsers()
-        {
-            return this.currentUserList;
         }
 
         /// <summary>

@@ -16,5 +16,10 @@ namespace ChewieBot.Services
         int GetPointsForUser(string username);
         void AddPointsForUser(string username, int points);
         void RemovePointsForUser(string username, int points);
+        void SetCurrentlyWatchingUsers(List<User> users);
+        void UserJoined(User user);
+        void UserLeft(User user);
+        bool IsUserWatching(string username);
+        User AddNewUser(string username, string userLevel);
     }
 }

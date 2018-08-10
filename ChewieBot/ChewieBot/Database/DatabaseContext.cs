@@ -29,7 +29,7 @@ namespace ChewieBot.Database
             modelBuilder.Entity<ChatEvent>()
                 .Ignore(x => x.UserList)
                 .Ignore(x => x.HasStarted)
-                .Ignore(x => x.HasFinished);
+                .Ignore(x => x.HasFinished);                
 
             var sqliteConnectionInitializer = new SqliteCreateDatabaseIfNotExists<DatabaseContext>(modelBuilder);
             System.Data.Entity.Database.SetInitializer(sqliteConnectionInitializer);

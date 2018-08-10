@@ -1,5 +1,6 @@
 ﻿using ChewieBot.AppStart;
 using ChewieBot.Enums;
+using ChewieBot.Exceptions;
 using ChewieBot.Models;
 using ChewieBot.ScriptingEngine;
 using ChewieBot.Services;
@@ -36,16 +37,16 @@ namespace ChewieBot.ScriptingAPI.Services
         public static ScriptServiceResponse GetPointsForUser(string username)
         {
             var response = new ScriptServiceResponse();
-            int? data = userService.GetPointsForUser(username);
-            response.Data = data >= 0 ? data : null;
-            if (response.Data == null)
+            try
+            {
+                int data = userService.GetPointsForUser(username);
+                response.Data = data;
+                response.ResultStatus = ScriptServiceResult.SUCCESS;              
+            }
+            catch (UserNotExistException)
             {
                 response.ResultStatus = ScriptServiceResult.USER_NOT_EXIST;
                 response.Message = $"Unable to get points for user with name: ${username}";
-            }
-            else
-            {
-                response.ResultStatus = ScriptServiceResult.SUCCESS;
             }
 
             return response;

@@ -37,23 +37,34 @@ namespace ChewieBot.Commands
 
         public void ExecuteCommand(string commandName, string username, List<string> chatParameters) 
         {
-            if (!this.commands.ContainsKey(commandName))
+
+            var command = this.GetCommand(commandName);
+            if (command == null)
             {
                 throw new CommandNotExistException($"{commandName} is not a valid command.");
             }
 
-            if (this.commands[commandName].Parameters.Count != chatParameters.Count)
+            if (command.Parameters != null && chatParameters.Count > 0)
             {
-                
-            }
+                var requiredParams = command.Parameters.Where(x => x.IsRequired);
+                if (command.Parameters.Count != chatParameters.Count && requiredParams.Count() != chatParameters.Count)
+                {
+                    // TODO: Ignore excess parameters or return an error?
+                    // For now, just remove excess parameters passed
+                    var count = chatParameters.Count > command.Parameters.Count 
+                        ? chatParameters.Count - command.Parameters.Count 
+                        : command.Parameters.Count - chatParameters.Count;
+                    chatParameters.RemoveRange(command.Parameters.Count, count);
+                }
 
-            if (chatParameters != null && chatParameters.Count > 0)
-            {
-                this.scriptEngine.ExecuteCommand(this.commands[commandName], username, chatParameters);
+                if (chatParameters != null && chatParameters.Count > 0)
+                {
+                    this.scriptEngine.ExecuteCommand(command, username, chatParameters);
+                }
             }
             else
             {
-                this.scriptEngine.ExecuteCommand(this.commands[commandName], username);
+                this.scriptEngine.ExecuteCommand(command, username);
             }
         }
 

@@ -1,4 +1,4 @@
-﻿parameters = ["eventType", "duration"]
+﻿parameters = { "eventType": True, "duration": True }
 
 def execute(username, params):
 	response = ChatEventService.CreateNewEvent(params.eventType, params.duration)

@@ -40,7 +40,7 @@ namespace ChewieBot.AppStart
         public static void RegisterTypes(IUnityContainer container)
         {
             container.RegisterType<IUserData, UserRepository>(new TransientLifetimeManager());
-            container.RegisterType<IUserService, UserService>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserData)));
+            container.RegisterType<IUserService, UserService>(new ContainerControlledLifetimeManager(), new InjectionConstructor(typeof(IUserData), typeof(IUserLevelService), typeof(IBotSettingService)));
             container.RegisterType<ITwitchApi, TwitchAPI>(new TransientLifetimeManager(), new InjectionConstructor(typeof(IUserService)));
             container.RegisterType<ITwitchService, TwitchService>(new ContainerControlledLifetimeManager(), new InjectionConstructor(typeof(IUserService), typeof(ICommandService)));
             container.RegisterType<ICommandService, CommandService>(new TransientLifetimeManager());

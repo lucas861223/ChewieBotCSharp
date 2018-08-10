@@ -9,7 +9,7 @@ namespace ChewieBot.ScriptingEngine
 {
     public class Command
     {
-        public List<string> Parameters { get; set; }
+        public List<CommandParameter> Parameters { get; set; }
         public string CommandName { get; set; }
         public ScriptSource Source { get; set; }
         public int PointCost { get; set; }

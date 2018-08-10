@@ -17,10 +17,14 @@ namespace ChewieBot.Database.Repository.Implementation
                 if (record == null)
                 {
                     record = user;
+                    var level = record.UserLevel;
+                    context.UserLevels.Attach(level);
                     context.Users.Add(record);
                 }
                 else
                 {
+                    var level = record.UserLevel;
+                    context.UserLevels.Attach(level);
                     context.Entry(record).CurrentValues.SetValues(user);
                 }
 
@@ -34,7 +38,7 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                return context.Users.FirstOrDefault(x => x.Id == id);
+                return context.Users.Include("UserLevel").FirstOrDefault(x => x.Id == id);
             }
         }
 
@@ -42,7 +46,7 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                return context.Users.FirstOrDefault(x => x.Username == username);
+                return context.Users.Include("UserLevel").FirstOrDefault(x => x.Username == username);
             }
         }
 
@@ -50,7 +54,7 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                return context.Users.Where(x => usernames.Contains(x.Username)).ToList();
+                return context.Users.Include("UserLevel").Where(x => usernames.Contains(x.Username)).ToList();
             }
         }
 
@@ -91,11 +95,15 @@ namespace ChewieBot.Database.Repository.Implementation
                     if (record == null)
                     {
                         record = user;
+                        var level = record.UserLevel;
+                        context.UserLevels.Attach(level);
                         context.Users.Add(record);
                         recordList.Add(record);
                     }
                     else
                     {
+                        var level = record.UserLevel;
+                        context.UserLevels.Attach(level);
                         context.Entry(record).CurrentValues.SetValues(user);
                         recordList.Add(record);
                     }

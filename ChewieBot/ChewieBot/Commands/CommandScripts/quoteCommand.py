@@ -1,4 +1,4 @@
-﻿parameters = ["id"]
+﻿parameters = { "id": True }
 
 def execute(username, params):
 	response = QuoteService.GetQuote(params.id)

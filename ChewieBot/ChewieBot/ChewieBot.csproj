@@ -281,6 +281,7 @@
     <Compile Include="Events\SongRemovedEventArgs.cs" />
     <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\CommandNotExistException.cs" />
+    <Compile Include="Exceptions\UserNotExistException.cs" />
     <Compile Include="Models\CommandListItem.cs" />
     <Compile Include="Models\ScriptServiceResponse.cs" />
     <Compile Include="PopoutPlayer.xaml.cs">

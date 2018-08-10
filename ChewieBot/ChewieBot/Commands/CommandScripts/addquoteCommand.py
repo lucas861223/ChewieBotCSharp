@@ -1,4 +1,4 @@
-﻿parameters= ["user", "quoteText"]
+﻿parameters= { "user": True, "quoteText": True }
 
 def execute(username, params):
 	response = QuoteService.AddQuote(username, params.user, params.quoteText)

@@ -1,4 +1,4 @@
-﻿parameters = ["url"]
+﻿parameters = { "url": True }
 cost = 50
 
 def execute(username, params):

@@ -49,6 +49,7 @@ namespace ChewieBot.ScriptingEngine
             engine.Execute("import clr", scope);
             engine.Execute("clr.AddReferenceToFileAndPath(\"ChewieBot.ScriptingAPI.dll\")", scope);
             engine.Execute("from ChewieBot.ScriptingAPI.Services import *", scope);
+            engine.Execute("from ChewieBot.ScriptingAPI.Enums import *", scope);
             return scope;
         }
 
@@ -83,14 +84,20 @@ namespace ChewieBot.ScriptingEngine
         /// </summary>
         /// <param name="source">The ScriptSource to get the parameters for.</param>
         /// <returns>A list of parameter names for the script.</returns>
-        private List<string> GetCommandParameters(ScriptSource source)
+        private List<CommandParameter> GetCommandParameters(ScriptSource source)
         {
             var scope = this.CreateScope();
             source.Execute(scope);
             if (scope.ContainsVariable(ScriptVariables.Parameters))
             {
-                var parameters = ((IList<object>)scope.GetVariable(ScriptVariables.Parameters)).Cast<string>().ToList();
-                return parameters;
+                var parameters = scope.GetVariable(ScriptVariables.Parameters);
+                var returnList = new List<CommandParameter>();
+                foreach (var param in parameters)
+                {
+                    returnList.Add(new CommandParameter { Key = param, IsRequired = parameters[param] });
+                }
+
+                return returnList;
             }
 
             return null;
@@ -157,7 +164,7 @@ namespace ChewieBot.ScriptingEngine
             {
                 for (int i = 0; i < command.Parameters.Count; i++)
                 {
-                    obj.Add(command.Parameters[i], chatParams[i]);
+                    obj.Add(command.Parameters[i].Key, chatParams[i]);
                 }
             }
 

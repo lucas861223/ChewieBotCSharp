@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
+    <Compile Include="CommandParameter.cs" />
     <Compile Include="Constants\ScriptFunctions.cs" />
     <Compile Include="IPythonEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

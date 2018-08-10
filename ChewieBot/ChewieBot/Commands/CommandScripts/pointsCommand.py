@@ -1,3 +1,14 @@
-﻿def execute(username):
-	result = UserService.GetPointsForUser(username)
-	TwitchService.SendMessage("%s - %d" % (username, result.Data))
+﻿parameters = { "username": False }
+
+def execute(username, params = None):
+	user = username
+	if params is not None:
+		result = UserService.GetUser(params.username)
+		if result.ResultStatus.value__ == ScriptServiceResult.SUCCESS.value__:
+			user = result.Data.Username
+		else:
+			TwitchService.SendMessage("%s doesn't exist." % (params.username))
+			return
+
+	result = UserService.GetPointsForUser(user)
+	TwitchService.SendMessage("%s - %d" % (user, result.Data))

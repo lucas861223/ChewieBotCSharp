@@ -1,5 +1,7 @@
 ﻿using ChewieBot.AppStart;
 using ChewieBot.Constants;
+using ChewieBot.Constants.SettingsConstants;
+using ChewieBot.Database.Model;
 using ChewieBot.Models;
 using ChewieBot.ScriptingEngine;
 using ChewieBot.Services;
@@ -33,6 +35,7 @@ namespace ChewieBot
     public partial class MainWindow : MetroWindow
     {
         private ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
+        private IBotSettingService botSettingService = UnityConfig.Resolve<IBotSettingService>();
 
         private MainWindowViewModel viewModel;
 
@@ -46,6 +49,7 @@ namespace ChewieBot
         {
             UnityConfig.Setup();
             DatabaseSetup.Setup();
+
             this.twitchService.InitializeClient();
             this.twitchService.OnConnectedEvent += OnConnected;
             this.twitchService.OnDisconnectedEvent += OnDisconnected;

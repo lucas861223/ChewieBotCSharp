@@ -1,4 +1,4 @@
-﻿parameters = ["username", "points"]
+﻿parameters = { "username": True, "points": True }
 
 def execute(username, params):
 	result = UserService.AddPointsForUser(params.username, params.points)
