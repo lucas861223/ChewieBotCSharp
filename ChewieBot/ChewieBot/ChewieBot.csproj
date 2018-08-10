@@ -252,21 +252,27 @@
     <Compile Include="Database\Model\BotSetting.cs" />
     <Compile Include="Database\Model\ChatEvent.cs" />
     <Compile Include="Database\Model\EventWinner.cs" />
+    <Compile Include="Database\Model\ModLevel.cs" />
     <Compile Include="Database\Model\Quote.cs" />
     <Compile Include="Database\Model\User.cs" />
     <Compile Include="Database\Model\UserLevel.cs" />
+    <Compile Include="Database\Model\VIPLevel.cs" />
     <Compile Include="Database\Repository\IBotSettingData.cs" />
     <Compile Include="Database\Repository\IChatEventData.cs" />
     <Compile Include="Database\Repository\IEventWinnerData.cs" />
+    <Compile Include="Database\Repository\IModLevelData.cs" />
     <Compile Include="Database\Repository\Implementation\BotSettingRepository.cs" />
     <Compile Include="Database\Repository\Implementation\ChatEventRepository.cs" />
     <Compile Include="Database\Repository\Implementation\EventWinnerRepository.cs" />
+    <Compile Include="Database\Repository\Implementation\ModLevelRepository.cs" />
     <Compile Include="Database\Repository\Implementation\QuoteRepository.cs" />
     <Compile Include="Database\Repository\Implementation\UserLevelRepository.cs" />
     <Compile Include="Database\Repository\Implementation\UserRepository.cs" />
+    <Compile Include="Database\Repository\Implementation\VIPLevelRepository.cs" />
     <Compile Include="Database\Repository\IQuoteData.cs" />
     <Compile Include="Database\Repository\IUserData.cs" />
     <Compile Include="Database\Repository\IUserLevelData.cs" />
+    <Compile Include="Database\Repository\IVIPLevelData.cs" />
     <Compile Include="Enums\ResponseType.cs" />
     <Compile Include="Enums\EventType.cs" />
     <Compile Include="Enums\ScriptServiceResult.cs" />
@@ -291,11 +297,17 @@
       <DependentUpon>Quotes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\IBotSettingService.cs" />
+    <Compile Include="Services\IDeepbotService.cs" />
+    <Compile Include="Services\IModLevelService.cs" />
     <Compile Include="Services\Implementation\BotSettingService.cs" />
+    <Compile Include="Services\Implementation\DeepbotService.cs" />
+    <Compile Include="Services\Implementation\ModLevelService.cs" />
     <Compile Include="Services\Implementation\UserLevelService.cs" />
+    <Compile Include="Services\Implementation\VIPLevelService.cs" />
     <Compile Include="Services\IUserLevelService.cs" />
     <Compile Include="Services\Implementation\QuoteService.cs" />
     <Compile Include="Services\IQuoteService.cs" />
+    <Compile Include="Services\IVIPLevelService.cs" />
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>

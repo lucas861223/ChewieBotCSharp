@@ -36,6 +36,7 @@ namespace ChewieBot
     {
         private ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
         private IBotSettingService botSettingService = UnityConfig.Resolve<IBotSettingService>();
+        private IDeepbotService deepbotService = UnityConfig.Resolve<IDeepbotService>();
 
         private MainWindowViewModel viewModel;
 
@@ -49,6 +50,8 @@ namespace ChewieBot
         {
             UnityConfig.Setup();
             DatabaseSetup.Setup();
+
+            this.deepbotService.LoadDeepbotUsersFromFile();
 
             this.twitchService.InitializeClient();
             this.twitchService.OnConnectedEvent += OnConnected;

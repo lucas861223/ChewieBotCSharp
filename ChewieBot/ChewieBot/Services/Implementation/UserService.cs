@@ -73,7 +73,7 @@ namespace ChewieBot.Services.Implementation
         /// </summary>
         /// <param name="username">The username to get points for.</param>
         /// <returns>The number of points for the user, if the user exists, or -1 if no user exists.</returns>
-        public int GetPointsForUser(string username)
+        public double GetPointsForUser(string username)
         {
 
             var user = this.GetUser(username);

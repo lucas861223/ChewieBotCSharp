@@ -20,5 +20,8 @@ namespace ChewieBot.Config
 
         // BotSettings
         public static int SettingsCacheDuration = Int32.Parse(ConfigurationManager.AppSettings["Settings-CacheDuration"]);
+
+        // Deepbot
+        public static string DeepbotUserFile = ConfigurationManager.AppSettings["DeepbotUserFile"];
     }
 }

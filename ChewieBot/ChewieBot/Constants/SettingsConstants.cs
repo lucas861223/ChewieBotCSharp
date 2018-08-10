@@ -15,6 +15,32 @@ namespace ChewieBot.Constants.SettingsConstants
         public const string BotUserLevelName = "Bot";
     }
 
+    public class ModLevelSettings
+    {
+        // Mod: 0
+        public const string NoModLevelName = "None";
+        // Mod: 1
+        public const string ModLevelName = "Moderator";
+        // Mod: 2
+        public const string SeniorModLevelName = "Senior Moderator";
+        // Mod: 4
+        public const string BotLevelName = "Bot";
+        // Mod: 5
+        public const string BroadcasterLevelName = "Broadcaster";
+    }
+
+    public class VIPLevelSettings
+    {
+        // VIP: 10
+        public const string NoVIPLevelName = "None";
+        // VIP: 1
+        public const string BronzeVIPLevelName = "Bronze";
+        // VIP: 2
+        public const string SilverVIPLevelName = "Silver";
+        // VIP: 3
+        public const string GoldVIPLevelName = "Gold";
+    }
+
     public class BaseSettings
     {
         public class PointRate

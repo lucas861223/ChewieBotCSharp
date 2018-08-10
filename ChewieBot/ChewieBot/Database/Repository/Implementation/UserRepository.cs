@@ -18,12 +18,20 @@ namespace ChewieBot.Database.Repository.Implementation
                 {
                     record = user;
                     var level = record.UserLevel;
+                    var modLevel = record.ModLevel;
+                    var vipLevel = record.VIPLevel;
+                    context.ModLevels.Attach(modLevel);
+                    context.VIPLevels.Attach(vipLevel);
                     context.UserLevels.Attach(level);
                     context.Users.Add(record);
                 }
                 else
                 {
                     var level = record.UserLevel;
+                    var modLevel = record.ModLevel;
+                    var vipLevel = record.VIPLevel;
+                    context.ModLevels.Attach(modLevel);
+                    context.VIPLevels.Attach(vipLevel);
                     context.UserLevels.Attach(level);
                     context.Entry(record).CurrentValues.SetValues(user);
                 }
@@ -91,11 +99,15 @@ namespace ChewieBot.Database.Repository.Implementation
                 var recordList = new List<User>();
                 foreach (var user in userList)
                 {
-                    var record = context.Users.Find(user.Id);
+                    var record = context.Users.FirstOrDefault(x => x.Username == user.Username);
                     if (record == null)
                     {
                         record = user;
                         var level = record.UserLevel;
+                        var modLevel = record.ModLevel;
+                        var vipLevel = record.VIPLevel;
+                        context.ModLevels.Attach(modLevel);
+                        context.VIPLevels.Attach(vipLevel);
                         context.UserLevels.Attach(level);
                         context.Users.Add(record);
                         recordList.Add(record);
@@ -104,6 +116,10 @@ namespace ChewieBot.Database.Repository.Implementation
                     {
                         var level = record.UserLevel;
                         context.UserLevels.Attach(level);
+                        var modLevel = record.ModLevel;
+                        var vipLevel = record.VIPLevel;
+                        context.ModLevels.Attach(modLevel);
+                        context.VIPLevels.Attach(vipLevel);
                         context.Entry(record).CurrentValues.SetValues(user);
                         recordList.Add(record);
                     }
