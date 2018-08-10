@@ -9,8 +9,9 @@ namespace ChewieBot.Services
 {
     public interface IBotSettingService
     {
-        BotSetting Set(BotSetting setting);
-        BotSetting Get(string name);
+        BotSetting Set(string name, string description, object value, Type type);
+        bool Exists(string name);
+        dynamic GetValue(string name);
         void Delete(string name);
         void Delete(BotSetting setting);
     }

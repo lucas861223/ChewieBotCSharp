@@ -38,13 +38,9 @@ namespace ChewieBot.AppStart
 
         private static void SetupBaseSettings()
         {
-            if (settingService.Get(BaseSettings.PointRate.Name) == null)
+            if (!settingService.Exists(BaseSettings.PointRate.Name))
             {
-                var bf = new BinaryFormatter();
-                var ms = new MemoryStream();
-                bf.Serialize(ms, 5);
-
-                settingService.Set(new BotSetting { Name = BaseSettings.PointRate.Name, Description = BaseSettings.PointRate.Description, Value = ms.ToArray(), TypeName = typeof(double).ToString() });
+                settingService.Set(BaseSettings.PointRate.Name, BaseSettings.PointRate.Description, 5, typeof(double));
             }
         }
     }

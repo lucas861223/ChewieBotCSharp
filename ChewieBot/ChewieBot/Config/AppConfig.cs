@@ -17,5 +17,8 @@ namespace ChewieBot.Config
         public static string TwitchChannel = ConfigurationManager.AppSettings["Twitch-Channel"];
         public static string TwitchOAuth = ConfigurationManager.AppSettings["Twitch-OAuth"];
         public static string TwitchUsername = ConfigurationManager.AppSettings["Twitch-Username"];
+
+        // BotSettings
+        public static int SettingsCacheDuration = Int32.Parse(ConfigurationManager.AppSettings["Settings-CacheDuration"]);
     }
 }
