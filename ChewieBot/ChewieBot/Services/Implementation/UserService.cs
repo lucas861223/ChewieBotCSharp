@@ -98,8 +98,7 @@ namespace ChewieBot.Services.Implementation
         {
             var timeDifference = DateTime.Now - user.LastPointUpdateTime;
             user.LastPointUpdateTime = DateTime.Now;
-            var pointRateSetting = this.botSettingService.Get(BaseSettings.PointRate.Name);
-            dynamic pointRate = pointRateSetting.GetValue();
+            dynamic pointRate = this.botSettingService.GetValue(BaseSettings.PointRate.Name);
             user.Points += (int)(timeDifference.TotalMinutes * (pointRate * user.UserLevel.PointMultiplier));    // TODO: Change this to use a setting value, based on user level, etc.
             this.SetUser(user);
             return user;
