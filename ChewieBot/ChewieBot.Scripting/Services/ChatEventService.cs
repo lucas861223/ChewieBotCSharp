@@ -25,8 +25,8 @@ namespace ChewieBot.ScriptingAPI.Services
 
         static ChatEventService()
         {
-            chatEventService.OnEventStarted += EventStarted;
-            chatEventService.OnEventEnded += EventEnded;
+            chatEventService.OnEventStartedEvent += EventStarted;
+            chatEventService.OnEventEndedEvent += EventEnded;
         }
 
         private static void EventEnded(object sender, EventEndedEventArgs e)

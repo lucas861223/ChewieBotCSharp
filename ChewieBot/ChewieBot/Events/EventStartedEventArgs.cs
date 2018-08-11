@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ChewieBot.Events
 {
-    public class EventStartedEventArgs
+    public class EventStartedEventArgs : BaseEvent
     {
         public int EventId { get; set; }
     }

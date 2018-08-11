@@ -42,13 +42,16 @@ namespace ChewieBot.Constants
             public const string InterfacePath = "ChewieBot.Services";
         }
 
-        public class TwitchEvents
+        public class Events
         {
             public const string OnStreamUp = "OnStreamUpEvent";
             public const string OnStreamDown = "OnStreamDownEvent";
             public const string OnHost = "OnHostEvent";
             public const string OnBitsReceived = "OnBitsReceivedEvent";
             public const string OnChannelSubscription = "OnChannelSubscriptionEvent";
+
+            public const string OnEventStarted = "OnEventStartedEvent";
+            public const string OnEventEnded = "OnEventEndedEvent";
         }
     }
 }

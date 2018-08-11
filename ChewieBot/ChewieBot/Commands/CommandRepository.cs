@@ -13,6 +13,7 @@ using ChewieBot.Constants;
 using ChewieBot.Services;
 using ChewieBot.AppStart;
 using ChewieBot.Events.TwitchPubSub;
+using ChewieBot.Events;
 
 namespace ChewieBot.Commands
 {
@@ -79,7 +80,7 @@ namespace ChewieBot.Commands
         }
 
         public void ExecuteEventCommand<T>(object sender, T args)
-            where T : TwitchEventArgs
+            where T : BaseEvent
         {
             var eventName = args.TriggeredByEvent;
             if (this.eventMappedCommands.Keys.Any(x => x == eventName))

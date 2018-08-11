@@ -7,7 +7,7 @@ using TwitchLib.PubSub.Events;
 
 namespace ChewieBot.Events.TwitchPubSub
 {
-    public class StreamDownArgs : TwitchEventArgs
+    public class StreamDownArgs : BaseEvent
     {
         public string ServerTime { get; set; }
 

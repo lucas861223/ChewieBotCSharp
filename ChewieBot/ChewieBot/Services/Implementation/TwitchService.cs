@@ -114,27 +114,27 @@ namespace ChewieBot.Services.Implementation
 
         private void OnHost(object sender, OnHostArgs e)
         {
-            this.OnHostEvent?.Invoke(sender, new HostArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnHost });
+            this.OnHostEvent?.Invoke(sender, new HostArgs(e) { TriggeredByEvent = AppConstants.Events.OnHost });
         }
 
         private void OnChannelSubscription(object sender, OnChannelSubscriptionArgs e)
         {
-            this.OnChannelSubscriptionEvent?.Invoke(sender, new ChannelSubscriptionArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnChannelSubscription });
+            this.OnChannelSubscriptionEvent?.Invoke(sender, new ChannelSubscriptionArgs(e) { TriggeredByEvent = AppConstants.Events.OnChannelSubscription });
         }
 
         private void OnBitsReceived(object sender, OnBitsReceivedArgs e)
         {
-            this.OnBitsReceivedEvent?.Invoke(sender, new BitsReceivedArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnBitsReceived });
+            this.OnBitsReceivedEvent?.Invoke(sender, new BitsReceivedArgs(e) { TriggeredByEvent = AppConstants.Events.OnBitsReceived });
         }
 
         private void OnStreamDown(object sender, OnStreamDownArgs e)
         {
-            this.OnStreamDownEvent?.Invoke(sender, new StreamDownArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnStreamDown });
+            this.OnStreamDownEvent?.Invoke(sender, new StreamDownArgs(e) { TriggeredByEvent = AppConstants.Events.OnStreamDown });
         }
 
         private void OnStreamUp(object sender, OnStreamUpArgs e)
         {
-            this.OnStreamUpEvent?.Invoke(sender, new StreamUpArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnStreamUp });
+            this.OnStreamUpEvent?.Invoke(sender, new StreamUpArgs(e) { TriggeredByEvent = AppConstants.Events.OnStreamUp });
         }
 
         private void OnPubSubServiceConnected(object sender, EventArgs e)
@@ -178,7 +178,7 @@ namespace ChewieBot.Services.Implementation
         private void OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
             // Bot joined.
-            this.OnStreamUpEvent?.Invoke(this, new StreamUpArgs(new OnStreamUpArgs { PlayDelay = 10, ServerTime = DateTime.Now.ToString() }) { TriggeredByEvent = AppConstants.TwitchEvents.OnStreamUp });
+            this.OnStreamUpEvent?.Invoke(this, new StreamUpArgs(new OnStreamUpArgs { PlayDelay = 10, ServerTime = DateTime.Now.ToString() }) { TriggeredByEvent = AppConstants.Events.OnStreamUp });
         }
 
         /// <summary>
