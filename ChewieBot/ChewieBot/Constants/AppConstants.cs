@@ -38,7 +38,8 @@ namespace ChewieBot.Constants
 
         public class ServiceAssmebly
         {
-            public const string FullName = "ChewieBot.Services.Implementation";
+            public const string Path = "ChewieBot.Services.Implementation";
+            public const string InterfacePath = "ChewieBot.Services";
         }
 
         public class TwitchEvents

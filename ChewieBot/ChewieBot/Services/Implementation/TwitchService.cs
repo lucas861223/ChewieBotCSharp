@@ -178,6 +178,7 @@ namespace ChewieBot.Services.Implementation
         private void OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
             // Bot joined.
+            this.OnStreamUpEvent?.Invoke(this, new StreamUpArgs(new OnStreamUpArgs { PlayDelay = 10, ServerTime = DateTime.Now.ToString() }) { TriggeredByEvent = AppConstants.TwitchEvents.OnStreamUp });
         }
 
         /// <summary>

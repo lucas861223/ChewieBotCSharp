@@ -69,5 +69,11 @@ namespace ChewieBot.AppStart
         {
             return GetConfiguredContainer().Resolve<T>();
         }
+
+        public static object ResolveByType(Type type)
+        {
+            var resolveMethod = typeof(UnityConfig).GetMethod("Resolve", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).MakeGenericMethod(type);
+            return resolveMethod.Invoke(null, null);
+        }
     }
 }
