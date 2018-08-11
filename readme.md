@@ -1,6 +1,20 @@
 # ChewieBot
 ### A Twitch Bot for Musicians
 
+This is a Twitch.TV chat bot, specifically designed to have functionality for music streamers.
+
+This is currently a work in progress, so things are still subject to change and are not final. 
+
+Documentation will be updated as things change.
+
+### Feature List
+- Python Scripting for custom commands -- *Mostly Done*
+- Integration with multiple platforms for music request -- *YouTube done, others not implemented yet*
+- Integration with OBS to add and update OBS Alerts -- *Not implemented. May never be, as there are multiple options available that work well. To be decided*
+- Song Queue system that provides detailed information about song requests -- *Basic system implemented. More functionality to be added.*
+- User VIP system that allows customisation -- *Basic system implemented. More functionality to be added.*
+- Automated functionality for events -- *Subscriptions and Bit Donations can trigger custom python scripts. Donations not implemented*
+
 ---
 
 [Commands][]
