@@ -75,7 +75,8 @@ namespace ChewieBot.ScriptingAPI.Services
         public static ScriptServiceResponse CreateNewEvent(string eventType, string eventDuration)
         {
             var response = new ScriptServiceResponse();
-            if (System.Enum.TryParse(eventType, out EventType type) && int.TryParse(eventDuration, out int duration))
+            var eventTypeCased = $"{eventType.First().ToString().ToUpper()}{eventType.Substring(1).ToLower()}";
+            if (System.Enum.TryParse(eventTypeCased, out EventType type) && int.TryParse(eventDuration, out int duration))
             {
                 response.ResultStatus = ScriptServiceResult.SUCCESS;
                 response.Data = chatEventService.CreateNewEvent(type, duration * 1000); // duration is in seconds, so multiply by 1000 to get ms for timers.

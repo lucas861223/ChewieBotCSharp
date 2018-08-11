@@ -533,6 +533,7 @@ Used by users to add a song request to the Song Queue.
 Usage in Twitch.TV Chat.
 
 `!addsong http://www.youtube.com/watch?v=12345678`
+
 `!addsong https://youtu.be/12345678`
 
 ```python
@@ -572,8 +573,13 @@ def execute(eventArgs):
         TwitchService.SendMessage("The stream has finished!")
 ```
 
-### Raffle Command
+### StartEvent Command
 This command is used to start raffles. Because this is a chat command, to use service events we need to register functions to the command is called.
+Note that the duration is in seconds.
+
+Usage in Twitch.TV chat
+
+`!startevent raffle 60`
 
 ```python
 # This time we have two required parameters.
