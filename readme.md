@@ -1,6 +1,8 @@
 # ChewieBot
 ### A Twitch Bot for Musicians
 
+[Commands][]
+
 This is a Twitch.TV chat bot, specifically designed to have functionality for music streamers.
 
 This is currently a work in progress, so things are still subject to change and are not final. 
@@ -15,17 +17,17 @@ Documentation will be updated as things change.
 - User VIP system that allows customisation -- *Basic system implemented. More functionality to be added.*
 - Automated functionality for events -- *Subscriptions and Bit Donations can trigger custom python scripts. Donations not implemented*
 
----
-
-[Commands][]
 
 <div id="commands"></div>
 
 # Commands
 ---
-[Introduction][CommandIntro]
+[Introduction to Commands][CommandIntro]
+
 [Python Scripts][CommandScripts]
+
 [Services Available in Python Scripts][CommandServices]
+
 - [Twitch Service][TwitchService]
 - [User Service][UserService]
 - [Song Queue Service][SongQueueService]
@@ -423,7 +425,7 @@ void StartEvent(string eventId);
 ```
 
 #### Models
-```chsarp
+```csharp
 public class ChatEvent
 {
     public int EventId;
@@ -482,8 +484,11 @@ public class Quote
 ```
 
 [Introduction][CommandIntro]
+
 [Python Scripts][CommandScripts]
+
 [Services Available in Python Scripts][CommandServices]
+
 - [Twitch Service][TwitchService]
 - [User Service][UserService]
 - [Song Queue Service][SongQueueService]
