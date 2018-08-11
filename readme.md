@@ -21,7 +21,6 @@ Documentation will be updated as things change.
 <div id="commands"></div>
 
 # Commands
----
 [Introduction to Commands][CommandIntro]
 
 [Python Scripts][CommandScripts]
@@ -33,6 +32,8 @@ Documentation will be updated as things change.
 - [Song Queue Service][SongQueueService]
 - [Chat Event Service][ChatEventService]
 - [Quote Service][QuoteService]
+
+[Example Scripts][Examples]
 
 <div id="commandIntro"></div>
 
@@ -49,7 +50,7 @@ Python scripts are required to be in the format `nameCommand.py` where `name` is
 
 Command scripts are in the following formats.
 
-#### Chat Commands
+### Chat Commands
 
 ```python
 # parameters is a dictionary containing all parameters for the command. The order that parameters are in the dictionary is the same order that the parameters will be required in the chat command.
@@ -80,7 +81,7 @@ def execute(username, params = None):
 - All of the variables in the script are optional, and can be removed if they don't have values.
 - `params` properties are all strings, as they are parsed from the users chat message.
 
-#### Event Scripts
+### Event Scripts
 ```python
 # State whether this command should be executed on an event triggering.
 triggeredOnEvent = bool
@@ -483,6 +484,124 @@ public class Quote
 }
 ```
 
+<div id="exampleScripts"></div>
+
+## Examples
+
+### Points Command
+Used by users so that they can check their own points, or the points of another user.
+
+Usage in Twitch.TV Chat:
+
+`!points`
+
+`!points magentah`
+
+```python
+# The username parameter is not required, as this command can be used wither with a user specified or not.
+parameters = { "username": False }
+
+# Because the parameter we defined is optional, we need to set the params argument as optional as well, with '= None'.
+def execute(username, params = None):
+	user = username
+	if params is not None:
+        # If there is a 'params' object, then a 'username' parameter has been passed. We use that to get the user object we want.
+		result = UserService.GetUser(params.username)
+        # The result from a service call will have the 'ResultStatus' property, that tells us whether the call was successful or not.
+        # If the call is successful here, we get the Username for the user.
+        # Note that accessing the 'result.Data.Username' uses capital letters at the start of each property after 'result', unlike the 'params.username' we accessed earlier.
+        # This is due to it being a C# object.
+        # Due to ResultStatus using a C# enum, we need to use the '.value__' property to access the value correctly.
+		if result.ResultStatus.value__ == ScriptServiceResult.SUCCESS.value__:
+			user = result.Data.Username
+        # If the service call wasn't a success, it's because the user doesn't exist. We send a message to the Twitch.TV chat service, then return early to prevent any more code executing.
+		else:
+			TwitchService.SendMessage("%s doesn't exist." % (params.username))
+			return
+
+    # If we reach here, we have a user we can try to get points for.
+	result = UserService.GetPointsForUser(user)
+    if result.ResultStatus.value__ == ScriptServiceResult.SUCCESS.value__:
+        # If the call was successful, we send a message to the Twitch.TV chat service with the username and points for the user.
+        # Note - because the GetPointsForUser() function returns a double, we can get that value by using result.Data.
+	    TwitchService.SendMessage("%s - %d" % (user, result.Data))
+```
+
+### AddSong Command
+Used by users to add a song request to the Song Queue.
+
+Usage in Twitch.TV Chat.
+
+`!addsong http://www.youtube.com/watch?v=12345678`
+`!addsong https://youtu.be/12345678`
+
+```python
+# The url parameter is required, as we need a url for the command to work correctly.
+parameters = { "url": True }
+
+# There is a cost of 50 points to use this command, meaning that when a user attemtpts to use this command, the bot will first check if they have 50 or more points.
+# If they don't, the user cannot use this command. If they do, 50 points will be removed from the user after using this command.
+cost = 50
+
+# Because the parameter we defined is required, we don't want to set the params argument as optional, like in the previous example, so we don't use '= None'.
+def execute(username, params):
+	result = SongQueueService.AddSong(username, params.url)
+    if result.ResultStatus.value__ == ScriptServiceResult.SUCCESS.value__:
+        # Here we send a message to the Twitch.TV chat service, stating that a song has been added to the queue.
+	    TwitchService.SendMessage("%s has been requested by %s!" % (result.Data.Title, username))
+    else:
+        # If the service call wasn't successful, we refund the user the cost of the command.
+        UserService.AddPoints(username, cost)
+```
+
+### StreamStatus Command
+This is an event script, so it will be triggered by events instead of being used by users.
+
+```python
+# The script will be triggered on an event.
+triggeredOnEvent = True
+# We want to trigger when the stream starts and ends.
+eventsToRegister = ["TwitchService.OnStreamUpEvent", "TwitchService.OnStreamDownEvent"]
+
+# Because this is an event script, the parameter passed by the bot will be the event args for the event instead of parameters passed from chat.
+def execute(eventArgs):
+    # The eventArgs contains the name, and we use that to change our message to the Twitch.TV chat service.
+    if eventArgs.EventName == "OnStreamUpEvent":
+        TwitchService.SendMessage("The stream is starting!")
+    elif eventArgs.EventName == "OnStreamDownEvent":
+        TwitchService.SendMessage("The stream has finished!")
+```
+
+### Raffle Command
+This command is used to start raffles. Because this is a chat command, to use service events we need to register functions to the command is called.
+
+```python
+# This time we have two required parameters.
+parameters = { "eventType": True, "duration": True }
+
+def execute(username, params):
+    # We create a new event with the type and duration passed from the chat message.
+	result = ChatEventService.CreateNewEvent(params.eventType, params.duration)
+    if result.ResultStatus.value__ == ScriptServiceResult.SUCCESS.value__:
+        # If the event was created successfully, then we add the event handlers to the start and end events, then we start the event with the id we received.
+        ChatEventService.OnEventStarted += eventStarted
+        ChatEventService.OnEventEnded += eventEnded
+        ChatEventService.StartEvent(response.Data.EventId)
+    else:
+        TwitchService.SendMessage("Couldn't start the event! Event type or duration.")
+
+# We define two new functions that we use as event handlers. Notice that these follow the C# event handler format of functionName(sender, args).
+def eventStarted(sender, args):
+    # We send a message to the Twitch.TV chat service saying that the event has started.
+	TwitchService.SendMessage("Event %d has started!" % (args.EventId))
+
+def eventEnded(sender, args):
+    # When the event ends, we send more message to the Twitch.TV chat service, saying the event has ended and who the winner is.
+    # EventWinners is a list of winners, so can have more than 1. For this example, we only care about the first winner.
+	TwitchService.SendMessage("Event %d has ended!" % (args.ChatEvent.EventId))
+	TwitchService.SendMessage("The winner was %s!" % (args.EventWinners[0].User.Username))
+```
+
 [Introduction][CommandIntro]
 
 [Python Scripts][CommandScripts]
@@ -495,6 +614,8 @@ public class Quote
 - [Chat Event Service][ChatEventService]
 - [Quote Service][QuoteService]
 
+[Examples Scripts][Examples]
+
 [Commands]: #commands "Commands"
 [CommandIntro]: #commandIntro "Introduction"
 [CommandScripts]: #commandScripts "Command Scripts"
@@ -504,3 +625,4 @@ public class Quote
 [SongQueueService]: #songQueueService
 [ChatEventService]: #chatEventService
 [QuoteService]: #quoteService
+[Examples]: #exampleScripts
