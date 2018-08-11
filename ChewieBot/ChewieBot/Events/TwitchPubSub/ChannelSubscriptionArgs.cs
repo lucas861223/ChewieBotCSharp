@@ -8,7 +8,7 @@ using TwitchLib.PubSub.Events;
 
 namespace ChewieBot.Events.TwitchPubSub
 {
-    public class ChannelSubscriptionArgs
+    public class ChannelSubscriptionArgs : TwitchEventArgs
     {
         public ChannelSubscription Subscription { get; set; }
 

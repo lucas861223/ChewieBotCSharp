@@ -1,4 +1,5 @@
 ﻿using ChewieBot.Config;
+using ChewieBot.Constants;
 using ChewieBot.Constants.SettingsConstants;
 using ChewieBot.Database.Model;
 using ChewieBot.Enums;
@@ -60,6 +61,7 @@ namespace ChewieBot.Services.Implementation
         {
             if (!this.IsInitialized)
             {
+                this.commandService.Initialize();
                 var credentials = new ConnectionCredentials(AppConfig.TwitchUsername, AppConfig.TwitchOAuth);
 
                 // Setup client.
@@ -69,6 +71,7 @@ namespace ChewieBot.Services.Implementation
                 this.client.AddChatCommandIdentifier('!');
                 this.client.AddWhisperCommandIdentifier('!');
 
+                this.pubsubClient = new TwitchPubSub();
                 this.pubsubClient.ListenToVideoPlayback(AppConfig.TwitchChannel);
 
                 this.SetupEventHandlers();
@@ -111,27 +114,27 @@ namespace ChewieBot.Services.Implementation
 
         private void OnHost(object sender, OnHostArgs e)
         {
-            this.OnHostEvent?.Invoke(sender, new HostArgs(e));
+            this.OnHostEvent?.Invoke(sender, new HostArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnHost });
         }
 
         private void OnChannelSubscription(object sender, OnChannelSubscriptionArgs e)
         {
-            this.OnChannelSubscriptionEvent?.Invoke(sender, new ChannelSubscriptionArgs(e));
+            this.OnChannelSubscriptionEvent?.Invoke(sender, new ChannelSubscriptionArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnChannelSubscription });
         }
 
         private void OnBitsReceived(object sender, OnBitsReceivedArgs e)
         {
-            this.OnBitsReceivedEvent?.Invoke(sender, new BitsReceivedArgs(e));
+            this.OnBitsReceivedEvent?.Invoke(sender, new BitsReceivedArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnBitsReceived });
         }
 
         private void OnStreamDown(object sender, OnStreamDownArgs e)
         {
-            this.OnStreamDownEvent?.Invoke(sender, new StreamDownArgs(e));
+            this.OnStreamDownEvent?.Invoke(sender, new StreamDownArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnStreamDown });
         }
 
         private void OnStreamUp(object sender, OnStreamUpArgs e)
         {
-            this.OnStreamUpEvent?.Invoke(sender, new StreamUpArgs(e));
+            this.OnStreamUpEvent?.Invoke(sender, new StreamUpArgs(e) { TriggeredByEvent = AppConstants.TwitchEvents.OnStreamUp });
         }
 
         private void OnPubSubServiceConnected(object sender, EventArgs e)

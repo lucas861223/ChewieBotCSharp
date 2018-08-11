@@ -51,7 +51,7 @@ namespace ChewieBot
             UnityConfig.Setup();
             DatabaseSetup.Setup();
 
-            this.deepbotService.LoadDeepbotUsersFromFile();
+            //this.deepbotService.LoadDeepbotUsersFromFile();
 
             this.twitchService.InitializeClient();
             this.twitchService.OnConnectedEvent += OnConnected;

@@ -13,5 +13,7 @@ namespace ChewieBot.ScriptingEngine
         public string CommandName { get; set; }
         public ScriptSource Source { get; set; }
         public int PointCost { get; set; }
+        public bool IsEventTriggered { get; set; }
+        public List<string> EventsToRegister { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using TwitchLib.PubSub.Events;
 
 namespace ChewieBot.Events.TwitchPubSub
 {
-    public class BitsReceivedArgs
+    public class BitsReceivedArgs : TwitchEventArgs
     {
         public int BitsUsed { get; set; }
         public string ChannelId { get; set; }

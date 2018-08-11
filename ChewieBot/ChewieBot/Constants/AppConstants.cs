@@ -35,5 +35,19 @@ namespace ChewieBot.Constants
         {
             public const string Text = "Popout Music Player";
         }
+
+        public class ServiceAssmebly
+        {
+            public const string FullName = "ChewieBot.Services.Implementation";
+        }
+
+        public class TwitchEvents
+        {
+            public const string OnStreamUp = "OnStreamUpEvent";
+            public const string OnStreamDown = "OnStreamDownEvent";
+            public const string OnHost = "OnHostEvent";
+            public const string OnBitsReceived = "OnBitsReceivedEvent";
+            public const string OnChannelSubscription = "OnChannelSubscriptionEvent";
+        }
     }
 }

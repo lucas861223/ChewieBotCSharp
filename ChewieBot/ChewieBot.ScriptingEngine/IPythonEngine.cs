@@ -11,5 +11,6 @@ namespace ChewieBot.ScriptingEngine
         Dictionary<string, Command> LoadScripts(string commandPaths);
         void ExecuteCommand(Command commandName, string username, List<string> chatParameters);
         void ExecuteCommand(Command commandName, string username);
+        void ExecuteEventCommand(Command commandName, EventScriptInfo info);
     }
 }

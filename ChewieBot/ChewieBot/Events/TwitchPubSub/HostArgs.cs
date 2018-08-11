@@ -7,7 +7,7 @@ using TwitchLib.PubSub.Events;
 
 namespace ChewieBot.Events.TwitchPubSub
 {
-    public class HostArgs
+    public class HostArgs : TwitchEventArgs
     {
         public string HostedChannel { get; set; }
         public string Moderator { get; set; }

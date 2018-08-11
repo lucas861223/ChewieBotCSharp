@@ -278,18 +278,29 @@
     <Compile Include="Enums\ScriptServiceResult.cs" />
     <Compile Include="Enums\SongRequestType.cs" />
     <Compile Include="Enums\SongSourceType.cs" />
+    <Compile Include="Enums\SubscriptionPlan.cs" />
+    <Compile Include="Events\TwitchPubSub\BitsReceivedArgs.cs" />
+    <Compile Include="Events\TwitchPubSub\ChannelSubscriptionArgs.cs" />
     <Compile Include="Events\EventEndedEventArgs.cs" />
     <Compile Include="Events\EventStartedEventArgs.cs" />
+    <Compile Include="Events\TwitchPubSub\HostArgs.cs" />
     <Compile Include="Events\QuoteAddedEventArgs.cs" />
     <Compile Include="Events\QuoteDeletedEventArgs.cs" />
     <Compile Include="Events\SongAddedEventArgs.cs" />
     <Compile Include="Events\SongChangedEventArgs.cs" />
     <Compile Include="Events\SongRemovedEventArgs.cs" />
+    <Compile Include="Events\TwitchPubSub\StreamDownArgs.cs" />
+    <Compile Include="Events\TwitchPubSub\StreamUpArgs.cs" />
+    <Compile Include="Events\TwitchPubSub\TwitchEventArgs.cs" />
     <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\CommandNotExistException.cs" />
     <Compile Include="Exceptions\UserNotExistException.cs" />
+    <Compile Include="Models\ChannelSubscription.cs" />
+    <Compile Include="Models\CommandEventInfo.cs" />
     <Compile Include="Models\CommandListItem.cs" />
+    <Compile Include="Models\Emote.cs" />
     <Compile Include="Models\ScriptServiceResponse.cs" />
+    <Compile Include="Models\SubMessage.cs" />
     <Compile Include="PopoutPlayer.xaml.cs">
       <DependentUpon>PopoutPlayer.xaml</DependentUpon>
     </Compile>
@@ -430,6 +441,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Commands\CommandScripts\raffleCommand.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Commands\CommandScripts\streamstartedCommand.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

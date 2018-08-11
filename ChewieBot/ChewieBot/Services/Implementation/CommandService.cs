@@ -13,10 +13,21 @@ namespace ChewieBot.Services.Implementation
         private ICommandRepository commandRepository;
         private IUserService userService;
 
+        private bool initialized = false;
+
         public CommandService(ICommandRepository commandRepository, IUserService userService)
         {
             this.commandRepository = commandRepository;
             this.userService = userService;
+        }
+
+        public void Initialize()
+        {
+            if (!this.initialized)
+            {
+                this.commandRepository.LoadCommands();
+                this.initialized = true;
+            }
         }
 
         /// <summary>
@@ -29,6 +40,11 @@ namespace ChewieBot.Services.Implementation
         /// <returns>A CommandResponse for the executed command, containing the status and a message if the command returns a message.</returns>
         public void ExecuteCommand(string commandName, string username, List<string> chatParameters = null) 
         {
+            if (!this.initialized)
+            {
+                this.Initialize();
+            }
+
             var userPoints = this.userService.GetPointsForUser(username);
             var commandCost = this.commandRepository.GetCommand(commandName).PointCost;
             if (userPoints >= commandCost)

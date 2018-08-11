@@ -39,7 +39,7 @@ namespace ChewieBot.ScriptingAPI.Services
             var response = new ScriptServiceResponse();
             try
             {
-                int data = userService.GetPointsForUser(username);
+                double data = userService.GetPointsForUser(username);
                 response.Data = data;
                 response.ResultStatus = ScriptServiceResult.SUCCESS;              
             }

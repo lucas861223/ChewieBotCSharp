@@ -68,10 +68,10 @@ namespace ChewieBot.ScriptingEngine
                 {
                     var chatCommandName = fileName.Substring(0, fileName.IndexOf("Command"));
                     var source = engine.CreateScriptSourceFromFile(file);
-
+                    
                     if (source != null)
                     {
-                        var command = new Command { CommandName = chatCommandName, Source = source, Parameters = GetCommandParameters(source), PointCost = GetCommandCost(source) };
+                        var command = this.CreateCommandObject(chatCommandName, source);
                         dict.Add(chatCommandName, command);
                     }
                 }
@@ -79,15 +79,55 @@ namespace ChewieBot.ScriptingEngine
             return dict;
         }
 
+        private Command CreateCommandObject(string commandName, ScriptSource source)
+        {
+            var command = new Command();
+            command.CommandName = commandName;
+            command.Source = source;
+
+            var scope = this.CreateScope();
+            source.Execute(scope);
+            command.Parameters = this.GetCommandParameters(scope);
+            command.PointCost = this.GetCommandCost(scope);
+            command.IsEventTriggered = this.IsEventTriggered(scope);
+            command.EventsToRegister = this.GetEventsToRegister(scope);
+
+            return command;
+        }
+
+        /// <summary>
+        /// Gets whether the command is to be executed on an event or not.
+        /// </summary>
+        /// <param name="source">The ScriptSource to check.</param>
+        /// <returns>True if the command is to be run on an event, false if not.</returns>
+        private bool IsEventTriggered(ScriptScope scope)
+        {
+            return scope.ContainsVariable(ScriptVariables.IsEvent) && scope.GetVariable<bool>(ScriptVariables.IsEvent);
+        }
+
+        private List<string> GetEventsToRegister(ScriptScope scope)
+        {
+            if (scope.ContainsVariable(ScriptVariables.EventsToRegister))
+            {
+                var events = scope.GetVariable(ScriptVariables.EventsToRegister);
+                var returnList = new List<string>();
+                foreach (var ev in events)
+                {
+                    returnList.Add(ev);
+                }
+                return returnList;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Gets the parameters from a command script source.
         /// </summary>
         /// <param name="source">The ScriptSource to get the parameters for.</param>
         /// <returns>A list of parameter names for the script.</returns>
-        private List<CommandParameter> GetCommandParameters(ScriptSource source)
+        private List<CommandParameter> GetCommandParameters(ScriptScope scope)
         {
-            var scope = this.CreateScope();
-            source.Execute(scope);
             if (scope.ContainsVariable(ScriptVariables.Parameters))
             {
                 var parameters = scope.GetVariable(ScriptVariables.Parameters);
@@ -108,10 +148,8 @@ namespace ChewieBot.ScriptingEngine
         /// </summary>
         /// <param name="source">The ScriptSource to get the parameters for.</param>
         /// <returns>The point cost for the command the script creates.</returns>
-        private int GetCommandCost(ScriptSource source)
+        private int GetCommandCost(ScriptScope scope)
         {
-            var scope = this.CreateScope();
-            source.Execute(scope);
             if (scope.ContainsVariable(ScriptVariables.PointCost))
             {
                 var cost = scope.GetVariable(ScriptVariables.PointCost);
@@ -119,6 +157,14 @@ namespace ChewieBot.ScriptingEngine
             }
 
             return 0;
+        }
+
+        public void ExecuteEventCommand(Command command, EventScriptInfo info)
+        {
+            var scope = this.CreateScope();
+            command.Source.Execute(scope);
+            var execute = scope.GetVariable<Func<dynamic, dynamic>>(ScriptFunctions.Execute);
+            execute(info);
         }
 
         /// <summary>
