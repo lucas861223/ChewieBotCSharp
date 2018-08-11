@@ -16,7 +16,7 @@ namespace ChewieBot.ScriptingAPI.Services
     {
         private static ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
 
-        public static event EventHandler<StreamUpArgs> OnSteamUpEvent;
+        public static event EventHandler<StreamUpArgs> OnStreamUpEvent;
         public static event EventHandler<StreamDownArgs> OnStreamDownEvent;
         public static event EventHandler<ChannelSubscriptionArgs> OnChannelSubscriptionEvent;
         public static event EventHandler<BitsReceivedArgs> OnBitsReceivedEvent;
@@ -27,7 +27,38 @@ namespace ChewieBot.ScriptingAPI.Services
             if (!twitchService.IsInitialized)
             {
                 twitchService.InitializeClient();
+
+                twitchService.OnStreamUpEvent += StreamUpEvent;
+                twitchService.OnStreamDownEvent += StreamDownEvent;
+                twitchService.OnBitsReceivedEvent += BitsReceivedEvent;
+                twitchService.OnChannelSubscriptionEvent += ChannelSubscriptionEvent;
+                twitchService.OnHostEvent += HostEvent;
             }
+        }
+
+        private static void StreamDownEvent(object sender, StreamDownArgs e)
+        {
+            OnStreamDownEvent?.Invoke(sender, e);
+        }
+
+        private static void StreamUpEvent(object sender, StreamUpArgs e)
+        {
+            OnStreamUpEvent?.Invoke(sender, e);
+        }
+
+        private static void BitsReceivedEvent(object sender, BitsReceivedArgs e)
+        {
+            OnBitsReceivedEvent?.Invoke(sender, e);
+        }
+
+        private static void ChannelSubscriptionEvent(object sender, ChannelSubscriptionArgs e)
+        {
+            OnChannelSubscriptionEvent?.Invoke(sender, e);
+        }
+
+        private static void HostEvent(object sender, HostArgs e)
+        {
+            OnHostEvent?.Invoke(sender, e);
         }
 
         public static ScriptServiceResponse SendMessage(string message)

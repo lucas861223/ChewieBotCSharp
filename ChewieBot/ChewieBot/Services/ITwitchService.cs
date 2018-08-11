@@ -1,4 +1,5 @@
 ﻿using ChewieBot.Database.Model;
+using ChewieBot.Events.TwitchPubSub;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,10 @@ namespace ChewieBot.Services
 
         event EventHandler<OnConnectedArgs> OnConnectedEvent;
         event EventHandler<OnDisconnectedArgs> OnDisconnectedEvent;
+        event EventHandler<StreamUpArgs> OnStreamUpEvent;
+        event EventHandler<StreamDownArgs> OnStreamDownEvent;
+        event EventHandler<ChannelSubscriptionArgs> OnChannelSubscriptionEvent;
+        event EventHandler<BitsReceivedArgs> OnBitsReceivedEvent;
+        event EventHandler<HostArgs> OnHostEvent;
     }
 }
