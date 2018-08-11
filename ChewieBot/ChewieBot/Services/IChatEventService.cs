@@ -17,7 +17,7 @@ namespace ChewieBot.Services
         void AddUser(int eventId, string username);
         void AddUserToCurrentEvent(EventType type, string username);
 
-        event EventHandler<EventStartedEventArgs> OnEventStartedEvent;
-        event EventHandler<EventEndedEventArgs> OnEventEndedEvent;
+        event EventHandler<ChatEventStartedEventArgs> OnChatEventStartedEvent;
+        event EventHandler<ChatEventEndedEventArgs> OnChatEventEndedEvent;
     }
 }

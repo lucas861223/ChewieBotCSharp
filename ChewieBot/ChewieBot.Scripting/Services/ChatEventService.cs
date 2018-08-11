@@ -20,23 +20,23 @@ namespace ChewieBot.ScriptingAPI.Services
     {
         private static IChatEventService chatEventService = UnityConfig.Resolve<IChatEventService>();
 
-        public static event EventHandler<EventStartedEventArgs> OnEventStarted;
-        public static event EventHandler<EventEndedEventArgs> OnEventEnded;
+        public static event EventHandler<ChatEventStartedEventArgs> OnChatEventStartedEvent;
+        public static event EventHandler<ChatEventEndedEventArgs> OnChatEventEndedEvent;
 
         static ChatEventService()
         {
-            chatEventService.OnEventStartedEvent += EventStarted;
-            chatEventService.OnEventEndedEvent += EventEnded;
+            chatEventService.OnChatEventStartedEvent += EventStarted;
+            chatEventService.OnChatEventEndedEvent += EventEnded;
         }
 
-        private static void EventEnded(object sender, EventEndedEventArgs e)
+        private static void EventEnded(object sender, ChatEventEndedEventArgs e)
         {
-            OnEventEnded?.Invoke(null, e);
+            OnChatEventEndedEvent?.Invoke(null, e);
         }
 
-        private static void EventStarted(object sender, EventStartedEventArgs e)
+        private static void EventStarted(object sender, ChatEventStartedEventArgs e)
         {
-            OnEventStarted?.Invoke(null, e);
+            OnChatEventStartedEvent?.Invoke(null, e);
         }
 
         public static ScriptServiceResponse AddUserToEvent(string eventId, string username)

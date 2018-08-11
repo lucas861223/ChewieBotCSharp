@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChewieBot.Events
 {
-    public class EventEndedEventArgs : BaseEvent
+    public class ChatEventEndedEventArgs : BaseEvent
     {
         public ChatEvent ChatEvent { get; set; }
         public List<EventWinner> EventWinners { get; set; }

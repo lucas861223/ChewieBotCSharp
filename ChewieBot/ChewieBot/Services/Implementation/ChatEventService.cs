@@ -20,8 +20,8 @@ namespace ChewieBot.Services.Implementation
         private IEventWinnerData eventWinnerData;
         private IUserService userService;
 
-        public event EventHandler<EventStartedEventArgs> OnEventStartedEvent;
-        public event EventHandler<EventEndedEventArgs> OnEventEndedEvent;
+        public event EventHandler<ChatEventStartedEventArgs> OnChatEventStartedEvent;
+        public event EventHandler<ChatEventEndedEventArgs> OnChatEventEndedEvent;
 
         public ChatEventService(IChatEventData chatEventData, IEventWinnerData eventWinnerData, IUserService userService)
         {
@@ -81,7 +81,7 @@ namespace ChewieBot.Services.Implementation
 
                 this.eventTimers.Add(eventId, timer);
                 this.eventTimers[eventId].Start();
-                this.OnEventStartedEvent?.Invoke(this, new EventStartedEventArgs { EventId = eventId, TriggeredByEvent = AppConstants.Events.OnEventStarted });
+                this.OnChatEventStartedEvent?.Invoke(this, new ChatEventStartedEventArgs { EventId = eventId, TriggeredByEvent = AppConstants.Events.OnEventStarted });
             }
         }
 
@@ -100,7 +100,7 @@ namespace ChewieBot.Services.Implementation
                 this.chatEventData.Set(this.eventList[eventId]);
 
                 var winners = this.GetEventWinners(eventId);
-                this.OnEventEndedEvent?.Invoke(this, new EventEndedEventArgs { ChatEvent = this.eventList[eventId], EventWinners = winners, TriggeredByEvent = AppConstants.Events.OnEventEnded });
+                this.OnChatEventEndedEvent?.Invoke(this, new ChatEventEndedEventArgs { ChatEvent = this.eventList[eventId], EventWinners = winners, TriggeredByEvent = AppConstants.Events.OnEventEnded });
 
                 this.eventTimers.Remove(eventId);
             }

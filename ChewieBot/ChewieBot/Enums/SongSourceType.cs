@@ -10,6 +10,7 @@ namespace ChewieBot.Enums
     {
         Invalid,
         Youtube,
-        Soundcloud
+        Soundcloud,
+        Spotify
     }
 }
