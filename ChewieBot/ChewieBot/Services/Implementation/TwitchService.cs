@@ -2,6 +2,8 @@
 using ChewieBot.Constants.SettingsConstants;
 using ChewieBot.Database.Model;
 using ChewieBot.Enums;
+using ChewieBot.Events;
+using ChewieBot.Events.TwitchPubSub;
 using ChewieBot.Exceptions;
 using ChewieBot.Twitch;
 using System;
@@ -12,12 +14,15 @@ using System.Threading.Tasks;
 using TwitchLib.Client;
 using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
+using TwitchLib.PubSub;
+using TwitchLib.PubSub.Events;
 
 namespace ChewieBot.Services.Implementation
 {
     public class TwitchService : ITwitchService
     {
         private TwitchClient client;
+        private TwitchPubSub pubsubClient;
         private IUserService userService;
         private IUserLevelService userLevelService;
         private ICommandService commandService;
@@ -27,6 +32,15 @@ namespace ChewieBot.Services.Implementation
 
         public event EventHandler<OnConnectedArgs> OnConnectedEvent;
         public event EventHandler<OnDisconnectedArgs> OnDisconnectedEvent;
+
+        // All of these events are wrappers around the TwitchPubSub events/args. 
+        // We need to duplicate them in this project so that we can expose them to the python engine
+        // without having to add a reference to TwitchLib.
+        public event EventHandler<StreamUpArgs> OnStreamUpEvent;
+        public event EventHandler<StreamDownArgs> OnStreamDownEvent;
+        public event EventHandler<BitsReceivedArgs> OnBitsReceivedEvent;
+        public event EventHandler<ChannelSubscriptionArgs> OnChannelSubscriptionEvent;
+        public event EventHandler<HostArgs> OnHostEvent;
 
         /// <summary>
         /// Service for interacting with the Twitch Client.
@@ -55,6 +69,8 @@ namespace ChewieBot.Services.Implementation
                 this.client.AddChatCommandIdentifier('!');
                 this.client.AddWhisperCommandIdentifier('!');
 
+                this.pubsubClient.ListenToVideoPlayback(AppConfig.TwitchChannel);
+
                 this.SetupEventHandlers();
 
                 this.IsInitialized = true;
@@ -75,6 +91,52 @@ namespace ChewieBot.Services.Implementation
             this.client.OnExistingUsersDetected += OnExistingUsersDetected;
             this.client.OnConnected += OnConnected;
             this.client.OnDisconnected += OnDisconnected;
+
+            this.pubsubClient.OnPubSubServiceConnected += OnPubSubServiceConnected;
+            this.pubsubClient.OnStreamUp += OnStreamUp;
+            this.pubsubClient.OnStreamDown += OnStreamDown;
+            this.pubsubClient.OnBitsReceived += OnBitsReceived;
+            this.pubsubClient.OnChannelSubscription += OnChannelSubscription;
+            this.pubsubClient.OnHost += OnHost;
+            this.pubsubClient.OnListenResponse += OnListenResponse;
+        }
+
+        private void OnListenResponse(object sender, OnListenResponseArgs e)
+        {
+            if (!e.Successful)
+            {
+                Console.WriteLine($"Failed to listen - {e.Response}");
+            }
+        }
+
+        private void OnHost(object sender, OnHostArgs e)
+        {
+            this.OnHostEvent?.Invoke(sender, new HostArgs(e));
+        }
+
+        private void OnChannelSubscription(object sender, OnChannelSubscriptionArgs e)
+        {
+            this.OnChannelSubscriptionEvent?.Invoke(sender, new ChannelSubscriptionArgs(e));
+        }
+
+        private void OnBitsReceived(object sender, OnBitsReceivedArgs e)
+        {
+            this.OnBitsReceivedEvent?.Invoke(sender, new BitsReceivedArgs(e));
+        }
+
+        private void OnStreamDown(object sender, OnStreamDownArgs e)
+        {
+            this.OnStreamDownEvent?.Invoke(sender, new StreamDownArgs(e));
+        }
+
+        private void OnStreamUp(object sender, OnStreamUpArgs e)
+        {
+            this.OnStreamUpEvent?.Invoke(sender, new StreamUpArgs(e));
+        }
+
+        private void OnPubSubServiceConnected(object sender, EventArgs e)
+        {
+            this.pubsubClient.SendTopics();
         }
 
         private void OnConnected(object sender, OnConnectedArgs e)

@@ -1,5 +1,6 @@
 ﻿using ChewieBot.AppStart;
 using ChewieBot.Enums;
+using ChewieBot.Events.TwitchPubSub;
 using ChewieBot.Models;
 using ChewieBot.ScriptingEngine;
 using ChewieBot.Services;
@@ -14,6 +15,12 @@ namespace ChewieBot.ScriptingAPI.Services
     public static class TwitchService
     {
         private static ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
+
+        public static event EventHandler<StreamUpArgs> OnSteamUpEvent;
+        public static event EventHandler<StreamDownArgs> OnStreamDownEvent;
+        public static event EventHandler<ChannelSubscriptionArgs> OnChannelSubscriptionEvent;
+        public static event EventHandler<BitsReceivedArgs> OnBitsReceivedEvent;
+        public static event EventHandler<HostArgs> OnHostEvent;
 
         static TwitchService()
         {
