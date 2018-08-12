@@ -14,6 +14,7 @@ using ChewieBot.Services;
 using ChewieBot.AppStart;
 using ChewieBot.Events.TwitchPubSub;
 using ChewieBot.Events;
+using ChewieBot.Config;
 
 namespace ChewieBot.Commands
 {
@@ -42,39 +43,66 @@ namespace ChewieBot.Commands
             this.RegisterEventCommands();
         }
 
+        public void ReloadCommand(string commandName)
+        {
+            var commandsPath = AppConfig.CommandsPath;
+            var command = this.scriptEngine.LoadScript(commandsPath, commandName);
+            if (command != null)
+            {
+                if (this.commands.Keys.Any(x => x == commandName))
+                {
+                    this.commands[commandName] = command;
+                }
+                else
+                {
+                    this.commands.Add(commandName, command);
+                }
+
+                if (command.IsEventTriggered)
+                {
+                    RegisterEventCommand(command);
+                }
+            }
+        }
+
         private void RegisterEventCommands()
         {
             foreach (var command in this.commands.Values.Where(x => x.IsEventTriggered).ToList())
             {
-                foreach (var eventToRegister in command.EventsToRegister)
+                RegisterEventCommand(command);
+            }
+        }
+
+        private void RegisterEventCommand(Command command)
+        {
+            foreach (var eventToRegister in command.EventsToRegister)
+            {
+                var eventClassName = eventToRegister.Split('.')[0];
+                var eventName = eventToRegister.Split('.')[1];
+                // Need the full name of the class that the event is in, including assembly, to get the type.
+                var type = Type.GetType($"{AppConstants.ServiceAssmebly.Path}.{eventClassName}");
+                var interfaceType = Type.GetType($"{AppConstants.ServiceAssmebly.InterfacePath}.I{eventClassName}");
+                var eventInfo = type.GetEvent(eventName);
+                var eventHandlerType = eventInfo.EventHandlerType;
+
+                // Need to use generics as the events that scripts can register to have different eventArgs.
+                // GenerticTypeArguments gets the type of the eventArgs needed, then we pass that to the MakeGeneric to make the correct method to bind to the event.
+                var eventArgsType = eventHandlerType.GenericTypeArguments[0];
+                var methodInfo = this.GetType().GetMethod("ExecuteEventCommand").MakeGenericMethod(eventArgsType);
+                var del = Delegate.CreateDelegate(eventHandlerType, this, methodInfo);
+
+                var eventService = UnityConfig.ResolveByType(interfaceType);
+
+                eventInfo.AddEventHandler(eventService, del);
+
+                // Add the command to list of commands registered to this event.
+                if (this.eventMappedCommands.Keys.Any(x => x == eventInfo.Name))
                 {
-                    var eventClassName = eventToRegister.Split('.')[0];
-                    var eventName = eventToRegister.Split('.')[1];
-                    // Need the full name of the class that the event is in, including assembly, to get the type.
-                    var type = Type.GetType($"{AppConstants.ServiceAssmebly.Path}.{eventClassName}");
-                    var interfaceType = Type.GetType($"{AppConstants.ServiceAssmebly.InterfacePath}.I{eventClassName}");
-                    var eventInfo = type.GetEvent(eventName);
-                    var eventHandlerType = eventInfo.EventHandlerType;
-
-                    // Need to use generics as the events that scripts can register to have different eventArgs.
-                    // GenerticTypeArguments gets the type of the eventArgs needed, then we pass that to the MakeGeneric to make the correct method to bind to the event.
-                    var eventArgsType = eventHandlerType.GenericTypeArguments[0];
-                    var methodInfo = this.GetType().GetMethod("ExecuteEventCommand").MakeGenericMethod(eventArgsType);
-                    var del = Delegate.CreateDelegate(eventHandlerType, this, methodInfo);
-
-                    var eventService = UnityConfig.ResolveByType(interfaceType);
-
-                    eventInfo.AddEventHandler(eventService, del);
-
-                    // Add the command to list of commands registered to this event.
-                    if (this.eventMappedCommands.Keys.Any(x => x == eventInfo.Name))
-                    {
-                        this.eventMappedCommands[eventInfo.Name].Add(command);
-                    }
-                    else
-                    {
-                        this.eventMappedCommands.Add(eventInfo.Name, new List<Command>() { command });
-                    }
+                    this.eventMappedCommands[eventInfo.Name].Add(command);
+                }
+                else
+                {
+                    this.eventMappedCommands.Add(eventInfo.Name, new List<Command>() { command });
                 }
             }
         }
@@ -103,27 +131,30 @@ namespace ChewieBot.Commands
                 throw new CommandNotExistException($"{commandName} is not a valid command.");
             }
 
-            if (command.Parameters != null && chatParameters.Count > 0)
+            if (!command.IsEventTriggered)
             {
-                var requiredParams = command.Parameters.Where(x => x.IsRequired);
-                if (command.Parameters.Count != chatParameters.Count && requiredParams.Count() != chatParameters.Count)
+                if (command.Parameters != null && chatParameters.Count > 0)
                 {
-                    // TODO: Ignore excess parameters or return an error?
-                    // For now, just remove excess parameters passed
-                    var count = chatParameters.Count > command.Parameters.Count 
-                        ? chatParameters.Count - command.Parameters.Count 
-                        : command.Parameters.Count - chatParameters.Count;
-                    chatParameters.RemoveRange(command.Parameters.Count, count);
-                }
+                    var requiredParams = command.Parameters.Where(x => x.IsRequired);
+                    if (command.Parameters.Count != chatParameters.Count && requiredParams.Count() != chatParameters.Count)
+                    {
+                        // TODO: Ignore excess parameters or return an error?
+                        // For now, just remove excess parameters passed
+                        var count = chatParameters.Count > command.Parameters.Count
+                            ? chatParameters.Count - command.Parameters.Count
+                            : command.Parameters.Count - chatParameters.Count;
+                        chatParameters.RemoveRange(command.Parameters.Count, count);
+                    }
 
-                if (chatParameters != null && chatParameters.Count > 0)
-                {
-                    this.scriptEngine.ExecuteCommand(command, username, chatParameters);
+                    if (chatParameters != null && chatParameters.Count > 0)
+                    {
+                        this.scriptEngine.ExecuteCommand(command, username, chatParameters);
+                    }
                 }
-            }
-            else
-            {
-                this.scriptEngine.ExecuteCommand(command, username);
+                else
+                {
+                    this.scriptEngine.ExecuteCommand(command, username);
+                }
             }
         }
 
@@ -135,6 +166,31 @@ namespace ChewieBot.Commands
             }
 
             return this.commands[commandName];
+        }
+
+        public string GetCommandSource(string commandName)
+        {
+            var filePath = $"{AppConfig.CommandsPath}\\{commandName}Command.py";
+
+            if (!this.commands.ContainsKey(commandName) || !File.Exists(filePath))
+            {
+                return String.Empty;
+            }
+            else
+            {
+                var source = File.ReadAllText(filePath);
+                return source;
+            }
+        }
+
+        public void UpdateCommandSource(string commandName, string source)
+        {
+            var filePath = $"{AppConfig.CommandsPath}\\{commandName}Command.py";
+            if (this.commands.ContainsKey(commandName) && File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, source);
+                this.ReloadCommand(commandName);
+            }
         }
     }
 }

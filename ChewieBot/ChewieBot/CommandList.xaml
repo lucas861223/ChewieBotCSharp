@@ -7,21 +7,59 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ContextMenu x:Key="CommandContextMenu">
+            <MenuItem Header="Edit Command" Click="EditCommand"/>
+        </ContextMenu>
+    </UserControl.Resources>
     <DockPanel>
         <ListBox  
                  DockPanel.Dock="Top" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderThickness="1"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" VerticalAlignment="Top"
                  ItemsSource="{Binding CommandList}">
+            <ListBox.Template>
+                <ControlTemplate>
+                    <DockPanel>
+                        <materialDesign:ColorZone Padding="8" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                            Mode="PrimaryLight" DockPanel.Dock="Top" Margin="0 0 0 15">
+                            <DockPanel>
+                                <Grid Margin="0, 2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1.2*" />
+                                        <ColumnDefinition Width="2.9*" />
+                                        <ColumnDefinition Width="1.2*" />
+                                        <ColumnDefinition Width="1.2*" />
+                                        <ColumnDefinition Width="3*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="Command Name" Grid.Column="0" />
+                                    <Label Content="Parameters" Grid.Column="1" />
+                                    <Label Content="Cost" Grid.Column="2" />
+                                    <Label Content="Is Event Command" Grid.Column="3" />
+                                    <Label Content="Registered Events" Grid.Column="4" />
+                                </Grid>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsPresenter></ItemsPresenter>
+                        </ScrollViewer>
+                    </DockPanel>
+                </ControlTemplate>
+            </ListBox.Template>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="0, 2">
+                    <Grid Margin="0, 2" ContextMenu="{StaticResource CommandContextMenu}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="5*" />
                             <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="5*" />
                         </Grid.ColumnDefinitions>
                         <Label Content="{Binding CommandName}" Grid.Column="0"/>
                         <Label Content="{Binding ParametersAsString}" Grid.Column="1"/>
                         <Label Content="{Binding Cost}" Grid.Column="2" />
+                        <Label Content="{Binding IsEventTriggered}" Grid.Column="3" />
+                        <Label Content="{Binding RegisteredEventsAsString}" Grid.Column="4" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

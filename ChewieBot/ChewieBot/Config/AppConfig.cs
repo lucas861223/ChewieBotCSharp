@@ -23,5 +23,7 @@ namespace ChewieBot.Config
 
         // Deepbot
         public static string DeepbotUserFile = ConfigurationManager.AppSettings["DeepbotUserFile"];
+
+        public static string CommandsPath = ConfigurationManager.AppSettings["CommandsPath"];
     }
 }

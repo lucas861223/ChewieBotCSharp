@@ -239,6 +239,9 @@
     </ApplicationDefinition>
     <Compile Include="AppStart\DatabaseSetup.cs" />
     <Compile Include="AppStart\UnityConfig.cs" />
+    <Compile Include="CommandEditor.xaml.cs">
+      <DependentUpon>CommandEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CommandList.xaml.cs">
       <DependentUpon>CommandList.xaml</DependentUpon>
     </Compile>
@@ -291,7 +294,7 @@
     <Compile Include="Events\SongRemovedEventArgs.cs" />
     <Compile Include="Events\TwitchPubSub\StreamDownArgs.cs" />
     <Compile Include="Events\TwitchPubSub\StreamUpArgs.cs" />
-    <Compile Include="Events\TwitchPubSub\TwitchEventArgs.cs" />
+    <Compile Include="Events\BaseEvent.cs" />
     <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\CommandNotExistException.cs" />
     <Compile Include="Exceptions\UserNotExistException.cs" />
@@ -328,6 +331,7 @@
     <Compile Include="UserLevels.xaml.cs">
       <DependentUpon>UserLevels.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CommandEditorViewModel.cs" />
     <Compile Include="ViewModels\CommandListViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\MenuLink.cs" />
@@ -354,6 +358,10 @@
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SongQueueViewModel.cs" />
     <Compile Include="ViewModels\UserLevelsViewModel.cs" />
+    <Page Include="CommandEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CommandList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

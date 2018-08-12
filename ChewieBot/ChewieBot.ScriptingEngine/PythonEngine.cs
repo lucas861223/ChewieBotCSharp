@@ -79,6 +79,20 @@ namespace ChewieBot.ScriptingEngine
             return dict;
         }
 
+        public Command LoadScript(string commandPath, string commandName)
+        {
+            if (Directory.EnumerateFiles(commandPath).Any(x => x == $"{commandPath}\\{commandName}Command.py"))
+            {
+                var source = engine.CreateScriptSourceFromFile($"{commandPath}\\{commandName}Command.py");
+                if (source != null)
+                {
+                    var command = this.CreateCommandObject(commandName, source);
+                    return command;
+                }
+            }
+            return null;
+        }
+
         private Command CreateCommandObject(string commandName, ScriptSource source)
         {
             var command = new Command();

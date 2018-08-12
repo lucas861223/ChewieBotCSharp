@@ -11,6 +11,8 @@ namespace ChewieBot.Models
     {
         public string CommandName { get; set; }
         public int Cost { get; set; }
+        public bool IsEventTriggered { get; set; }
+        public List<string> RegisteredEvents { get; set; }
         public List<CommandParameter> Parameters { get; set; }
         
         public string ParametersAsString
@@ -24,6 +26,21 @@ namespace ChewieBot.Models
                 else
                 {
                     return "No Parameters";
+                }
+            }
+        }
+
+        public string RegisteredEventsAsString
+        {
+            get
+            {
+                if (RegisteredEvents != null && RegisteredEvents.Count > 0)
+                {
+                    return string.Join(", ", RegisteredEvents.Select(x => x.Split('.')[1]));
+                }
+                else
+                {
+                    return "No Events";
                 }
             }
         }
