@@ -170,7 +170,7 @@ public class ChannelSubscriptionArgs
     public ChannelSubscription Subscription;
 }
 
-pupblic class ChannelSubscription
+public class ChannelSubscription
 {
     public string ChannelId;
     public string ChannelName;
