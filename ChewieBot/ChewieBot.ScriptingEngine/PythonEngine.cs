@@ -117,10 +117,12 @@ namespace ChewieBot.ScriptingEngine
             if (scope.ContainsVariable(ScriptVariables.MinimumUserLevelRank))
             {
                 command.MinimumUserLevelRank = scope.GetVariable(ScriptVariables.MinimumUserLevelRank);
+                command.PermissionsSet = true;
             }
             if (scope.ContainsVariable(ScriptVariables.RequiredUserLevelRank))
             {
                 command.RequiredUserLevelRank = scope.GetVariable(ScriptVariables.RequiredUserLevelRank);
+                command.PermissionsSet = true;
             }
 
             return command;
@@ -131,10 +133,12 @@ namespace ChewieBot.ScriptingEngine
             if (scope.ContainsVariable(ScriptVariables.MinimumVIPLevelRank))
             {
                 command.MinimumVIPLevelRank = scope.GetVariable(ScriptVariables.MinimumVIPLevelRank);
+                command.PermissionsSet = true;
             }
             if (scope.ContainsVariable(ScriptVariables.RequiredVIPLevelRank))
             {
                 command.RequiredVIPLevelRank = scope.GetVariable(ScriptVariables.RequiredVIPLevelRank);
+                command.PermissionsSet = true;
             }
             
             return command;

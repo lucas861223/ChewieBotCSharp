@@ -15,6 +15,7 @@ namespace ChewieBot.ScriptingEngine
         public int PointCost { get; set; }
         public bool IsEventTriggered { get; set; }
         public List<string> EventsToRegister { get; set; }
+        public bool PermissionsSet { get; set; } = false;
         public int? RequiredUserLevelRank { get; set; } = null;
         public int? MinimumUserLevelRank { get; set; } = null;
         public int? RequiredVIPLevelRank { get; set; } = null;

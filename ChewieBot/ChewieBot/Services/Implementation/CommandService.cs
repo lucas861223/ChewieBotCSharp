@@ -74,6 +74,11 @@ namespace ChewieBot.Services.Implementation
         private bool UserHasPermission(string commandName, User user)
         {
             var command = this.commandRepository.GetCommand(commandName);
+            if (!command.PermissionsSet)
+            {
+                return true;
+            }
+
             var permission = true;
 
             // Only a single permission can be used. User level takes priority over vip levels.s
