@@ -241,7 +241,7 @@ namespace ChewieBot.Services.Implementation
                     this.SendMessage(cex.Message);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // python script failed for some reason.
             }

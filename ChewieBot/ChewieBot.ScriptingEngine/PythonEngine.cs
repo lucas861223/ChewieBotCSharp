@@ -106,6 +106,37 @@ namespace ChewieBot.ScriptingEngine
             command.IsEventTriggered = this.IsEventTriggered(scope);
             command.EventsToRegister = this.GetEventsToRegister(scope);
 
+            command = this.GetUserLevels(command, scope);
+            command = this.GetVIPLevels(command, scope);
+
+            return command;
+        }
+
+        private Command GetUserLevels(Command command, ScriptScope scope)
+        {
+            if (scope.ContainsVariable(ScriptVariables.MinimumUserLevelRank))
+            {
+                command.MinimumUserLevelRank = scope.GetVariable(ScriptVariables.MinimumUserLevelRank);
+            }
+            if (scope.ContainsVariable(ScriptVariables.RequiredUserLevelRank))
+            {
+                command.RequiredUserLevelRank = scope.GetVariable(ScriptVariables.RequiredUserLevelRank);
+            }
+
+            return command;
+        }
+
+        private Command GetVIPLevels(Command command, ScriptScope scope)
+        {
+            if (scope.ContainsVariable(ScriptVariables.MinimumVIPLevelRank))
+            {
+                command.MinimumVIPLevelRank = scope.GetVariable(ScriptVariables.MinimumVIPLevelRank);
+            }
+            if (scope.ContainsVariable(ScriptVariables.RequiredVIPLevelRank))
+            {
+                command.RequiredVIPLevelRank = scope.GetVariable(ScriptVariables.RequiredVIPLevelRank);
+            }
+            
             return command;
         }
 

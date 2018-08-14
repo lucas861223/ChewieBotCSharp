@@ -2,7 +2,6 @@
 using ChewieBot.Enums;
 using ChewieBot.Exceptions;
 using ChewieBot.Models;
-using ChewieBot.ScriptingEngine;
 using ChewieBot.Services;
 using System;
 using System.Collections.Generic;

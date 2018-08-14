@@ -11,22 +11,9 @@ namespace ChewieBot.Constants.SettingsConstants
         public const string ViewerUserLevelName = "Viewer";
         public const string SubscriberUserLevelName = "Subscriber";
         public const string ModeratorUserLevelName = "Moderator";
+        public const string SeniorModeratorUserLevelName = "Senior Moderator";
         public const string BroadcasterUserLevelName = "Broadcaster";
         public const string BotUserLevelName = "Bot";
-    }
-
-    public class ModLevelSettings
-    {
-        // Mod: 0
-        public const string NoModLevelName = "None";
-        // Mod: 1
-        public const string ModLevelName = "Moderator";
-        // Mod: 2
-        public const string SeniorModLevelName = "Senior Moderator";
-        // Mod: 4
-        public const string BotLevelName = "Bot";
-        // Mod: 5
-        public const string BroadcasterLevelName = "Broadcaster";
     }
 
     public class VIPLevelSettings

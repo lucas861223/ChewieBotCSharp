@@ -15,25 +15,22 @@ namespace ChewieBot.Services.Implementation
     {
         private IUserService userService;
         private IUserLevelService userLevelService;
-        private IModLevelService modLevelService;
         private IVIPLevelService vipLevelService;
 
         private List<ModLevel> modLevelList;
         private List<UserLevel> userLevelList;
         private List<VIPLevel> vipLevelList;
 
-        public DeepbotService(IUserService userService, IUserLevelService userLevelService, IModLevelService modLevelService, IVIPLevelService vipLevelService)
+        public DeepbotService(IUserService userService, IUserLevelService userLevelService, IVIPLevelService vipLevelService)
         {
             this.userService = userService;
             this.userLevelService = userLevelService;
-            this.modLevelService = modLevelService;
             this.vipLevelService = vipLevelService;
         }
 
         private void Init()
         {
             this.userLevelList = this.userLevelService.GetAll();
-            this.modLevelList = this.modLevelService.GetAll();
             this.vipLevelList = this.vipLevelService.GetAll();
         }
 
@@ -63,15 +60,24 @@ namespace ChewieBot.Services.Implementation
                 if (this.userService.GetUser(user.user.Value) == null)
                 {
                     count++;
-                    vipLevel = this.vipLevelList.FirstOrDefault(x => x.Rank == user.vip.Value);
-                    modLevel = this.modLevelList.FirstOrDefault(x => x.Rank == user.mod.Value);
+                    if (user.vip.value == 10)
+                    {
+                        // deepbot has no vip level to 10 for some reason, instead of 0.
+                        user.vip.value = 0;
+                    }
 
-                    switch (modLevel.Rank)
+                    vipLevel = this.vipLevelList.FirstOrDefault(x => x.Rank == user.vip.Value);
+
+                    switch (user.mod.value)
                     {
                         case 1:
-                        case 2:
                             {
                                 userLevel = userLevelList.FirstOrDefault(x => x.Name == UserLevelSettings.ModeratorUserLevelName);
+                                break;
+                            }
+                        case 2:
+                            {
+                                userLevel = userLevelList.FirstOrDefault(x => x.Name == UserLevelSettings.SeniorModeratorUserLevelName);
                                 break;
                             }
                         case 4:
@@ -95,7 +101,6 @@ namespace ChewieBot.Services.Implementation
                     var newUser = new User
                     {
                         JoinedDate = user.join_date.Value,
-                        ModLevel = modLevel,
                         Points = user.points.Value,
                         UserLevel = userLevel,
                         Username = user.user.Value,

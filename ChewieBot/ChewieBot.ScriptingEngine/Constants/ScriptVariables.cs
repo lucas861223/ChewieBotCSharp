@@ -13,5 +13,9 @@ namespace ChewieBot.ScriptingEngine.Constants
         public const string UserLevel = "level";
         public const string IsEvent = "triggeredOnEvent";
         public const string EventsToRegister = "eventsToRegister";
+        public const string MinimumUserLevelRank = "minimumUserLevel";
+        public const string RequiredUserLevelRank = "requiredUserLevel";
+        public const string MinimumVIPLevelRank = "minimumVIPLevel";
+        public const string RequiredVIPLevelRank = "requiredVIPLevel";
     }
 }

@@ -1,6 +1,6 @@
 ﻿parameters = { "username": False }
-minimumUserLevel = "Viewer"
-minimumVIPLevel = "Gold"
+minimumUserLevel = 2
+minimumVIPLevel = 1
 
 def execute(username, params = None):
 	user = username

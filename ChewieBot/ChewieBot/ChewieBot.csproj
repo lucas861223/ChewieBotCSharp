@@ -7,7 +7,7 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{C6368EAB-3493-44C7-A816-93647792983C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ChewieBot</RootNamespace>
@@ -21,7 +21,7 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -263,11 +263,9 @@
     <Compile Include="Database\Repository\IBotSettingData.cs" />
     <Compile Include="Database\Repository\IChatEventData.cs" />
     <Compile Include="Database\Repository\IEventWinnerData.cs" />
-    <Compile Include="Database\Repository\IModLevelData.cs" />
     <Compile Include="Database\Repository\Implementation\BotSettingRepository.cs" />
     <Compile Include="Database\Repository\Implementation\ChatEventRepository.cs" />
     <Compile Include="Database\Repository\Implementation\EventWinnerRepository.cs" />
-    <Compile Include="Database\Repository\Implementation\ModLevelRepository.cs" />
     <Compile Include="Database\Repository\Implementation\QuoteRepository.cs" />
     <Compile Include="Database\Repository\Implementation\UserLevelRepository.cs" />
     <Compile Include="Database\Repository\Implementation\UserRepository.cs" />
@@ -312,10 +310,8 @@
     </Compile>
     <Compile Include="Services\IBotSettingService.cs" />
     <Compile Include="Services\IDeepbotService.cs" />
-    <Compile Include="Services\IModLevelService.cs" />
     <Compile Include="Services\Implementation\BotSettingService.cs" />
     <Compile Include="Services\Implementation\DeepbotService.cs" />
-    <Compile Include="Services\Implementation\ModLevelService.cs" />
     <Compile Include="Services\Implementation\UserLevelService.cs" />
     <Compile Include="Services\Implementation\VIPLevelService.cs" />
     <Compile Include="Services\IUserLevelService.cs" />
@@ -417,6 +413,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="list.todo" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

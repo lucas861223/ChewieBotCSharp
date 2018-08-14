@@ -18,9 +18,7 @@ namespace ChewieBot.Database.Repository.Implementation
                 {
                     record = user;
                     var level = record.UserLevel;
-                    var modLevel = record.ModLevel;
                     var vipLevel = record.VIPLevel;
-                    context.ModLevels.Attach(modLevel);
                     context.VIPLevels.Attach(vipLevel);
                     context.UserLevels.Attach(level);
                     context.Users.Add(record);
@@ -28,9 +26,7 @@ namespace ChewieBot.Database.Repository.Implementation
                 else
                 {
                     var level = record.UserLevel;
-                    var modLevel = record.ModLevel;
                     var vipLevel = record.VIPLevel;
-                    context.ModLevels.Attach(modLevel);
                     context.VIPLevels.Attach(vipLevel);
                     context.UserLevels.Attach(level);
                     context.Entry(record).CurrentValues.SetValues(user);
@@ -46,7 +42,7 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                return context.Users.Include("UserLevel").FirstOrDefault(x => x.Id == id);
+                return context.Users.Include("UserLevel").Include("VIPLevel").FirstOrDefault(x => x.Id == id);
             }
         }
 
@@ -54,7 +50,7 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                return context.Users.Include("UserLevel").FirstOrDefault(x => x.Username == username);
+                return context.Users.Include("UserLevel").Include("VIPLevel").FirstOrDefault(x => x.Username == username);
             }
         }
 
@@ -62,7 +58,7 @@ namespace ChewieBot.Database.Repository.Implementation
         {
             using (var context = new DatabaseContext())
             {
-                return context.Users.Include("UserLevel").Where(x => usernames.Contains(x.Username)).ToList();
+                return context.Users.Include("UserLevel").Include("VIPLevel").Where(x => usernames.Contains(x.Username)).ToList();
             }
         }
 
@@ -104,9 +100,7 @@ namespace ChewieBot.Database.Repository.Implementation
                     {
                         record = user;
                         var level = record.UserLevel;
-                        var modLevel = record.ModLevel;
                         var vipLevel = record.VIPLevel;
-                        context.ModLevels.Attach(modLevel);
                         context.VIPLevels.Attach(vipLevel);
                         context.UserLevels.Attach(level);
                         context.Users.Add(record);
@@ -116,9 +110,7 @@ namespace ChewieBot.Database.Repository.Implementation
                     {
                         var level = record.UserLevel;
                         context.UserLevels.Attach(level);
-                        var modLevel = record.ModLevel;
                         var vipLevel = record.VIPLevel;
-                        context.ModLevels.Attach(modLevel);
                         context.VIPLevels.Attach(vipLevel);
                         context.Entry(record).CurrentValues.SetValues(user);
                         recordList.Add(record);

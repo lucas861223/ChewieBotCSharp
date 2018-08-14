@@ -16,13 +16,11 @@ namespace ChewieBot.AppStart
     {
         private static IBotSettingService settingService = UnityConfig.Resolve<IBotSettingService>();
         private static IUserLevelService userLevelService = UnityConfig.Resolve<IUserLevelService>();
-        private static IModLevelService modLevelService = UnityConfig.Resolve<IModLevelService>();
         private static IVIPLevelService vipLevelService = UnityConfig.Resolve<IVIPLevelService>();
 
         public static void Setup()
         {
             SetupUserLevels();
-            SetupModLevels();
             SetupVIPLevels();
             SetupBaseSettings();
         }
@@ -40,18 +38,6 @@ namespace ChewieBot.AppStart
             }
         }
 
-        private static void SetupModLevels()
-        {
-            if (modLevelService.Get(ModLevelSettings.BotLevelName) == null)
-            {
-                modLevelService.Set(new ModLevel { Name = ModLevelSettings.NoModLevelName, Rank = 0 });
-                modLevelService.Set(new ModLevel { Name = ModLevelSettings.ModLevelName, Rank = 1 });
-                modLevelService.Set(new ModLevel { Name = ModLevelSettings.SeniorModLevelName, Rank = 2 });
-                modLevelService.Set(new ModLevel { Name = ModLevelSettings.BotLevelName, Rank = 4 });
-                modLevelService.Set(new ModLevel { Name = ModLevelSettings.BroadcasterLevelName, Rank = 5 });
-            }
-        }
-
         private static void SetupVIPLevels()
         {
             if (vipLevelService.Get(VIPLevelSettings.BronzeVIPLevelName) == null)
@@ -59,7 +45,7 @@ namespace ChewieBot.AppStart
                 vipLevelService.Set(new VIPLevel { Name = VIPLevelSettings.BronzeVIPLevelName, Rank = 1, PointMultiplier = 1.5f });
                 vipLevelService.Set(new VIPLevel { Name = VIPLevelSettings.SilverVIPLevelName, Rank = 2, PointMultiplier = 1.5f });
                 vipLevelService.Set(new VIPLevel { Name = VIPLevelSettings.GoldVIPLevelName, Rank = 3, PointMultiplier = 1.5f });
-                vipLevelService.Set(new VIPLevel { Name = VIPLevelSettings.NoVIPLevelName, Rank = 10, PointMultiplier = 1.0f });
+                vipLevelService.Set(new VIPLevel { Name = VIPLevelSettings.NoVIPLevelName, Rank = 0, PointMultiplier = 1.0f });
             }
         }
 

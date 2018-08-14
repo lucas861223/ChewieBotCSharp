@@ -17,9 +17,6 @@ namespace ChewieBot.Database.Model
         [ForeignKey("UserLevel")]
         public int UserLevelId { get; set; }
         public virtual UserLevel UserLevel { get; set; }
-        [ForeignKey("ModLevel")]
-        public int ModLevelId { get; set; }
-        public virtual ModLevel ModLevel { get; set; }
         [ForeignKey("VIPLevel")]
         public int VIPLevelId { get; set; }
         public virtual VIPLevel VIPLevel { get; set; }

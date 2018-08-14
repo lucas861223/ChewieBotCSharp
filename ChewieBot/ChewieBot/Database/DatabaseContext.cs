@@ -17,7 +17,6 @@ namespace ChewieBot.Database
         public DbSet<UserLevel> UserLevels { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<BotSetting> BotSettings { get; set; }
-        public DbSet<ModLevel> ModLevels { get; set; }
         public DbSet<VIPLevel> VIPLevels { get; set; }
 
         public DatabaseContext()

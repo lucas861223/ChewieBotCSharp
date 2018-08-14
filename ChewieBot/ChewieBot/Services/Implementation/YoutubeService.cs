@@ -23,7 +23,7 @@ namespace ChewieBot.Services.Implementation
                 var key = this.GetYoutubeSongId(song.Url);
                 if (key != null)
                 {
-                    song.Url = this.FormatYoutubeUrl(key);
+                    song.Url = $"{this.FormatYoutubeUrl(key)}&autoplay=0";  // Disable autoplay
                     var urlParams = $"?part=contentDetails,snippet,status&id={key}&key={ConfigurationManager.AppSettings["Youtube-API-Key"]}";
                     var response = client.GetAsync(urlParams).Result;
                     if (response.IsSuccessStatusCode)
