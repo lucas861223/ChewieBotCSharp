@@ -32,9 +32,10 @@ namespace ChewieBot.AppStart
             {
                 userLevelService.Set(new UserLevel { Name = UserLevelSettings.ViewerUserLevelName, PointMultiplier = 1.0f, Rank = 0 });
                 userLevelService.Set(new UserLevel { Name = UserLevelSettings.SubscriberUserLevelName, PointMultiplier = 1.5f, Rank = 1 });
-                userLevelService.Set(new UserLevel { Name = UserLevelSettings.ModeratorUserLevelName, PointMultiplier = 1.5f, Rank = 2 });                
-                userLevelService.Set(new UserLevel { Name = UserLevelSettings.BotUserLevelName, PointMultiplier = 0.0f, Rank = 3 });
-                userLevelService.Set(new UserLevel { Name = UserLevelSettings.BroadcasterUserLevelName, PointMultiplier = 1.5f, Rank = 4 });
+                userLevelService.Set(new UserLevel { Name = UserLevelSettings.ModeratorUserLevelName, PointMultiplier = 1.5f, Rank = 2 });   
+                userLevelService.Set(new UserLevel { Name = UserLevelSettings.SeniorModeratorUserLevelName, PointMultiplier = 1.5f, Rank = 3 });             
+                userLevelService.Set(new UserLevel { Name = UserLevelSettings.BotUserLevelName, PointMultiplier = 0.0f, Rank = 4 });
+                userLevelService.Set(new UserLevel { Name = UserLevelSettings.BroadcasterUserLevelName, PointMultiplier = 1.5f, Rank = 5 });
             }
         }
 
