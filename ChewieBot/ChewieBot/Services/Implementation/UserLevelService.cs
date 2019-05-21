@@ -41,5 +41,10 @@ namespace ChewieBot.Services.Implementation
         {
             return this.userLevelData.Set(userLevel);
         }
+
+        public List<UserLevel> Set(List<UserLevel> userLevels)
+        {
+            return this.userLevelData.Set(userLevels);
+        }
     }
 }

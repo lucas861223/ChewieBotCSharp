@@ -14,6 +14,12 @@ namespace ChewieBot.Constants
             public const string Disconnect = "disconnect";
         }
 
+        public class StreamlabsAuthButton
+        {
+            public const string Connect = "Connect to Streamlabs";
+            public const string Connected = "Authorized with Streamlabs";
+        }
+
         public class ConnectStatus
         {
             public const string Connected = "status: connected";
@@ -29,6 +35,7 @@ namespace ChewieBot.Constants
             public const string Quotes = "Quotes";
             public const string CommandList = "Command List";
             public const string UserLevels = "User Levels";
+            public const string StreamLabs = "Authorize Stream Labs";
         }
 
         public class PopoutMusicPlayer
@@ -52,6 +59,11 @@ namespace ChewieBot.Constants
 
             public const string OnEventStarted = "OnEventStartedEvent";
             public const string OnEventEnded = "OnEventEndedEvent";
+        }
+
+        public class ConfigKeys
+        {
+            public const string StreamlabsToken = "StreamlabsToken";
         }
     }
 }

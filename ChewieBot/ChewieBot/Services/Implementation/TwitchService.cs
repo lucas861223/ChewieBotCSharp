@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using TwitchLib.Client;
 using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
+using TwitchLib.Communication.Events;
 using TwitchLib.PubSub;
 using TwitchLib.PubSub.Events;
 
@@ -32,7 +33,7 @@ namespace ChewieBot.Services.Implementation
         public bool IsInitialized { get; private set; }
 
         public event EventHandler<OnConnectedArgs> OnConnectedEvent;
-        public event EventHandler<OnDisconnectedArgs> OnDisconnectedEvent;
+        public event EventHandler<OnDisconnectedEventArgs> OnDisconnectedEvent;
 
         // All of these events are wrappers around the TwitchPubSub events/args. 
         // We need to duplicate them in this project so that we can expose them to the python engine
@@ -147,7 +148,7 @@ namespace ChewieBot.Services.Implementation
             this.OnConnectedEvent?.Invoke(sender, e);
         }
 
-        private void OnDisconnected(object sender, OnDisconnectedArgs e)
+        private void OnDisconnected(object sender, OnDisconnectedEventArgs e)
         {
             this.OnDisconnectedEvent?.Invoke(sender, e);
         }

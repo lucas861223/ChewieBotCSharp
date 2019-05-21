@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TwitchLib.Client.Events;
+using TwitchLib.Communication.Events;
 
 namespace ChewieBot.Services
 {
@@ -19,7 +20,7 @@ namespace ChewieBot.Services
         void InitializeClient();
 
         event EventHandler<OnConnectedArgs> OnConnectedEvent;
-        event EventHandler<OnDisconnectedArgs> OnDisconnectedEvent;
+        event EventHandler<OnDisconnectedEventArgs> OnDisconnectedEvent;
         event EventHandler<StreamUpArgs> OnStreamUpEvent;
         event EventHandler<StreamDownArgs> OnStreamDownEvent;
         event EventHandler<ChannelSubscriptionArgs> OnChannelSubscriptionEvent;

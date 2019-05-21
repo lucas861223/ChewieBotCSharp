@@ -61,6 +61,8 @@ namespace ChewieBot.AppStart
             container.RegisterType<IDeepbotService, DeepbotService>(new TransientLifetimeManager());
             container.RegisterType<IVIPLevelData, VIPLevelRepository>(new TransientLifetimeManager());
             container.RegisterType<IVIPLevelService, VIPLevelService>(new TransientLifetimeManager());
+            container.RegisterType<IKeyValueData, KeyValueRepository>(new TransientLifetimeManager());
+            container.RegisterType<IConfigService, ConfigService>(new TransientLifetimeManager());
         }
 
         public static T Resolve<T>()

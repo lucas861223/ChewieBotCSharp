@@ -23,6 +23,13 @@ namespace ChewieBot.ViewModels
             set { this.MutateVerbose(ref title, value, RaisePropertyChanged()); }
         }
 
+        private string streamlabsAuthButton;
+        public string StreamlabsAuthButton
+        {
+            get { return this.streamlabsAuthButton; }
+            set { this.MutateVerbose(ref this.streamlabsAuthButton, value, RaisePropertyChanged()); }
+        }
+
         private string connectButton;
         public string ConnectButton
         {
@@ -62,6 +69,8 @@ namespace ChewieBot.ViewModels
             this.ConnectButton = AppConstants.ConnectButton.Connect;
             this.ConnectStatus = AppConstants.ConnectStatus.NotConnected;
             this.ConnectColour = AppConstants.ConnectStatus.NotConnectedColourHex;
+            this.StreamlabsAuthButton = AppConstants.StreamlabsAuthButton.Connect;
+
             MenuItems = new MenuLink[]
                 {
                     new MenuLink(AppConstants.Views.SongQueue, new SongQueue(UnityConfig.Resolve<ISongQueueService>())),

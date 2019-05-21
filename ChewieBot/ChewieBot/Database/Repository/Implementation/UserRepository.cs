@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChewieBot.Constants.SettingsConstants;
 using ChewieBot.Database.Model;
 
 namespace ChewieBot.Database.Repository.Implementation
@@ -17,8 +18,12 @@ namespace ChewieBot.Database.Repository.Implementation
                 if (record == null)
                 {
                     record = user;
-                    var level = record.UserLevel;
-                    var vipLevel = record.VIPLevel;
+                    var level = context.UserLevels.First(x => x.Name == UserLevelSettings.ViewerUserLevelName);
+                    var vipLevel = context.VIPLevels.First(x => x.Name == VIPLevelSettings.NoVIPLevelName);
+                    record.UserLevel = level;
+                    record.VIPLevel = vipLevel;
+                    record.JoinedDate = DateTime.Now;
+                    record.Points = 0;
                     context.VIPLevels.Attach(vipLevel);
                     context.UserLevels.Attach(level);
                     context.Users.Add(record);

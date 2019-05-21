@@ -25,5 +25,13 @@ namespace ChewieBot.Config
         public static string DeepbotUserFile = ConfigurationManager.AppSettings["DeepbotUserFile"];
 
         public static string CommandsPath = ConfigurationManager.AppSettings["CommandsPath"];
+
+        // Streamlabs
+        public static string StreamlabsAuthUrl = ConfigurationManager.AppSettings["Streamlabs-AuthUrl"];
+        public static string StreamlabsTokenUrl = ConfigurationManager.AppSettings["Streamlabs-TokenUrl"];
+        public static string StreamlabsClientId = ConfigurationManager.AppSettings["Streamlabs-ClientId"];
+        public static string StreamlabsClientSecret = ConfigurationManager.AppSettings["Streamlabs-ClientSecret"];
+        public static string StreamlabsRedirectUri = ConfigurationManager.AppSettings["Streamlabs-RedirectUri"];
+        public static string StreamlabsScope = ConfigurationManager.AppSettings["Streamlabs-Scope"];
     }
 }

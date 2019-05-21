@@ -2,6 +2,7 @@
 using ChewieBot.Constants;
 using ChewieBot.Constants.SettingsConstants;
 using ChewieBot.Database.Model;
+using ChewieBot.Database.Repository;
 using ChewieBot.Models;
 using ChewieBot.ScriptingEngine;
 using ChewieBot.Services;
@@ -26,6 +27,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TwitchLib.Client.Events;
+using TwitchLib.Communication.Events;
 
 namespace ChewieBot
 {
@@ -37,8 +39,10 @@ namespace ChewieBot
         private ITwitchService twitchService = UnityConfig.Resolve<ITwitchService>();
         private IBotSettingService botSettingService = UnityConfig.Resolve<IBotSettingService>();
         private IDeepbotService deepbotService = UnityConfig.Resolve<IDeepbotService>();
+        private IConfigService configService = UnityConfig.Resolve<IConfigService>();
 
         private MainWindowViewModel viewModel;
+        private OAuthWebpage popoutOAuth;
 
         public MainWindow()
         {
@@ -58,6 +62,12 @@ namespace ChewieBot
             this.twitchService.OnDisconnectedEvent += OnDisconnected;
             viewModel = new MainWindowViewModel();
             DataContext = viewModel;
+
+            if (!String.IsNullOrEmpty(this.configService.Get(AppConstants.ConfigKeys.StreamlabsToken)))
+            {
+                viewModel.StreamlabsAuthButton = AppConstants.StreamlabsAuthButton.Connected;
+                this.StreamlabsAuthBtn.IsEnabled = false;
+            }
         }
 
         private void UIElement_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -97,6 +107,17 @@ namespace ChewieBot
             });
         }
 
+        private void StreamlabsAuthButtonClicked(object sender, EventArgs e)
+        {
+            popoutOAuth = new OAuthWebpage(UnityConfig.Resolve<IKeyValueData>());
+            popoutOAuth.Show();
+
+            popoutOAuth.Closed += (cs, ce) =>
+            {
+                popoutOAuth = null;
+            };
+        }
+
         private void OnConnected(object sender, OnConnectedArgs e)
         {
             this.viewModel.ConnectButton = AppConstants.ConnectButton.Disconnect;
@@ -104,7 +125,7 @@ namespace ChewieBot
             this.viewModel.ConnectColour = AppConstants.ConnectStatus.ConnectedColourHex;
         }
 
-        private void OnDisconnected(object sender, OnDisconnectedArgs e)
+        private void OnDisconnected(object sender, OnDisconnectedEventArgs e)
         {
             this.viewModel.ConnectButton = AppConstants.ConnectButton.Connect;
             this.viewModel.ConnectStatus = AppConstants.ConnectStatus.NotConnected;

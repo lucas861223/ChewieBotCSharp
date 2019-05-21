@@ -18,6 +18,7 @@ namespace ChewieBot.Database
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<BotSetting> BotSettings { get; set; }
         public DbSet<VIPLevel> VIPLevels { get; set; }
+        public DbSet<KeyValue> Config { get; set; }
 
         public DatabaseContext()
             : base("DatabaseConnection")

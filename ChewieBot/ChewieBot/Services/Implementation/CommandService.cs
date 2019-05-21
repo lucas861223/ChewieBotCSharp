@@ -1,4 +1,5 @@
 ﻿using ChewieBot.Commands;
+using ChewieBot.Constants.SettingsConstants;
 using ChewieBot.Database.Model;
 using ChewieBot.Exceptions;
 using System;
@@ -101,25 +102,25 @@ namespace ChewieBot.Services.Implementation
 
 
             // Mods/Broadcaster automatically get permission for all levels below them.
-            var streamer = this.userLevelService.Get("Broadcaster");
+            var streamer = this.userLevelService.Get(UserLevelSettings.BroadcasterUserLevelName);
             if ((command.MinimumUserLevelRank == null || command.MinimumUserLevelRank <= streamer.Rank) && (command.RequiredUserLevelRank == null || command.RequiredUserLevelRank <= streamer.Rank))
             {
                 permission = user.UserLevel.Rank >= streamer.Rank;
             }
 
-            var bot = this.userLevelService.Get("Bot");
+            var bot = this.userLevelService.Get(UserLevelSettings.BotUserLevelName);
             if ((command.MinimumUserLevelRank == null || command.MinimumUserLevelRank <= bot.Rank) && (command.RequiredUserLevelRank == null || command.RequiredUserLevelRank <= bot.Rank))
             {
                 permission = user.UserLevel.Rank >= bot.Rank;
             }
 
-            var seniorMod = this.userLevelService.Get("SeniorModerator");
+            var seniorMod = this.userLevelService.Get(UserLevelSettings.SeniorModeratorUserLevelName);
             if ((command.MinimumUserLevelRank == null || command.MinimumUserLevelRank <= seniorMod.Rank) && (command.RequiredUserLevelRank == null || command.RequiredUserLevelRank <= seniorMod.Rank))
             {
                 permission = user.UserLevel.Rank >= seniorMod.Rank;
             }
 
-            var mod = this.userLevelService.Get("Moderator");
+            var mod = this.userLevelService.Get(UserLevelSettings.ModeratorUserLevelName);
             if ((command.MinimumUserLevelRank == null ||command.MinimumUserLevelRank <= mod.Rank) && (command.RequiredUserLevelRank == null || command.RequiredUserLevelRank <= mod.Rank))
             {
                 permission = user.UserLevel.Rank >= mod.Rank;

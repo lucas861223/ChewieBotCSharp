@@ -12,6 +12,7 @@ namespace ChewieBot.Services
         UserLevel Get(string name);
         List<UserLevel> GetAll();
         UserLevel Set(UserLevel userLevel);
+        List<UserLevel> Set(List<UserLevel> userLevels);
         void Delete(UserLevel userLevel);
         void Delete(string name);
     }

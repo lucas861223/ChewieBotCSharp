@@ -8,18 +8,37 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
+        <Grid DockPanel.Dock="Top">
+            <Label Name="SavedLabel" DockPanel.Dock="Top" Width="240" HorizontalAlignment="Right" Margin="0 1px 20px 20px" FontSize="16px" FontWeight="Bold" Foreground="Green" Visibility="Hidden">Saved!</Label>
+            <Button Name="SaveButton" DockPanel.Dock="Top" Width="160" HorizontalAlignment="Right" Click="SaveButtonClick" Margin="0 0 20px 20px">Save</Button>
+        </Grid>
         <ListBox  
                  DockPanel.Dock="Top" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderThickness="1"
                  ItemsSource="{Binding LevelList}">
+            <ListBox.Template>
+                <ControlTemplate>
+                    <DockPanel LastChildFill="True">
+                        <Grid DockPanel.Dock="Top" Height="30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16px">User Level</Label>
+                            <Label Grid.Column="1" FontWeight="Bold" FontSize="16px" HorizontalAlignment="Right">Points Multiplier</Label>
+                        </Grid>
+                        <ItemsPresenter></ItemsPresenter>
+                    </DockPanel>
+                </ControlTemplate>
+            </ListBox.Template>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0, 2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" />
-                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="10*" />
+                            <ColumnDefinition Width="0.5*" />
                         </Grid.ColumnDefinitions>
                         <Label Content="{Binding Name}" Grid.Column="0"/>
-                        <Label Content="{Binding PointMultiplier}" Grid.Column="1" />
+                        <TextBox Text="{Binding PointMultiplier, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" TextAlignment="Center" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

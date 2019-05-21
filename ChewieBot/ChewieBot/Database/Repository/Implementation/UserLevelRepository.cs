@@ -70,5 +70,20 @@ namespace ChewieBot.Database.Repository.Implementation
                 return record;
             }
         }
+
+        public List<UserLevel> Set(List<UserLevel> userLevels)
+        {
+            var returnRecords = new List<UserLevel>();
+            using (var context = new DatabaseContext())
+            {
+                foreach (var userLevel in userLevels)
+                {
+                    // Inefficient due to calling SaveChanges() on every record, but it's not a huge deal here and 
+                    // it's easier to just call the existing function.
+                    returnRecords.Add(this.Set(userLevel));
+                }
+            }
+            return returnRecords;
+        }
     }
 }

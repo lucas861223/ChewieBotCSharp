@@ -10,6 +10,7 @@ namespace ChewieBot.Database.Repository
     public interface IUserLevelData
     {
         UserLevel Set(UserLevel userLevel);
+        List<UserLevel> Set(List<UserLevel> userLevels);
         UserLevel Get(string name);
         List<UserLevel> GetAll();
         void Delete(string name);
