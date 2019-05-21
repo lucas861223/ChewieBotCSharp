@@ -20,7 +20,7 @@
         <Controls:WindowCommands>
             <Label Content="{Binding ConnectStatus}" Padding="0 8 10 0" Foreground="{Binding ConnectColour}" />
             <Button Content="{Binding ConnectButton}" Click="ConnectButtonClicked" />
-            <Button Name="StreamlabsAuthBtn" Content="{Binding StreamlabsAuthButton}" Click="StreamlabsAuthButtonClicked" />
+            <Button Name="StreamlabsAuthBtn" Content="{Binding StreamlabsAuthButton}" Click="StreamlabsAuthButtonClicked" Foreground="{Binding StreamlabsColour}" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
     <Grid>

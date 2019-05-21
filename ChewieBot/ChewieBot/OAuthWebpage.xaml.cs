@@ -70,7 +70,8 @@ namespace ChewieBot
         {
             if (e.NewValue.ToString().Contains("Uh oh"))
             {
-                var verified = false;
+                this.Hide();
+
                 // Check url for code property
                 if (OAuthPopout.Address.Contains("code"))
                 {
@@ -101,10 +102,7 @@ namespace ChewieBot
 
                     }
                 }
-                if (verified)
-                {
-                    this.Close();
-                }
+                this.Close();
             }
         }
     }

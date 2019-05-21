@@ -51,6 +51,13 @@ namespace ChewieBot.ViewModels
             set { this.MutateVerbose(ref connectColour, value, RaisePropertyChanged()); }
         }
 
+        private string streamlabsColour;
+        public string StreamlabsColour
+        {
+            get { return this.streamlabsColour; }
+            set { this.MutateVerbose(ref this.streamlabsColour, value, RaisePropertyChanged()); }
+        }
+
         public bool Connected { get; set; }
 
         private Action<PropertyChangedEventArgs> RaisePropertyChanged()
@@ -70,6 +77,7 @@ namespace ChewieBot.ViewModels
             this.ConnectStatus = AppConstants.ConnectStatus.NotConnected;
             this.ConnectColour = AppConstants.ConnectStatus.NotConnectedColourHex;
             this.StreamlabsAuthButton = AppConstants.StreamlabsAuthButton.Connect;
+            this.StreamlabsColour = AppConstants.ConnectStatus.NotConnectedColourHex;
 
             MenuItems = new MenuLink[]
                 {

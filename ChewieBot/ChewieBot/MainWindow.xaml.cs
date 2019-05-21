@@ -63,10 +63,19 @@ namespace ChewieBot
             viewModel = new MainWindowViewModel();
             DataContext = viewModel;
 
+            this.VerifyStreamlabs();
+        }
+
+        private void VerifyStreamlabs()
+        {
             if (!String.IsNullOrEmpty(this.configService.Get(AppConstants.ConfigKeys.StreamlabsToken)))
             {
                 viewModel.StreamlabsAuthButton = AppConstants.StreamlabsAuthButton.Connected;
-                this.StreamlabsAuthBtn.IsEnabled = false;
+                this.StreamlabsAuthBtn.Dispatcher.Invoke(() =>
+                {
+                    this.StreamlabsAuthBtn.IsEnabled = false;
+                    this.viewModel.StreamlabsColour = AppConstants.ConnectStatus.ConnectedColourHex;
+                });
             }
         }
 
@@ -115,6 +124,7 @@ namespace ChewieBot
             popoutOAuth.Closed += (cs, ce) =>
             {
                 popoutOAuth = null;
+                this.VerifyStreamlabs();
             };
         }
 
