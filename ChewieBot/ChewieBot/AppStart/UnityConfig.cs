@@ -63,6 +63,7 @@ namespace ChewieBot.AppStart
             container.RegisterType<IVIPLevelService, VIPLevelService>(new TransientLifetimeManager());
             container.RegisterType<IKeyValueData, KeyValueRepository>(new TransientLifetimeManager());
             container.RegisterType<IConfigService, ConfigService>(new TransientLifetimeManager());
+            container.RegisterType<IStreamLabsService, StreamLabsService>(new TransientLifetimeManager());
         }
 
         public static T Resolve<T>()

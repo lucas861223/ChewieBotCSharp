@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ChewieBot.Services
 {
-    class IStreamLabsService
+    public interface IStreamLabsService
     {
+        void Test();
     }
 }

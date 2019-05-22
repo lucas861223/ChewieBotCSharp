@@ -60,7 +60,7 @@ namespace ChewieBot.Services.Implementation
                 return null;
             }
 
-            var song = new Song { Id = nextSongId, Url = url, RequestedBy = user, RequestType = requestType, SourceType = sourceType };
+            var song = new Song { Id = nextSongId, Url = url, RequestedBy = user, RequestType = requestType, SourceType = sourceType, TimeRequested = DateTime.Now };
             song = this.GetSongDetails(song);
             this.SongList.Add(song);
             nextSongId++;

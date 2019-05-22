@@ -97,7 +97,6 @@ namespace ChewieBot
                             var responseText = await reader.ReadToEndAsync();
                             dynamic json = JsonConvert.DeserializeObject(responseText);
                             this.configData.Set(AppConstants.ConfigKeys.StreamlabsToken, json["access_token"].ToString());
-                            verified = true;
                         }
 
                     }

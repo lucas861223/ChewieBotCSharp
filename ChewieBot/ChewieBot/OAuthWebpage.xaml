@@ -15,7 +15,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Music Player" Width="1366" Height="768">
+        Title="Streamlabs Authentication" Width="1366" Height="768">
     <Grid>
         <CefSharp:ChromiumWebBrowser Name="OAuthPopout" DockPanel.Dock="Bottom" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></CefSharp:ChromiumWebBrowser>
     </Grid>

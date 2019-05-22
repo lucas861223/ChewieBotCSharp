@@ -31,17 +31,19 @@
                                 <DockPanel>
                                     <Grid Margin="0, 2">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="7*" />
-                                            <ColumnDefinition Width="1.4*" />
-                                            <ColumnDefinition Width="2.8*" />
-                                            <ColumnDefinition Width="0.8*" />
+                                            <ColumnDefinition Width="400px" />
+                                            <ColumnDefinition Width="140px" />
+                                            <ColumnDefinition Width="140px" />
+                                            <ColumnDefinition Width="200px"/>
+                                            <ColumnDefinition Width="1.8*" />
                                             <ColumnDefinition Width="2*" />
                                         </Grid.ColumnDefinitions>
                                         <Label Content="Song Name" Grid.Column="0" />
                                         <Label Content="Length" Grid.Column="1" />
                                         <Label Content="Requested By" Grid.Column="2" />
-                                        <Label Content="Type" Grid.Column="3" />
-                                        <Button Click="OpenPopoutPlayer" Content="Popout Music Player" Grid.Column="4" />
+                                        <Label Content="Time Requested" Grid.Column="3" />
+                                        <Label Content="Type" Grid.Column="4" />
+                                        <Button Click="OpenPopoutPlayer" Content="Popout Music Player" Grid.Column="5" />
                                     </Grid>
                                 </DockPanel>
                             </materialDesign:ColorZone>
@@ -55,15 +57,17 @@
                     <DataTemplate>
                         <Grid Name="SongGrid" Margin="0, 2" ContextMenu="{StaticResource SongQueueContextMenu}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5*" />
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="400px" />
+                                <ColumnDefinition Width="140px" />
+                                <ColumnDefinition Width="140px" />
+                                <ColumnDefinition Width="200px" />
+                                <ColumnDefinition Width="2.2*" />
                             </Grid.ColumnDefinitions>
                             <Label Content="{Binding Title}" Grid.Column="0"/>
                             <Label Content="{Binding Duration}" Grid.Column="1" />
                             <Label Content="{Binding RequestedBy.Username}" Grid.Column="2" />
-                            <Label Content="{Binding RequestType}" Grid.Column="3" />
+                            <Label Content="{Binding TimeRequested}" Grid.Column="3" />
+                            <Label Content="{Binding RequestType}" Grid.Column="4" />
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

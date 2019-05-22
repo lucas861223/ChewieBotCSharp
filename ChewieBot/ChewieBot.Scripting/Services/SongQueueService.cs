@@ -18,7 +18,7 @@ namespace ChewieBot.ScriptingAPI.Services
         public static ScriptServiceResponse AddSong(string username, string url)
         {
             var user = userService.GetUser(username);
-            var song = songService.AddNewSong(url, user, SongRequestType.Raffle);
+            var song = songService.AddNewSong(url, user, SongRequestType.Points);
             var response = new ScriptServiceResponse();
             if (song != null)
             {

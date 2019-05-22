@@ -40,6 +40,7 @@ namespace ChewieBot
         private IBotSettingService botSettingService = UnityConfig.Resolve<IBotSettingService>();
         private IDeepbotService deepbotService = UnityConfig.Resolve<IDeepbotService>();
         private IConfigService configService = UnityConfig.Resolve<IConfigService>();
+        private IStreamLabsService streamLabsService = UnityConfig.Resolve<IStreamLabsService>();
 
         private MainWindowViewModel viewModel;
         private OAuthWebpage popoutOAuth;
@@ -63,10 +64,10 @@ namespace ChewieBot
             viewModel = new MainWindowViewModel();
             DataContext = viewModel;
 
-            this.VerifyStreamlabs();
+            this.UpdateStreamlabsButton();
         }
 
-        private void VerifyStreamlabs()
+        private void UpdateStreamlabsButton()
         {
             if (!String.IsNullOrEmpty(this.configService.Get(AppConstants.ConfigKeys.StreamlabsToken)))
             {
@@ -106,11 +107,13 @@ namespace ChewieBot
             {
                 if (this.twitchService.IsConnected)
                 {
-                    this.twitchService.Disconnect();                    
+                    this.twitchService.Disconnect();
+                    this.streamLabsService.Test();
                 }
                 else
                 {
                     this.twitchService.Connect();
+                    this.streamLabsService.Test();
                     this.viewModel.ConnectStatus = AppConstants.ConnectStatus.Connecting;
                 }
             });
@@ -124,7 +127,7 @@ namespace ChewieBot
             popoutOAuth.Closed += (cs, ce) =>
             {
                 popoutOAuth = null;
-                this.VerifyStreamlabs();
+                this.UpdateStreamlabsButton();
             };
         }
 
