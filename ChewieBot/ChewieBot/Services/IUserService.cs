@@ -19,6 +19,10 @@ namespace ChewieBot.Services
         void SetCurrentlyWatchingUsers(List<User> users);
         void UserJoined(User user);
         void UserLeft(User user);
+        void SetIdle(bool idle);
+        void UpdatePointsForCurrentViewers();
+        void UpdatePointsForUsers(List<User> users);
+        List<User> GetCurrentlyWatchingUsers();
         bool IsUserWatching(string username);
         User AddNewUser(string username, string userLevel);
     }

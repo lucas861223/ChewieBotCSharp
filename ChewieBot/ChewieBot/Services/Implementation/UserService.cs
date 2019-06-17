@@ -18,6 +18,7 @@ namespace ChewieBot.Services.Implementation
         private IUserLevelService userLevelService;
         private IBotSettingService botSettingService;
         private HashSet<User> currentWatchingUsers;
+        private bool gainIdlePoints;
 
         public UserService(IUserData userData, IUserLevelService userLevelService, IBotSettingService botSettingService)
         {
@@ -25,6 +26,15 @@ namespace ChewieBot.Services.Implementation
             this.userLevelService = userLevelService;
             this.botSettingService = botSettingService;
             this.currentWatchingUsers = new HashSet<User>();
+            this.gainIdlePoints = false;
+        }
+        /// <summary>
+        /// Should the users be able to get idle points, for when stream is off.
+        /// </summary>
+        /// <param name="idle">Boolean value for if idle points should be added.</param>
+        public void SetIdle(bool idle)
+        {
+            this.gainIdlePoints = idle;
         }
 
         /// <summary>
@@ -48,13 +58,21 @@ namespace ChewieBot.Services.Implementation
         }
 
         /// <summary>
+        /// Gets the list of currently watching viewers.
+        /// </summary>
+        public List<User> GetCurrentlyWatchingUsers()
+        {
+            return (List<User>) this.currentWatchingUsers.ToList();
+        }
+
+        /// <summary>
         /// Gets a user with their username.
         /// </summary>
         /// <param name="username">The username of the user to get.</param>
         /// <returns>The user, if it exists, or null if no user exists.</returns>
         public User GetUser(string username)
         {
-            var user = this.userData.Get(username);
+            var user = this.userData.Get(username.ToLower());
             return user;
         }
 
@@ -88,6 +106,35 @@ namespace ChewieBot.Services.Implementation
             }
             return user.Points;
         }
+        /// <summary>
+        /// Updates points for all currently watching viewers, for when stream ends or bot disconnects.
+        /// </summary>
+        /// <param name="user">List of users currently watching.</param>
+        public void UpdatePointsForCurrentViewers()
+        {
+            this.UpdatePointsForUsers((List<User>) this.currentWatchingUsers.ToList());
+        }
+
+        /// <summary>
+        /// Updates points for all viewers in the list.
+        /// </summary>
+        /// <param name="user">List of users to be updated.</param>
+        public void UpdatePointsForUsers(List<User> users)
+        {
+            foreach(User user in users)
+            {
+                this.UpdatePoints(user);
+            }
+        }
+
+        /// <summary>
+        /// Update users points to add idle points. 
+        /// </summary>
+        /// <param name="user">User to add idle points to.</param>
+        private void UpdatePoints(User user)
+        {
+            this.AddIdlePoints(user);
+        }
 
         /// <summary>
         /// Update users points to add idle points. 
@@ -96,11 +143,14 @@ namespace ChewieBot.Services.Implementation
         /// <returns>User with updated points.</returns>
         private User AddIdlePoints(User user)
         {
-            var timeDifference = DateTime.Now - user.LastPointUpdateTime;
+            if(this.gainIdlePoints)
+            {
+                var timeDifference = DateTime.Now - user.LastPointUpdateTime;
+                dynamic pointRate = this.botSettingService.GetValue(BaseSettings.PointRate.Name);
+                user.Points += (int)(timeDifference.TotalMinutes * (pointRate * user.UserLevel.PointMultiplier));    // TODO: Change this to use a setting value, based on user level, etc.
+                this.SetUser(user);
+            }
             user.LastPointUpdateTime = DateTime.Now;
-            dynamic pointRate = this.botSettingService.GetValue(BaseSettings.PointRate.Name);
-            user.Points += (int)(timeDifference.TotalMinutes * (pointRate * user.UserLevel.PointMultiplier));    // TODO: Change this to use a setting value, based on user level, etc.
-            this.SetUser(user);
             return user;
         }
 

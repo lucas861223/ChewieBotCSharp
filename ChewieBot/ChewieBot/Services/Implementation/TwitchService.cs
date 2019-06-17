@@ -130,11 +130,15 @@ namespace ChewieBot.Services.Implementation
 
         private void OnStreamDown(object sender, OnStreamDownArgs e)
         {
+            this.userService.UpdatePointsForCurrentViewers();
+            this.userService.SetIdle(false);
             this.OnStreamDownEvent?.Invoke(sender, new StreamDownArgs(e) { TriggeredByEvent = AppConstants.Events.OnStreamDown });
         }
 
         private void OnStreamUp(object sender, OnStreamUpArgs e)
         {
+            this.userService.UpdatePointsForCurrentViewers();
+            this.userService.SetIdle(true);
             this.OnStreamUpEvent?.Invoke(sender, new StreamUpArgs(e) { TriggeredByEvent = AppConstants.Events.OnStreamUp });
         }
 
@@ -150,6 +154,8 @@ namespace ChewieBot.Services.Implementation
 
         private void OnDisconnected(object sender, OnDisconnectedEventArgs e)
         {
+            this.userService.UpdatePointsForCurrentViewers();
+            this.userService.SetIdle(false);
             this.OnDisconnectedEvent?.Invoke(sender, e);
         }
 
@@ -178,6 +184,8 @@ namespace ChewieBot.Services.Implementation
         /// <param name="e">Event Args containing the name of the bot and channel that was joined.</param>
         private void OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
+            this.userService.UpdatePointsForCurrentViewers();
+            this.userService.SetIdle(true);
             // Bot joined.
             this.OnStreamUpEvent?.Invoke(this, new StreamUpArgs(new OnStreamUpArgs { PlayDelay = 10, ServerTime = DateTime.Now.ToString() }) { TriggeredByEvent = AppConstants.Events.OnStreamUp });
         }
@@ -200,7 +208,8 @@ namespace ChewieBot.Services.Implementation
                 }
                 this.userService.UserJoined(user);
 
-                this.SendMessage($"{user.Username} joined!");
+                //this.SendMessage($"{user.Username} joined!");
+                this.SendMessage(user.Points.ToString());
 
             }
         }
@@ -216,7 +225,7 @@ namespace ChewieBot.Services.Implementation
             if (user != null)
             {
                 this.userService.UserLeft(user);
-                this.SendMessage($"{user.Username} left!");
+                // this.SendMessage($"{user.Username} left!");
             }
         }
 
